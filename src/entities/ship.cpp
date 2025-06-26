@@ -111,3 +111,15 @@ void Ship::STATE_Straight_Flight() {
     LoadAnimationWithId(ShipAnimation::STRAIGHT_FLIGHT);
     ProcessPressedKeys(false);
 }
+
+void Ship::STATE_Ascending() {
+    UpdatePreviousDirection();
+    LoadAnimationWithId(ShipAnimation::ASCENDING);
+    ProcessPressedKeys(false);
+}
+
+void Ship::STATE_Descending() {
+    UpdatePreviousDirection();
+    LoadAnimationWithId(ShipAnimation::DESCENDING);
+    ProcessPressedKeys(false);
+}

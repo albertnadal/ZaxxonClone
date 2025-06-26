@@ -16,7 +16,7 @@ enum EntityType: uint16_t { TERRAIN = 0, PLAYER = 1, ENEMY = 2 };
 enum Direction: uint8_t { RIGHT = 0, LEFT = 1 };
 
 // Object animation identificators
-enum ShipAnimation: uint16_t { STRAIGHT_FLIGHT = 0, TURNING_LEFT = 1, TURNING_RIGHT = 2, ASCENDING = 3, DESCENDING = 4 };
+enum ShipAnimation: uint16_t { STRAIGHT_FLIGHT = 0, ASCENDING = 1, DESCENDING = 2 };
 
 // Others
 constexpr bool DEBUG = true;                                                     // Debug mode.
@@ -25,3 +25,8 @@ constexpr int MILLISECONDS_PER_TICK = 16;                                       
 constexpr float ZOOM = 2.0f;                                                     // Game display zoom.
 constexpr const char *WINDOW_TITLE = "Zaxxon";                                   // Title to show in the application window bar.
 constexpr const char *ENTITIES_DATA_FILENAME = "entities.dat";                   // The data file where entity animations and collision areas are defined.
+constexpr int LEVEL_WIDTH = 100;                                                 // Width of the level.
+constexpr int LEVEL_HEIGHT = 100;                                                // Height of the level.
+constexpr int LEVEL_LENGTH = 10000;                                              // Length of the level.
+constexpr int SEGMENT_LENGTH = 10;                                               // Space between segments in the level.
+constexpr const char *LEVEL_FILENAME = "level.dat";                              // The file where the level is defined.

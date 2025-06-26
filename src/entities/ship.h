@@ -39,24 +39,30 @@ public:
   static IEntity* Create();
 
   // state machine triggers
-  void RightKeyPressed();
-  void RightKeyReleased();
-  void LeftKeyPressed();
-  void LeftKeyReleased();
+  void UpKeyPressed();
+  void UpKeyReleased();
+  void DownKeyPressed();
+  void DownKeyReleased();
 
 private:
   // state machine state functions
   void STATE_Straight_Flight();
+  void STATE_Ascending();
+  void STATE_Descending();
 
   // state map to define state function order
   BEGIN_STATE_MAP
       STATE_MAP_ENTRY(&Ship::STATE_Straight_Flight)
+      STATE_MAP_ENTRY(&Ship::STATE_Ascending)
+      STATE_MAP_ENTRY(&Ship::STATE_Descending)
   END_STATE_MAP
 
   // state enumeration order must match the order of state
   // method entries in the state map
   enum ShipStateIdentificator {
       STATE_STRAIGHT_FLIGHT = 0, // Initial state
+      STATE_ASCENDING = 1,
+      STATE_DESCENDING = 2,
       SHIP_MAX_STATES
   };
 };
