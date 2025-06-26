@@ -10,15 +10,59 @@ GameManager::GameManager(EntityDataManager* _textureManager, SpriteRectDoubleBuf
         maxObjects = _maxObjects;
 }
 
-void GameManager::LoadLevelFromFile(const std::string& filename) {
-  std::ifstream file(filename);
-  assert(file.is_open() && "Error: Unable to open file with level data.");
-
-  file.close();
+void GameManager::LoadLevel() {
+  LoadLevelFromFile(LEVEL_FILENAME);
 }
 
-std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator entity_id, int x, int y) {
+void GameManager::LoadLevelFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+    assert(file.is_open() && "Error: Unable to open file with level data.");
+
+    std::string segmentData;
+    int segmentNumber = 0;
+
+    while (std::getline(file, segmentData)) {
+        auto colonPos = segmentData.find(':');
+        if (colonPos == std::string::npos) continue;
+
+        std::string segmentName = segmentData.substr(0, colonPos);
+        std::cout << "Loading segment: " << segmentName << std::endl;
+
+        std::string entitiesStr = segmentData.substr(colonPos + 1);
+        std::stringstream entitiesStream(entitiesStr);
+        std::string entityData;
+
+        while (std::getline(entitiesStream, entityData, '|')) {
+            std::stringstream ssEntity(entityData);
+            std::string entityId, entityX, entityY;
+            std::getline(ssEntity, entityId, ',');
+            std::getline(ssEntity, entityX, ',');
+            std::getline(ssEntity, entityY);
+
+            if (!entityId.empty() && !entityX.empty() && !entityY.empty()) {
+                CreateEntityWithId(
+                    static_cast<EntityIdentificator>(std::stoi(entityId)),
+                    std::stoi(entityX),
+                    std::stoi(entityY),
+                    segmentNumber * SEGMENT_LENGTH
+                );
+            }
+        }
+        ++segmentNumber;
+    }
+
+    file.close();
+}
+
+std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator entity_id, int x, int y, int z) {
   std::optional<IEntity *> entity_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(entity_id);
+
+  if(entity_ptr.has_value()) {
+    if (entity_id == EntityIdentificator::SHIP) {
+      ship = static_cast<Ship*>(*entity_ptr);
+    }
+  }
+
   return entity_ptr;
 }
 

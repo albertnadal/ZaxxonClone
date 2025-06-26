@@ -80,9 +80,12 @@ int main()
         entityTextureManager = new EntityDataManager();
         SpriteRectDoubleBuffer *spriteRectDoubleBuffer = new SpriteRectDoubleBuffer(MAX_OBJECTS);
         gameManager = new GameManager(entityTextureManager, spriteRectDoubleBuffer, MAX_OBJECTS);
-        
+
         // Load texture atlas into GPU memory
         Texture2D textureAtlas = entityTextureManager->LoadTextureAtlas();
+
+        // Load level from file
+        gameManager->LoadLevel();
 
         while (!WindowShouldClose() && !exitGame)
         {
@@ -98,16 +101,6 @@ int main()
                                                 auto source = spriteRectDoubleBuffer->consumer_buffer[i].source;
                                                 auto tint = spriteRectDoubleBuffer->consumer_buffer[i].tint;
                                                 DrawTextureRec(textureAtlas, source, position, tint);
-
-                                                if (DEBUG) {
-                                                        // Draw solid bondaries only for debug purposes
-                                                        auto box = spriteRectDoubleBuffer->consumer_buffer[i].boundaries;
-                                                        DrawRectangleLinesEx({static_cast<float>(box.upperBoundX), static_cast<float>(box.upperBoundY), static_cast<float>(box.lowerBoundX-box.upperBoundX), static_cast<float>(box.lowerBoundY-box.upperBoundY)}, 1.0f, PINK);
-
-                                                        // Draw attack bondaries only for debug purposes
-                                                        box = spriteRectDoubleBuffer->consumer_buffer[i].attackBoundaries;
-                                                        DrawRectangleLinesEx({static_cast<float>(box.upperBoundX), static_cast<float>(box.upperBoundY), static_cast<float>(box.lowerBoundX-box.upperBoundX), static_cast<float>(box.lowerBoundY-box.upperBoundY)}, 1.0f, YELLOW);
-                                                }
                                         }
                                         spriteRectDoubleBuffer->unlock();
                                 EndMode2D();

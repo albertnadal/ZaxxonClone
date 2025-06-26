@@ -38,8 +38,9 @@ class GameManager
 public:
   GameManager(EntityDataManager*, SpriteRectDoubleBuffer*, uint32_t);
   ~GameManager();
+  void LoadLevel();
   UpdateInfo Update(uint8_t);
-  std::optional<IEntity *> CreateEntityWithId(EntityIdentificator, int , int);
+  std::optional<IEntity *> CreateEntityWithId(EntityIdentificator, int, int, int);
   std::optional<Position *> GetPlayerPosition() const;
 };
 
