@@ -61,6 +61,14 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
     if (entity_id == EntityIdentificator::SHIP) {
       ship = static_cast<Ship*>(*entity_ptr);
     }
+
+    // Set the initial position of the object in the screen
+    (*entity_ptr)->position.setInitialXY(x, y);
+
+    // Initial update to load the sprites and boundary box
+    (*entity_ptr)->Update();
+
+    mobileObjects[(*entity_ptr)->uniqueId] = *entity_ptr;
   }
 
   return entity_ptr;
@@ -76,7 +84,7 @@ std::optional<Position *> GameManager::GetPlayerPosition() const {
 
 UpdateInfo GameManager::Update(uint8_t pressedKeys) {
   updateMobileObjects(pressedKeys);
-  updateStaticObjects();
+  //updateStaticObjects();
   updateSpriteRectBuffers();
   deleteUneededObjects();
 

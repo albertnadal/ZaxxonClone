@@ -10,7 +10,6 @@ void Ship::PrintName() const {
 }
 
 bool Ship::Update(const uint8_t pressedKeys_) {
-
     bool needRedraw = false;
     pressedKeys = pressedKeys_;
 

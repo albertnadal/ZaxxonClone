@@ -87,6 +87,8 @@ int main()
         // Load level from file
         gameManager->LoadLevel();
 
+        pthread_create(&gameLogicThread, nullptr, gameLogicThreadFunc, nullptr);
+
         while (!WindowShouldClose() && !exitGame)
         {
                         processKeyboardInput();
