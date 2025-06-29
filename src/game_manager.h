@@ -26,9 +26,6 @@ class GameManager
   SpriteRectDoubleBuffer *spriteRectDoubleBuffer;
   uint32_t maxObjects;
   void LoadLevelFromFile(const std::string&);
-  float newCameraVerticalPosition;
-  float currentCameraVerticalPosition;
-  std::vector<int> validAltitudes = {84, 78, 72, 66, 60}; // Altitudes of levels 4, 5, 6, 7 and 8. Are multiple of six.
   void deleteUneededObjects();
   void deleteAllObjects();
   void updateEntities(std::map<uint32_t, IEntity*>&, std::optional<uint8_t>);

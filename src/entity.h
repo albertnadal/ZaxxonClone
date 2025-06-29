@@ -46,21 +46,12 @@ public:
   uint32_t uniqueId;
   bool isMarkedToDelete = false;
   void SetGameManager(GameManager*);
-  void PositionSetOffset(int16_t x, int16_t y);
-  void PositionSetXY(float, float);
+  void PositionSetXYZ(float, float, float);
   void PositionSetX(float);
   void PositionSetY(float);
   void PositionAddX(float);
   void PositionAddY(float);
-  virtual std::vector<int> GetLowerBound() const;
-  virtual std::vector<int> GetUpperBound() const;
-  virtual std::vector<int> GetSolidLowerBound() const;
-  virtual std::vector<int> GetSolidUpperBound() const;
-  virtual std::optional<std::vector<int>> GetAttackLowerBound() const;  // REVISIT: This method must be moved to Ship class, as the Ship is the only object with attack areas
-  virtual std::optional<std::vector<int>> GetAttackUpperBound() const;  // REVISIT: This method must be moved to Ship class, as the Ship is the only object with attack areas
   virtual Boundaries GetAbsoluteBoundaries() const;
-  virtual Boundaries GetAbsoluteSolidBoundaries() const;
-  virtual std::optional<Boundaries> GetAbsoluteAttackBoundaries() const;  // REVISIT: This method must be moved to Ship class, as the Ship is the only object with attack areas
   virtual EntityIdentificator Id() const;
   virtual EntityType Type() const;
   virtual void InitWithSpriteSheet(EntitySpriteSheet*);

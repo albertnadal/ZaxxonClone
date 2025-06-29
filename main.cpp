@@ -66,7 +66,7 @@ int main()
         srand(static_cast<unsigned>(time(0))); // Initialize the random seed to avoid deterministic behaviours. Just for debug purposes.
 
         InitWindow(SCR_WIDTH * ZOOM, SCR_HEIGHT * ZOOM, WINDOW_TITLE);
-        SetExitKey(0); // Disable close the application when pressing Esc key.
+        //SetExitKey(0); // Disable close the application when pressing Esc key.
 
         // Camera configuration for scene game play screen
         Camera2D gameCamera;

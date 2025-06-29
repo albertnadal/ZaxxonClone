@@ -21,28 +21,8 @@ void IEntity::SetGameManager(GameManager *_gameManager) {
   gameManager = _gameManager;
 }
 
-void IEntity::PositionSetXY(float x, float y) {
-    position.setXY(x, y);
-}
-
-void IEntity::PositionSetX(float x) {
-  position.setX(x);
-}
-
-void IEntity::PositionSetY(float y) {
-  position.setY(y);
-}
-
-void IEntity::PositionAddX(float x) {
-  position.addX(x);
-}
-
-void IEntity::PositionAddY(float y) {
-  position.addY(y);
-}
-
-void IEntity::PositionSetOffset(int16_t x, int16_t y) {
-  position.setOffset(x, y);
+void IEntity::PositionSetXYZ(float x, float y, float z) {
+    position.SetXYZ(x, y, z);
 }
 
 void IEntity::LoadAnimationWithId(uint16_t animationId) {
@@ -97,46 +77,11 @@ bool IEntity::ShouldBeginAnimationLoopAgain()
     return false;
 }
 
-std::vector<int> IEntity::GetLowerBound() const {
-  return {position.GetIntX() + boundingBox.lowerBoundX, position.GetIntY() + boundingBox.lowerBoundY};
-}
-
-std::vector<int> IEntity::GetUpperBound() const {
-  return {position.GetIntX() + boundingBox.upperBoundX, position.GetIntY() + boundingBox.upperBoundY};
-}
-
-std::vector<int> IEntity::GetSolidLowerBound() const {
-  return {position.GetIntX() + solidBoundingBox.lowerBoundX, position.GetIntY() + solidBoundingBox.lowerBoundY};
-}
-
-std::vector<int> IEntity::GetSolidUpperBound() const {
-  return {position.GetIntX() + solidBoundingBox.upperBoundX, position.GetIntY() + solidBoundingBox.upperBoundY};
-}
-
-std::optional<std::vector<int>> IEntity::GetAttackLowerBound() const {
-  return std::nullopt;
-}
-
-std::optional<std::vector<int>> IEntity::GetAttackUpperBound() const {
-  return std::nullopt;
-}
-
 Boundaries IEntity::GetAbsoluteBoundaries() const {
-  return {position.GetIntX() + boundingBox.upperBoundX,
-          position.GetIntY() + boundingBox.upperBoundY,
-          position.GetIntX() + boundingBox.lowerBoundX,
-          position.GetIntY() + boundingBox.lowerBoundY};
-}
-
-Boundaries IEntity::GetAbsoluteSolidBoundaries() const {
-  return {position.GetIntX() + boundingBox.upperBoundX,
-          position.GetIntY() + boundingBox.upperBoundY,
-          position.GetIntX() + boundingBox.lowerBoundX,
-          position.GetIntY() + boundingBox.lowerBoundY};
-}
-
-std::optional<Boundaries> IEntity::GetAbsoluteAttackBoundaries() const {
-  return std::nullopt;
+  return {static_cast<int>(position.GetProjectedX()) + boundingBox.upperBoundX,
+          static_cast<int>(position.GetProjectedY()) + boundingBox.upperBoundY,
+          static_cast<int>(position.GetProjectedX()) + boundingBox.lowerBoundX,
+          static_cast<int>(position.GetProjectedY()) + boundingBox.lowerBoundY};
 }
 
 EntityIdentificator IEntity::Id() const {
@@ -160,8 +105,8 @@ void IEntity::PrintName() const {
 }
 
 void IEntity::UpdatePositionInSpacePartitionTree() {
-    std::vector<int> lowerBound = GetLowerBound();
-    std::vector<int> upperBound = GetUpperBound();
+    //std::vector<int> lowerBound = GetLowerBound();
+    //std::vector<int> upperBound = GetUpperBound();
 }
 
 bool IEntity::Update() {

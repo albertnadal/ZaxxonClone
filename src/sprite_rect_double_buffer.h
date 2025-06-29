@@ -10,11 +10,10 @@ struct SpriteRect {
     Rectangle source;
     Vector2 position;
     Boundaries boundaries; // Used only for debug purposes.
-    Boundaries attackBoundaries; // Used only for debug purposes.
     Color tint;  // Used only for debug purposes.
 
-    SpriteRect() : source({0,0,0,0}), position({0,0}), boundaries({0,0,0,0}), attackBoundaries({0,0,0,0}), tint(WHITE) {}
-    SpriteRect(Rectangle src, Vector2 pos, Boundaries boundaries, Boundaries attackBoundaries, Color tint) : source(src), position(pos), boundaries(boundaries), attackBoundaries(attackBoundaries), tint(tint) {}
+    SpriteRect() : source({0,0,0,0}), position({0,0}), boundaries({0,0,0,0}), tint(WHITE) {}
+    SpriteRect(Rectangle src, Vector2 pos, Boundaries boundaries, Color tint) : source(src), position(pos), boundaries(boundaries), tint(tint) {}
 };
 
 class SpriteRectDoubleBuffer {

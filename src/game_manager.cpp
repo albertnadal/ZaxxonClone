@@ -63,7 +63,7 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
     }
 
     // Set the initial position of the object in the screen
-    (*entity_ptr)->position.setInitialXY(x, y);
+    (*entity_ptr)->position.SetXYZ(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
 
     // Initial update to load the sprites and boundary box
     (*entity_ptr)->Update();
@@ -93,10 +93,9 @@ UpdateInfo GameManager::Update(uint8_t pressedKeys) {
 }
 
 void GameManager::updateSpriteRectBuffers() {
-  /*
   int i = 0;
-  std::vector<aabb::AABBIntersection<IEntity*>> objectIntersections = spacePartitionObjectsTree->query(player->GetLowerBound(), player->GetUpperBound());
-
+  //std::vector<aabb::AABBIntersection<IEntity*>> objectIntersections = spacePartitionObjectsTree->query(player->GetLowerBound(), player->GetUpperBound());
+/*
   for (auto const& x : staticObjects) {
     IEntity* entity_ptr = x.second;
     Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
@@ -118,21 +117,19 @@ void GameManager::updateSpriteRectBuffers() {
     }
 
     spriteRectDoubleBuffer->producer_buffer[i++] = SpriteRect(src, pos, boundaries, attackBoundaries, tint);
-  }
+  }*/
 
   for (auto const& x : mobileObjects) {
     IEntity* entity_ptr = x.second;
     Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
-    Vector2 pos = { entity_ptr->position.GetX(), entity_ptr->position.GetY() };
+    Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
     Boundaries boundaries = entity_ptr->GetAbsoluteBoundaries();
-    Boundaries attackBoundaries = entity_ptr->GetAbsoluteAttackBoundaries().value_or(Boundaries{0,0,0,0});
-    spriteRectDoubleBuffer->producer_buffer[i] = SpriteRect(src, pos, boundaries, attackBoundaries, WHITE);
+    spriteRectDoubleBuffer->producer_buffer[i] = SpriteRect(src, pos, boundaries, WHITE);
     i++;
   }
 
   spriteRectDoubleBuffer->producer_buffer_length = i;
   spriteRectDoubleBuffer->swapBuffers();
-  */
 }
 
 void GameManager::updateEntities(std::map<uint32_t, IEntity*>& objects, std::optional<uint8_t> pressedKeys = std::nullopt) {
