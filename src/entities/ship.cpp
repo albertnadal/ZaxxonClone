@@ -55,11 +55,25 @@ void Ship::UpdatePreviousDirection() {
 }
 
 void Ship::ProcessPressedKeys(bool checkPreviousPressedKeys) {
+    // User pressed Z_KEY_RIGHT
+    if ((pressedKeys & KeyboardKeyCode::Z_KEY_RIGHT) == KeyboardKeyCode::Z_KEY_RIGHT) {
+        MoveTo(Direction::RIGHT);
+    }
 
+    if ((pressedKeys & KeyboardKeyCode::Z_KEY_LEFT) == KeyboardKeyCode::Z_KEY_LEFT) {
+        MoveTo(Direction::LEFT);
+    }
+
+    prevPressedKeys = pressedKeys;
 }
 
 void Ship::ProcessReleasedKeys() {
     prevPressedKeys = KeyboardKeyCode::Z_KEY_NONE;
+}
+
+void Ship::MoveTo(Direction direction) {
+    // Update the player position.
+    PositionAddX(direction == Direction::RIGHT ? 2.0f : -2.0f);
 }
 
 void Ship::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {

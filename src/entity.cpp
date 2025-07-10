@@ -22,7 +22,11 @@ void IEntity::SetGameManager(GameManager *_gameManager) {
 }
 
 void IEntity::PositionSetXYZ(float x, float y, float z) {
-    position.SetXYZ(x, y, z);
+  position.SetXYZ(x, y, z);
+}
+
+void IEntity::PositionAddX(float x) {
+  position.AddX(x);
 }
 
 void IEntity::LoadAnimationWithId(uint16_t animationId) {

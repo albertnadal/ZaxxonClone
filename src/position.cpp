@@ -20,12 +20,22 @@ float Position::GetProjectedY() const {
     return projected_y;
 }
 
+inline float Position::CalculateProjectedY() const {
+    return 100 + x * 0.57735f; // Projection on the Y axis for isometric view
+}
+
 void Position::SetXYZ(float _x, float _y, float _z) {
     x = _x;
     y = _y;
     z = _z;
     projected_x = x;
-    projected_y = 100 + x * 0.57735f; // Projection on the Y axis for isometric view
+    projected_y = CalculateProjectedY();
+}
+
+void Position::AddX(float _x) {
+    x += _x;
+    projected_x = x;
+    projected_y = CalculateProjectedY();
 }
 
 Position::~Position() {
