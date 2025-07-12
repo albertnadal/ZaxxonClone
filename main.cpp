@@ -76,6 +76,13 @@ int main()
         gameCamera.rotation = 0.0f;
         gameCamera.zoom = ZOOM;
 
+        // Camera configuration for level background
+        Camera2D backgroundCamera;
+        backgroundCamera.target = (Vector2){ 0, 0 };
+        backgroundCamera.offset = (Vector2){ 0, 0 };
+        backgroundCamera.rotation = 0.0f;
+        backgroundCamera.zoom = ZOOM;
+
         SetTargetFPS(FPS);
 
         entityTextureManager = new EntityDataManager();
@@ -84,6 +91,7 @@ int main()
 
         // Load texture atlas into GPU memory
         Texture2D textureAtlas = entityTextureManager->LoadTextureAtlas();
+        Texture2D levelBackground = entityTextureManager->LoadLevelBackground();
 
         // Load level from file
         gameManager->LoadLevel();
@@ -97,6 +105,9 @@ int main()
                         BeginDrawing();
                                 ClearBackground(BLACK);
 
+                                BeginMode2D(backgroundCamera);
+                                        DrawTextureRec(levelBackground, {0,0,1816,1008}, {50.0f,-805.0f}, WHITE);
+                                EndMode2D();
                                 BeginMode2D(gameCamera);
                                         spriteRectDoubleBuffer->lock();
                                         for(int i=0; i<spriteRectDoubleBuffer->consumer_buffer_length; i++) {

@@ -95,6 +95,10 @@ Texture2D EntityDataManager::LoadTextureAtlas() const {
         return LoadTexture(FileSystem::getPath(textureFilename).c_str());
 }
 
+Texture2D EntityDataManager::LoadLevelBackground() const {
+        return LoadTexture(FileSystem::getPath("level.png").c_str());
+}
+
 std::optional<EntitySpriteSheet*> EntityDataManager::GetSpriteSheetByEntityIdentificator(EntityIdentificator entityId) const {
         auto searchIterator = entitySpriteSheetsMap.find(entityId);
         if (searchIterator != entitySpriteSheetsMap.end()) {
