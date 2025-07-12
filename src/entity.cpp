@@ -29,6 +29,10 @@ void IEntity::PositionAddX(float x) {
   position.AddX(x);
 }
 
+void IEntity::PositionAddY(float y) {
+  position.AddY(y);
+}
+
 void IEntity::LoadAnimationWithId(uint16_t animationId) {
     std::optional<EntitySpriteSheetAnimation *> currentAnimation = spriteSheet->GetAnimationWithId(animationId);
     assert(currentAnimation != std::nullopt);

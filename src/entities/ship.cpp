@@ -55,25 +55,55 @@ void Ship::UpdatePreviousDirection() {
 }
 
 void Ship::ProcessPressedKeys(bool checkPreviousPressedKeys) {
-    // User pressed Z_KEY_RIGHT
+    bool shipIsMovingInXAxis = true;
     if ((pressedKeys & KeyboardKeyCode::Z_KEY_RIGHT) == KeyboardKeyCode::Z_KEY_RIGHT) {
-        MoveTo(Direction::RIGHT);
+        MoveToXAxis(Direction::RIGHT);
+    } else if ((pressedKeys & KeyboardKeyCode::Z_KEY_LEFT) == KeyboardKeyCode::Z_KEY_LEFT) {
+        MoveToXAxis(Direction::LEFT);
+    } else {
+        shipIsMovingInXAxis = false;
     }
 
-    if ((pressedKeys & KeyboardKeyCode::Z_KEY_LEFT) == KeyboardKeyCode::Z_KEY_LEFT) {
-        MoveTo(Direction::LEFT);
+    if ((pressedKeys & KeyboardKeyCode::Z_KEY_UP) == KeyboardKeyCode::Z_KEY_UP) {
+        if ((!checkPreviousPressedKeys) || ((checkPreviousPressedKeys) && ((prevPressedKeys & KeyboardKeyCode::Z_KEY_UP) != KeyboardKeyCode::Z_KEY_UP))) {
+            UpKeyPressed();
+        }
+        MoveToYAxis(Direction::UP, shipIsMovingInXAxis);
+    } else if ((prevPressedKeys & KeyboardKeyCode::Z_KEY_UP) == KeyboardKeyCode::Z_KEY_UP) {
+        UpKeyReleased();
+    } else if ((pressedKeys & KeyboardKeyCode::Z_KEY_DOWN) == KeyboardKeyCode::Z_KEY_DOWN) {
+        if ((!checkPreviousPressedKeys) || ((checkPreviousPressedKeys) && ((prevPressedKeys & KeyboardKeyCode::Z_KEY_DOWN) != KeyboardKeyCode::Z_KEY_DOWN))) {
+            DownKeyPressed();
+        }
+        MoveToYAxis(Direction::DOWN, shipIsMovingInXAxis);
+    } else if ((prevPressedKeys & KeyboardKeyCode::Z_KEY_DOWN) == KeyboardKeyCode::Z_KEY_DOWN) {
+        DownKeyReleased();
     }
 
     prevPressedKeys = pressedKeys;
 }
 
 void Ship::ProcessReleasedKeys() {
+    if ((prevPressedKeys & KeyboardKeyCode::Z_KEY_UP) == KeyboardKeyCode::Z_KEY_UP) {
+        UpKeyReleased();
+    }
+
+    if ((prevPressedKeys & KeyboardKeyCode::Z_KEY_DOWN) == KeyboardKeyCode::Z_KEY_DOWN) {
+        DownKeyReleased();
+    }
+
     prevPressedKeys = KeyboardKeyCode::Z_KEY_NONE;
 }
 
-void Ship::MoveTo(Direction direction) {
+void Ship::MoveToXAxis(Direction direction) {
     // Update the player position.
     PositionAddX(direction == Direction::RIGHT ? 2.0f : -2.0f);
+}
+
+void Ship::MoveToYAxis(Direction direction, bool flySlow) {
+    // Update the player position.
+    float verticalVelocity = flySlow ? 1.5f : 2.0f;
+    PositionAddY(direction == Direction::DOWN ? verticalVelocity : -1 * verticalVelocity);
 }
 
 void Ship::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {

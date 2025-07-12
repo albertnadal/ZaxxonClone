@@ -13,7 +13,7 @@ enum EntityIdentificator: uint16_t { NONE = 0, SHIP = 1 };
 enum EntityType: uint16_t { TERRAIN = 0, PLAYER = 1, ENEMY = 2 };
 
 // Object movement direction
-enum Direction: uint8_t { RIGHT = 0, LEFT = 1 };
+enum Direction: uint8_t { RIGHT = 0, LEFT = 1, UP = 2, DOWN = 3 };
 
 // Object animation identificators
 enum ShipAnimation: uint16_t { STRAIGHT_FLIGHT = 0, ASCENDING = 1, DESCENDING = 2 };

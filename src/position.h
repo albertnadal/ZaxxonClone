@@ -17,6 +17,7 @@ public:
   Vector2 GetProjectedCoordinate() const;
   void SetXYZ(float, float, float);
   void AddX(float);
+  void AddY(float);
   float GetProjectedX() const;
   float GetProjectedY() const;
 };

@@ -27,7 +27,8 @@ class Ship: public IEntity
 
   // Ship action update functions
   void UpdateCollisions();
-  void MoveTo(Direction);
+  void MoveToXAxis(Direction);
+  void MoveToYAxis(Direction, bool);
 
 public:
   Ship();
