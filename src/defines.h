@@ -20,8 +20,7 @@ enum ShipAnimation: uint16_t { STRAIGHT_FLIGHT = 0, ASCENDING = 1, DESCENDING = 
 
 // Others
 constexpr bool DEBUG = true;                                                     // Debug mode.
-constexpr int FPS = 60;                                                          // Frames per second.
-constexpr int MILLISECONDS_PER_TICK = 16;                                        // Game logic frequency in milliseconds. 16ms ≈ 60 ticks per second.
+constexpr int MILLISECONDS_PER_TICK = 16;                                        // Game logic frequency in milliseconds. 16ms ≈ 60 ticks per second ≈ 60 frames per second.
 constexpr float ZOOM = 2.0f;                                                     // Game display zoom.
 constexpr const char *WINDOW_TITLE = "Zaxxon";                                   // Title to show in the application window bar.
 constexpr const char *ENTITIES_DATA_FILENAME = "entities.dat";                   // The data file where entity animations and collision areas are defined.

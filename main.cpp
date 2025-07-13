@@ -1,8 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <cmath>
-#include <mutex>
-#include <pthread.h>
 #include <thread>
 #include <bitset>
 #include <raylib/raylib.h>
@@ -15,33 +11,14 @@ constexpr uint32_t SCR_WIDTH = 224;
 constexpr uint32_t SCR_HEIGHT = 256;
 constexpr uint32_t MAX_OBJECTS = 1000;
 
-pthread_t gameLogicThread;
-std::chrono::duration<float> cpuTimePerUpdate;
+std::chrono::duration<float> computingTimePerUpdate;
 uint8_t pressedKeys = Z_KEY_NONE;
 bool exitGame = false;
 bool isGameFinished = false;
 EntityDataManager *entityTextureManager;
 GameManager *gameManager;
-int gameLogicFrequency = MILLISECONDS_PER_TICK;
+int gameLoopFrequency = MILLISECONDS_PER_TICK;
 bool paused = false;
-
-static void* gameLogicThreadFunc(void* v)
-{
-        UpdateInfo info;
-        while(!exitGame && !isGameFinished) {
-                if (!paused) {
-                        auto t0 = std::chrono::high_resolution_clock::now();
-                        info = gameManager->Update(pressedKeys);
-                        isGameFinished = info.gameFinished;
-
-                        auto t1 = std::chrono::high_resolution_clock::now();
-                        cpuTimePerUpdate = t1 - t0;
-                }
-                std::this_thread::sleep_for(std::chrono::milliseconds(gameLogicFrequency) - cpuTimePerUpdate);
-        }
-
-        return nullptr;
-}
 
 inline void processKeyboardInput() {
         if (IsKeyPressed(KEY_RIGHT) || IsKeyReleased(KEY_RIGHT)) pressedKeys ^= Z_KEY_RIGHT;
@@ -52,8 +29,8 @@ inline void processKeyboardInput() {
         if (IsKeyPressed(KEY_ESCAPE) || IsKeyReleased(KEY_ESCAPE)) pressedKeys ^= Z_KEY_ESCAPE;
 
         if (DEBUG) {
-                if (IsKeyPressed(KEY_P)) gameLogicFrequency += 10;
-                if (IsKeyPressed(KEY_O)) gameLogicFrequency -= 10;
+                if (IsKeyPressed(KEY_P)) gameLoopFrequency += 10;
+                if (IsKeyPressed(KEY_O)) gameLoopFrequency -= 10;
                 if (IsKeyPressed(KEY_M)) paused = !paused;
         }
 }
@@ -83,8 +60,6 @@ int main()
         backgroundCamera.rotation = 0.0f;
         backgroundCamera.zoom = ZOOM;
 
-        SetTargetFPS(FPS);
-
         entityTextureManager = new EntityDataManager();
         SpriteRectDoubleBuffer *spriteRectDoubleBuffer = new SpriteRectDoubleBuffer(MAX_OBJECTS);
         gameManager = new GameManager(entityTextureManager, spriteRectDoubleBuffer, MAX_OBJECTS);
@@ -96,11 +71,15 @@ int main()
         // Load level from file
         gameManager->LoadLevel();
 
-        pthread_create(&gameLogicThread, nullptr, gameLogicThreadFunc, nullptr);
+        UpdateInfo info;
 
         while (!WindowShouldClose() && !exitGame)
         {
                         processKeyboardInput();
+
+                        auto t0 = std::chrono::high_resolution_clock::now();
+                        info = gameManager->Update(pressedKeys);
+                        isGameFinished = info.gameFinished;
 
                         BeginDrawing();
                                 ClearBackground(BLACK);
@@ -109,26 +88,25 @@ int main()
                                         DrawTextureRec(levelBackground, {0,0,1816,1008}, {50.0f,-805.0f}, WHITE);
                                 EndMode2D();
                                 BeginMode2D(gameCamera);
-                                        spriteRectDoubleBuffer->lock();
                                         for(int i=0; i<spriteRectDoubleBuffer->consumer_buffer_length; i++) {
                                                 auto position = spriteRectDoubleBuffer->consumer_buffer[i].position;
                                                 auto source = spriteRectDoubleBuffer->consumer_buffer[i].source;
                                                 auto tint = spriteRectDoubleBuffer->consumer_buffer[i].tint;
                                                 DrawTextureRec(textureAtlas, source, position, tint);
                                         }
-                                        spriteRectDoubleBuffer->unlock();
                                 EndMode2D();
 
                                 if (DEBUG) {
                                         DrawFPS(16, 16);
                                 }
                         EndDrawing();
+
+                        auto t1 = std::chrono::high_resolution_clock::now();
+                        computingTimePerUpdate = t1 - t0;
+                        std::this_thread::sleep_for(std::chrono::milliseconds(gameLoopFrequency) - computingTimePerUpdate);
         }
 
         exitGame = true;
-
-        // Wait for the gameLogicThread to finish
-        pthread_join(gameLogicThread, nullptr);
 
         delete entityTextureManager;
         delete gameManager;
