@@ -9,7 +9,7 @@ private:
   float x, y, z;
   float projected_x, projected_y;
 
-  inline float CalculateProjectedY() const;
+  void CalculateProjectionCoordinate();
 public:
   Position();
   ~Position();
@@ -18,6 +18,7 @@ public:
   void SetXYZ(float, float, float);
   void AddX(float);
   void AddY(float);
+  void AddZ(float);
   float GetProjectedX() const;
   float GetProjectedY() const;
 };

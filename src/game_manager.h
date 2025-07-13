@@ -11,7 +11,7 @@
 
 class Ship;
 
-struct UpdateInfo { int lifeCounter; bool gameFinished; };
+struct UpdateInfo { Position levelPosition; int lifeCounter; bool gameFinished; };
 
 class GameManager
 {
@@ -25,6 +25,7 @@ class GameManager
   EntityDataManager *textureManager;
   SpriteRectDoubleBuffer *spriteRectDoubleBuffer;
   uint32_t maxObjects;
+  Position levelPosition;
   void LoadLevelFromFile(const std::string&);
   void deleteUneededObjects();
   void deleteAllObjects();

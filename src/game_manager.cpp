@@ -8,6 +8,7 @@ GameManager::GameManager(EntityDataManager* _textureManager, SpriteRectDoubleBuf
         textureManager = _textureManager;
         spriteRectDoubleBuffer = _spriteRectDoubleBuffer;
         maxObjects = _maxObjects;
+        levelPosition.SetXYZ(0, 0, 0);
 }
 
 void GameManager::LoadLevel() {
@@ -83,12 +84,14 @@ std::optional<Position *> GameManager::GetPlayerPosition() const {
 }
 
 UpdateInfo GameManager::Update(uint8_t pressedKeys) {
+  //TODO: Increase level position in the Z axis info.levelPosition.AddZ(1.0f);
   updateMobileObjects(pressedKeys);
   //updateStaticObjects();
   updateSpriteRectBuffers();
   deleteUneededObjects();
 
-  UpdateInfo info;
+  UpdateInfo info; // TODO: To avoid creating a new object every time, we can use a static variable here or make it a member variable.
+  info.levelPosition = levelPosition;
   return info;
 }
 

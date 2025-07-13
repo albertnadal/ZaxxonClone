@@ -20,27 +20,33 @@ float Position::GetProjectedY() const {
     return projected_y;
 }
 
-inline float Position::CalculateProjectedY() const {
-    return y + 100.0f + x * 0.57735f; // Projection on the Y axis for isometric view
+void Position::CalculateProjectionCoordinate() {
+    // 0.5 is the tangent of 26.565 degrees, which is used for calculating the isometric projection
+    projected_y = y + 100.0f + x * 0.5; // Projection on the Y axis from the X axis
+    projected_y = projected_y + z * -0.5; // Projection on the Y axis from the Z axis
+    projected_x = x + z; // Projection on the X axis from the Z axis
 }
 
 void Position::SetXYZ(float _x, float _y, float _z) {
     x = _x;
     y = _y;
     z = _z;
-    projected_x = x;
-    projected_y = CalculateProjectedY();
+    CalculateProjectionCoordinate();
 }
 
 void Position::AddX(float _x) {
     x += _x;
-    projected_x = x;
-    projected_y = CalculateProjectedY();
+    CalculateProjectionCoordinate();
 }
 
 void Position::AddY(float _y) {
     y += _y;
-    projected_y = CalculateProjectedY();
+    CalculateProjectionCoordinate();
+}
+
+void Position::AddZ(float _z) {
+    z += _z;
+    CalculateProjectionCoordinate();
 }
 
 Position::~Position() {
