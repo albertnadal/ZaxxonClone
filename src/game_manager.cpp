@@ -8,7 +8,6 @@ GameManager::GameManager(EntityDataManager* _textureManager, SpriteRectDoubleBuf
         textureManager = _textureManager;
         spriteRectDoubleBuffer = _spriteRectDoubleBuffer;
         maxObjects = _maxObjects;
-        levelPosition.SetXYZ(0, 0, 0);
 }
 
 void GameManager::LoadLevel() {
@@ -16,6 +15,10 @@ void GameManager::LoadLevel() {
 }
 
 void GameManager::LoadLevelFromFile(const std::string& filename) {
+    // Set the initial position of the level background in the 3D space
+    levelPosition.SetXYZ(0, 0, 0);
+    levelPosition.SetXYZOffset(0, 0, 0);
+
     std::ifstream file(filename);
     assert(file.is_open() && "Error: Unable to open file with level data.");
 
@@ -41,11 +44,12 @@ void GameManager::LoadLevelFromFile(const std::string& filename) {
             std::getline(ssEntity, entityY);
 
             if (!entityId.empty() && !entityX.empty() && !entityY.empty()) {
+                Position position;
+                position.SetXYZ(std::stof(entityX), std::stof(entityY), segmentNumber * SEGMENT_LENGTH);
+                position.SetXYZOffset(0, 0, 0);
                 CreateEntityWithId(
                     static_cast<EntityIdentificator>(std::stoi(entityId)),
-                    std::stoi(entityX),
-                    std::stoi(entityY),
-                    segmentNumber * SEGMENT_LENGTH
+                    position
                 );
             }
         }
@@ -55,7 +59,7 @@ void GameManager::LoadLevelFromFile(const std::string& filename) {
     file.close();
 }
 
-std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator entity_id, int x, int y, int z) {
+std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator entity_id, Position position) {
   std::optional<IEntity *> entity_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(entity_id);
 
   if(entity_ptr.has_value()) {
@@ -64,7 +68,7 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
     }
 
     // Set the initial position of the object in the screen
-    (*entity_ptr)->position.SetXYZ(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
+    (*entity_ptr)->position.Copy(position);
 
     // Initial update to load the sprites and boundary box
     (*entity_ptr)->Update();

@@ -86,10 +86,11 @@ bool IEntity::ShouldBeginAnimationLoopAgain()
 }
 
 Boundaries IEntity::GetAbsoluteBoundaries() const {
-  return {static_cast<int>(position.GetProjectedX()) + boundingBox.upperBoundX,
-          static_cast<int>(position.GetProjectedY()) + boundingBox.upperBoundY,
-          static_cast<int>(position.GetProjectedX()) + boundingBox.lowerBoundX,
-          static_cast<int>(position.GetProjectedY()) + boundingBox.lowerBoundY};
+  Vector2 projection = position.GetProjectedCoordinate();
+  return {static_cast<int>(projection.x) + boundingBox.upperBoundX,
+          static_cast<int>(projection.y) + boundingBox.upperBoundY,
+          static_cast<int>(projection.x) + boundingBox.lowerBoundX,
+          static_cast<int>(projection.y) + boundingBox.lowerBoundY};
 }
 
 EntityIdentificator IEntity::Id() const {

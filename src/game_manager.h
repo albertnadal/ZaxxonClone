@@ -38,7 +38,7 @@ public:
   ~GameManager();
   void LoadLevel();
   UpdateInfo Update(uint8_t);
-  std::optional<IEntity *> CreateEntityWithId(EntityIdentificator, int, int, int);
+  std::optional<IEntity *> CreateEntityWithId(EntityIdentificator, Position);
   std::optional<Position *> GetPlayerPosition() const;
 };
 

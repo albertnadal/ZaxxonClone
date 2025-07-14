@@ -7,6 +7,7 @@ class Position
 {
 private:
   float x, y, z;
+  float x_offset, y_offset, z_offset;
   float projected_x, projected_y;
 
   void CalculateProjectionCoordinate();
@@ -15,12 +16,14 @@ public:
   ~Position();
 
   Vector2 GetProjectedCoordinate() const;
+  Vector3 GetCoordinates() const;
+  Vector3 GetOffset() const;
   void SetXYZ(float, float, float);
+  void SetXYZOffset(float, float, float);
   void AddX(float);
   void AddY(float);
   void AddZ(float);
-  float GetProjectedX() const;
-  float GetProjectedY() const;
+  void Copy(Position);
 };
 
 #endif

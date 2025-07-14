@@ -3,6 +3,7 @@
 
 Position::Position() {
     x = y = z = 0.0f;
+    x_offset = y_offset = z_offset = 0.0f;
     projected_x = projected_y = 0.0f;
 }
 
@@ -10,12 +11,12 @@ Vector2 Position::GetProjectedCoordinate() const {
     return { projected_x, projected_y };
 }
 
-float Position::GetProjectedX() const {
-    return projected_x;
+Vector3 Position::GetCoordinates() const {
+    return { x, y, z };
 }
 
-float Position::GetProjectedY() const {
-    return projected_y;
+Vector3 Position::GetOffset() const {
+    return { x_offset, y_offset, z_offset };
 }
 
 void Position::CalculateProjectionCoordinate() {
@@ -32,6 +33,13 @@ void Position::SetXYZ(float _x, float _y, float _z) {
     CalculateProjectionCoordinate();
 }
 
+void Position::SetXYZOffset(float _x, float _y, float _z) {
+    x_offset = _x;
+    y_offset = _y;
+    z_offset = _z;
+    CalculateProjectionCoordinate();
+}
+
 void Position::AddX(float _x) {
     x += _x;
     CalculateProjectionCoordinate();
@@ -44,6 +52,18 @@ void Position::AddY(float _y) {
 
 void Position::AddZ(float _z) {
     z += _z;
+    CalculateProjectionCoordinate();
+}
+
+void Position::Copy(Position position) {
+    Vector3 coordinates = position.GetCoordinates();
+    Vector3 coordinatesOffset = position.GetOffset();
+    x = coordinates.x;
+    y = coordinates.y;
+    z = coordinates.z;
+    x_offset = coordinatesOffset.x;
+    y_offset = coordinatesOffset.y;
+    z_offset = coordinatesOffset.z;
     CalculateProjectionCoordinate();
 }
 
