@@ -12,7 +12,7 @@
 class Ship;
 
 struct UpdateInfo { Position levelPosition; int lifeCounter; bool gameFinished; };
-struct LevelInfo { Texture2D texture; };
+struct LevelInfo { Texture2D texture; Rectangle source; Position position; };
 
 class GameManager
 {

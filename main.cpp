@@ -69,7 +69,6 @@ int main()
 
         // Load level
         LevelInfo levelInfo = gameManager->LoadLevel();
-        Texture2D levelBackground = levelInfo.texture;
 
         UpdateInfo info;
 
@@ -85,7 +84,7 @@ int main()
                                 ClearBackground(BLACK);
 
                                 BeginMode2D(backgroundCamera);
-                                        DrawTextureRec(levelBackground, {0,0,1816,1008}, {50.0f,-805.0f}, WHITE);
+                                        DrawTextureRec(levelInfo.texture, levelInfo.source, levelInfo.position.GetProjectedCoordinate(), WHITE);
                                 EndMode2D();
                                 BeginMode2D(gameCamera);
                                         for(int i=0; i<spriteRectDoubleBuffer->consumer_buffer_length; i++) {
