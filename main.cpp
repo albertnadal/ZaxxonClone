@@ -66,10 +66,10 @@ int main()
 
         // Load texture atlas into GPU memory
         Texture2D textureAtlas = entityTextureManager->LoadTextureAtlas();
-        Texture2D levelBackground = entityTextureManager->LoadLevelBackground();
 
-        // Load level from file
-        gameManager->LoadLevel();
+        // Load level
+        LevelInfo levelInfo = gameManager->LoadLevel();
+        Texture2D levelBackground = levelInfo.texture;
 
         UpdateInfo info;
 

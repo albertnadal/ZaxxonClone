@@ -10,17 +10,23 @@ GameManager::GameManager(EntityDataManager* _textureManager, SpriteRectDoubleBuf
         maxObjects = _maxObjects;
 }
 
-void GameManager::LoadLevel() {
-  LoadLevelFromFile(LEVEL_FILENAME);
+LevelInfo GameManager::LoadLevel() {
+  return LoadLevelFromFile(LEVEL_FILENAME);
 }
 
-void GameManager::LoadLevelFromFile(const std::string& filename) {
+LevelInfo GameManager::LoadLevelFromFile(const std::string& filename) {
+    LevelInfo levelInfo;
+
     // Set the initial position of the level background in the 3D space
     levelPosition.SetXYZ(0, 0, 0);
     levelPosition.SetXYZOffset(0, 0, 0);
 
     std::ifstream file(filename);
     assert(file.is_open() && "Error: Unable to open file with level data.");
+
+    std::string backgroundTextureFilemame;
+    std::getline(file, backgroundTextureFilemame);
+    levelInfo.texture = LoadTexture(FileSystem::getPath(backgroundTextureFilemame).c_str());
 
     std::string segmentData;
     int segmentNumber = 0;
@@ -57,6 +63,7 @@ void GameManager::LoadLevelFromFile(const std::string& filename) {
     }
 
     file.close();
+    return levelInfo;
 }
 
 std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator entity_id, Position position) {

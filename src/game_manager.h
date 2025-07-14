@@ -12,6 +12,7 @@
 class Ship;
 
 struct UpdateInfo { Position levelPosition; int lifeCounter; bool gameFinished; };
+struct LevelInfo { Texture2D texture; };
 
 class GameManager
 {
@@ -26,7 +27,7 @@ class GameManager
   SpriteRectDoubleBuffer *spriteRectDoubleBuffer;
   uint32_t maxObjects;
   Position levelPosition;
-  void LoadLevelFromFile(const std::string&);
+  LevelInfo LoadLevelFromFile(const std::string&);
   void deleteUneededObjects();
   void deleteAllObjects();
   void updateEntities(std::map<uint32_t, IEntity*>&, std::optional<uint8_t>);
@@ -36,7 +37,7 @@ class GameManager
 public:
   GameManager(EntityDataManager*, SpriteRectDoubleBuffer*, uint32_t);
   ~GameManager();
-  void LoadLevel();
+  LevelInfo LoadLevel();
   UpdateInfo Update(uint8_t);
   std::optional<IEntity *> CreateEntityWithId(EntityIdentificator, Position);
   std::optional<Position *> GetPlayerPosition() const;

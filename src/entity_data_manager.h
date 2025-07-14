@@ -21,7 +21,6 @@ public:
   EntityDataManager();
   ~EntityDataManager();
   Texture2D LoadTextureAtlas() const;
-  Texture2D LoadLevelBackground() const;
   std::optional<EntitySpriteSheet*> GetSpriteSheetByEntityIdentificator(EntityIdentificator) const;
 };
 
