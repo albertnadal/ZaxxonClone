@@ -104,7 +104,7 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
   return entity_ptr;
 }
 
-std::optional<Position *> GameManager::GetPlayerPosition() const {
+std::optional<Position *> GameManager::GetPlayerPosition() const { // TODO: To be removed
   if (ship == nullptr) {
     return std::nullopt;
   }

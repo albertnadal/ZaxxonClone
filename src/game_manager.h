@@ -42,7 +42,7 @@ public:
   LevelInfo LoadLevel();
   UpdateInfo Update(uint8_t);
   std::optional<IEntity *> CreateEntityWithId(EntityIdentificator, Position);
-  std::optional<Position *> GetPlayerPosition() const;
+  std::optional<Position *> GetPlayerPosition() const; // TODO: To be removed
 };
 
 #endif

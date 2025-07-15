@@ -42,7 +42,6 @@ public:
   Position position;
   Boundaries boundingBox;
   Boundaries solidBoundingBox;
-  collision::vec2<int16_t> vectorDirection;
   uint32_t uniqueId;
   bool isMarkedToDelete = false;
   void SetGameManager(GameManager*);

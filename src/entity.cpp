@@ -13,8 +13,6 @@ IEntity::IEntity(EntityIdentificator _id, EntityType _type, unsigned char _maxSt
   id(_id),
   type(_type) {
   boundingBox = solidBoundingBox = {0, 0, 0, 0};
-  vectorDirection.x = 0;
-  vectorDirection.y = 0;
 }
 
 void IEntity::SetGameManager(GameManager *_gameManager) {
