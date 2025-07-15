@@ -12,7 +12,7 @@
 class Ship;
 
 struct UpdateInfo { Position levelPosition; int lifeCounter; bool gameFinished; };
-struct LevelInfo { Texture2D texture; Rectangle source; Position position; };
+struct LevelInfo { Texture2D bgTexture; Rectangle bgSource; Position bgPosition; };
 
 class GameManager
 {
@@ -20,7 +20,7 @@ class GameManager
   std::map<uint32_t, IEntity*> staticObjects;
   std::vector<IEntity*> objectsToDelete;
   Ship* ship = nullptr;
-  int lifeCounter = 1; //MAX_PLAYER_LIFES;
+  int lifeCounter = 1;
   bool isGameFinished = false;
   bool isGameOver = false;
   EntityDataManager *textureManager;

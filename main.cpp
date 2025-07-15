@@ -46,19 +46,12 @@ int main()
         InitWindow(SCR_WIDTH * ZOOM, SCR_HEIGHT * ZOOM, WINDOW_TITLE);
         //SetExitKey(0); // Disable close the application when pressing Esc key.
 
-        // Camera configuration for scene game play screen
+        // Camera configuration
         Camera2D gameCamera;
         gameCamera.target = (Vector2){ 0, 0 };
         gameCamera.offset = (Vector2){ 0, 0 };
         gameCamera.rotation = 0.0f;
         gameCamera.zoom = ZOOM;
-
-        // Camera configuration for level background
-        Camera2D backgroundCamera;
-        backgroundCamera.target = (Vector2){ 0, 0 };
-        backgroundCamera.offset = (Vector2){ 0, 0 };
-        backgroundCamera.rotation = 0.0f;
-        backgroundCamera.zoom = ZOOM;
 
         entityTextureManager = new EntityDataManager();
         SpriteRectDoubleBuffer *spriteRectDoubleBuffer = new SpriteRectDoubleBuffer(MAX_OBJECTS);
@@ -82,11 +75,11 @@ int main()
 
                         BeginDrawing();
                                 ClearBackground(BLACK);
-
-                                BeginMode2D(backgroundCamera);
-                                        DrawTextureRec(levelInfo.texture, levelInfo.source, levelInfo.position.GetProjectedCoordinate(), WHITE);
-                                EndMode2D();
                                 BeginMode2D(gameCamera);
+                                        // Draw game background
+                                        DrawTextureRec(levelInfo.bgTexture, levelInfo.bgSource, levelInfo.bgPosition.GetProjectedCoordinate(), WHITE);
+
+                                        // Draw game objects
                                         for(int i=0; i<spriteRectDoubleBuffer->consumer_buffer_length; i++) {
                                                 auto position = spriteRectDoubleBuffer->consumer_buffer[i].position;
                                                 auto source = spriteRectDoubleBuffer->consumer_buffer[i].source;

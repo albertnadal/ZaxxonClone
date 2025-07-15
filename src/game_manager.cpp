@@ -28,7 +28,7 @@ LevelInfo GameManager::LoadLevelFromFile(const std::string& filename) {
     std::getline(file, bgTextureData);
     auto colonPos = bgTextureData.find(':');
 
-    levelInfo.texture = LoadTexture(FileSystem::getPath(bgTextureData.substr(0, colonPos)).c_str());
+    levelInfo.bgTexture = LoadTexture(FileSystem::getPath(bgTextureData.substr(0, colonPos)).c_str());
     std::string bgCoordinatesStr = bgTextureData.substr(colonPos + 1);
     std::stringstream bgStream(bgCoordinatesStr);
 
@@ -39,8 +39,8 @@ LevelInfo GameManager::LoadLevelFromFile(const std::string& filename) {
     std::getline(bgStream, bgY, ',');
     std::getline(bgStream, bgZ);
 
-    levelInfo.source = { 0.0f, 0.0f, std::stof(bgWidth), std::stof(bgHeight) };
-    levelInfo.position.SetXYZ(std::stof(bgX), std::stof(bgY), std::stof(bgZ));
+    levelInfo.bgSource = { 0.0f, 0.0f, std::stof(bgWidth), std::stof(bgHeight) };
+    levelInfo.bgPosition.SetXYZ(std::stof(bgX), std::stof(bgY), std::stof(bgZ));
 
     std::string segmentData;
     int segmentNumber = 0;
