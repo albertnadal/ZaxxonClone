@@ -8,6 +8,13 @@ GameManager::GameManager(EntityDataManager* _textureManager, SpriteRectDoubleBuf
         textureManager = _textureManager;
         spriteRectDoubleBuffer = _spriteRectDoubleBuffer;
         maxObjects = _maxObjects;
+        resetLevelValues();
+}
+
+void GameManager::resetLevelValues() {
+    cameraPosition.SetXYZ(0, 0, 0);
+    cameraPosition.SetXYZOffset(0, 0, 0);
+    currentLevelZPosition = 0.0f;
 }
 
 LevelInfo GameManager::LoadLevel() {
@@ -16,10 +23,7 @@ LevelInfo GameManager::LoadLevel() {
 
 LevelInfo GameManager::LoadLevelFromFile(const std::string& filename) {
     LevelInfo levelInfo;
-
-    // Set the initial position of the level background in the 3D space
-    levelPosition.SetXYZ(0, 0, 0);
-    levelPosition.SetXYZOffset(0, 0, 0);
+    resetLevelValues();
 
     std::ifstream file(filename);
     assert(file.is_open() && "Error: Unable to open file with level data.");
@@ -109,14 +113,16 @@ std::optional<Position *> GameManager::GetPlayerPosition() const {
 }
 
 UpdateInfo GameManager::Update(uint8_t pressedKeys) {
-  //TODO: Increase level position in the Z axis info.levelPosition.AddZ(1.0f);
+  currentLevelZPosition += ADVANCE_Z_DELTA;
+  cameraPosition.AddZ(-ADVANCE_Z_DELTA);
+
   updateMobileObjects(pressedKeys);
   //updateStaticObjects();
   updateSpriteRectBuffers();
   deleteUneededObjects();
 
   UpdateInfo info; // TODO: To avoid creating a new object every time, we can use a static variable here or make it a member variable.
-  info.levelPosition = levelPosition;
+  info.cameraPosition = cameraPosition;
   return info;
 }
 

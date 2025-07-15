@@ -73,6 +73,9 @@ int main()
                         info = gameManager->Update(pressedKeys);
                         isGameFinished = info.gameFinished;
 
+                        // Update game camera position
+                        gameCamera.offset = info.cameraPosition.GetProjectedCoordinate();
+
                         BeginDrawing();
                                 ClearBackground(BLACK);
                                 BeginMode2D(gameCamera);
