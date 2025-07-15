@@ -4,9 +4,9 @@
 #include <fstream>
 #include <sstream>
 
-GameManager::GameManager(EntityDataManager* _textureManager, SpriteRectDoubleBuffer* _spriteRectDoubleBuffer, uint32_t _maxObjects) {
+GameManager::GameManager(EntityDataManager* _textureManager, SpriteRectBuffer* _spriteRectBuffer, uint32_t _maxObjects) {
         textureManager = _textureManager;
-        spriteRectDoubleBuffer = _spriteRectDoubleBuffer;
+        spriteRectBuffer = _spriteRectBuffer;
         maxObjects = _maxObjects;
         resetLevelValues();
 }
@@ -150,7 +150,7 @@ void GameManager::updateSpriteRectBuffers() {
       }
     }
 
-    spriteRectDoubleBuffer->producer_buffer[i++] = SpriteRect(src, pos, boundaries, attackBoundaries, tint);
+    spriteRectBuffer->producer_buffer[i++] = SpriteRect(src, pos, boundaries, attackBoundaries, tint);
   }*/
 
   for (auto const& x : mobileObjects) {
@@ -158,12 +158,11 @@ void GameManager::updateSpriteRectBuffers() {
     Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
     Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
     Boundaries boundaries = entity_ptr->GetAbsoluteBoundaries();
-    spriteRectDoubleBuffer->producer_buffer[i] = SpriteRect(src, pos, boundaries, WHITE);
+    spriteRectBuffer->buffer[i] = SpriteRect(src, pos, boundaries, WHITE);
     i++;
   }
 
-  spriteRectDoubleBuffer->producer_buffer_length = i;
-  spriteRectDoubleBuffer->swapBuffers();
+  spriteRectBuffer->bufferLength = i;
 }
 
 void GameManager::updateEntities(std::map<uint32_t, IEntity*>& objects, std::optional<uint8_t> pressedKeys = std::nullopt) {

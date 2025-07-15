@@ -6,7 +6,7 @@
 #include <entity_factory.h>
 #include <entities/ship.h>
 #include <entity_data_manager.h>
-#include <sprite_rect_double_buffer.h>
+#include <sprite_rect_buffer.h>
 #include <utils.h>
 
 class Ship;
@@ -24,7 +24,7 @@ class GameManager
   bool isGameFinished = false;
   bool isGameOver = false;
   EntityDataManager *textureManager;
-  SpriteRectDoubleBuffer *spriteRectDoubleBuffer;
+  SpriteRectBuffer *spriteRectBuffer;
   uint32_t maxObjects;
   Position cameraPosition;
   float currentLevelZPosition;
@@ -37,7 +37,7 @@ class GameManager
   void updateStaticObjects();
   void updateSpriteRectBuffers();
 public:
-  GameManager(EntityDataManager*, SpriteRectDoubleBuffer*, uint32_t);
+  GameManager(EntityDataManager*, SpriteRectBuffer*, uint32_t);
   ~GameManager();
   LevelInfo LoadLevel();
   UpdateInfo Update(uint8_t);

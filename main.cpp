@@ -54,8 +54,8 @@ int main()
         gameCamera.zoom = ZOOM;
 
         entityTextureManager = new EntityDataManager();
-        SpriteRectDoubleBuffer *spriteRectDoubleBuffer = new SpriteRectDoubleBuffer(MAX_OBJECTS);
-        gameManager = new GameManager(entityTextureManager, spriteRectDoubleBuffer, MAX_OBJECTS);
+        SpriteRectBuffer *spriteRectBuffer = new SpriteRectBuffer(MAX_OBJECTS);
+        gameManager = new GameManager(entityTextureManager, spriteRectBuffer, MAX_OBJECTS);
 
         // Load texture atlas into GPU memory
         Texture2D textureAtlas = entityTextureManager->LoadTextureAtlas();
@@ -83,10 +83,10 @@ int main()
                                         DrawTextureRec(levelInfo.bgTexture, levelInfo.bgSource, levelInfo.bgPosition.GetProjectedCoordinate(), WHITE);
 
                                         // Draw game objects
-                                        for(int i=0; i<spriteRectDoubleBuffer->consumer_buffer_length; i++) {
-                                                auto position = spriteRectDoubleBuffer->consumer_buffer[i].position;
-                                                auto source = spriteRectDoubleBuffer->consumer_buffer[i].source;
-                                                auto tint = spriteRectDoubleBuffer->consumer_buffer[i].tint;
+                                        for(int i=0; i<spriteRectBuffer->bufferLength; i++) {
+                                                auto position = spriteRectBuffer->buffer[i].position;
+                                                auto source = spriteRectBuffer->buffer[i].source;
+                                                auto tint = spriteRectBuffer->buffer[i].tint;
                                                 DrawTextureRec(textureAtlas, source, position, tint);
                                         }
                                 EndMode2D();
@@ -105,7 +105,7 @@ int main()
 
         delete entityTextureManager;
         delete gameManager;
-        delete spriteRectDoubleBuffer;
+        delete spriteRectBuffer;
 
         UnloadTexture(textureAtlas);
         CloseWindow();

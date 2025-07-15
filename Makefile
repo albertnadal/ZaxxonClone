@@ -4,8 +4,8 @@ CFLAGS=-std=c++17 -stdlib=libc++ -Ofast -march=native -flto -fno-signed-zeros -f
 LDFLAGS=-Wl,-search_paths_first -Wl,-headerpad_max_install_names -framework OpenGL -framework Cocoa -framework IOKit -framework CoreAudio -framework CoreVideo -framework CoreFoundation -lraylib -Lthird_party/raylib/
 EXEC=main
 
-all: Rectangle.o sprite_rect_double_buffer.o position.o entity.o entity_factory.o ship.o ship_state_transitions.o state_machine.o game_manager.o sprite.o entity_sprite_sheet_animation.o entity_sprite_sheet.o entity_data_manager.o
-	$(CXX) $(CFLAGS) $(LDFLAGS) main.cpp entity.o entity_factory.o ship.o ship_state_transitions.o state_machine.o game_manager.o sprite.o entity_data_manager.o entity_sprite_sheet.o entity_sprite_sheet_animation.o position.o sprite_rect_double_buffer.o Rectangle.o -o $(EXEC)
+all: Rectangle.o sprite_rect_buffer.o position.o entity.o entity_factory.o ship.o ship_state_transitions.o state_machine.o game_manager.o sprite.o entity_sprite_sheet_animation.o entity_sprite_sheet.o entity_data_manager.o
+	$(CXX) $(CFLAGS) $(LDFLAGS) main.cpp entity.o entity_factory.o ship.o ship_state_transitions.o state_machine.o game_manager.o sprite.o entity_data_manager.o entity_sprite_sheet.o entity_sprite_sheet_animation.o position.o sprite_rect_buffer.o Rectangle.o -o $(EXEC)
 
 ship.o: src/entities/ship.cpp
 	$(CXX) -c $(CFLAGS) src/entities/ship.cpp
@@ -40,8 +40,8 @@ sprite.o: src/sprite.cpp
 position.o: src/position.cpp
 	$(CXX) -c $(CFLAGS) src/position.cpp
 
-sprite_rect_double_buffer.o: src/sprite_rect_double_buffer.cpp
-	$(CXX) -c $(CFLAGS) src/sprite_rect_double_buffer.cpp
+sprite_rect_buffer.o: src/sprite_rect_buffer.cpp
+	$(CXX) -c $(CFLAGS) src/sprite_rect_buffer.cpp
 
 Rectangle.o: src/collision/geometry/Rectangle.cpp
 	$(CXX) -c $(CFLAGS) src/collision/geometry/Rectangle.cpp
