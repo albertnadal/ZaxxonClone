@@ -114,7 +114,7 @@ std::optional<Position *> GameManager::GetPlayerPosition() const {
 
 UpdateInfo GameManager::Update(uint8_t pressedKeys) {
   currentLevelZPosition += ADVANCE_Z_DELTA;
-  cameraPosition.AddZ(-ADVANCE_Z_DELTA);
+  cameraPosition.AddZ(-ADVANCE_Z_DELTA*ZOOM);
 
   updateMobileObjects(pressedKeys);
   //updateStaticObjects();

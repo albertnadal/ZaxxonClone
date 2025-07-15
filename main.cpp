@@ -7,8 +7,8 @@
 #include <game_manager.h>
 #include <utils.h>
 
-constexpr uint32_t SCR_WIDTH = 224;
-constexpr uint32_t SCR_HEIGHT = 256;
+constexpr float SCR_WIDTH = 224.0f;
+constexpr float SCR_HEIGHT = 256.0f;
 constexpr uint32_t MAX_OBJECTS = 1000;
 
 std::chrono::duration<float> computingTimePerUpdate;

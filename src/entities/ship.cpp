@@ -13,6 +13,8 @@ bool Ship::Update(const uint8_t pressedKeys_) {
     bool needRedraw = false;
     pressedKeys = pressedKeys_;
 
+    position.AddZ(ADVANCE_Z_DELTA); // Advance the ship in the Z axis.
+
     if (pressedKeys != KeyboardKeyCode::Z_KEY_NONE) {
         ProcessPressedKeys();
     } else if (pressedKeys != prevPressedKeys) {

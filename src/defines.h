@@ -29,4 +29,4 @@ constexpr int LEVEL_HEIGHT = 100;                                               
 constexpr int LEVEL_LENGTH = 10000;                                              // Length of the level.
 constexpr int SEGMENT_LENGTH = 10;                                               // Space between segments in the level.
 constexpr const char *LEVEL_FILENAME = "level.dat";                              // The file where the level is defined.
-constexpr int ADVANCE_Z_DELTA = 1.0f;                                            // Delta to advance the level in the Z axis per frame.
+constexpr float ADVANCE_Z_DELTA = 0.7f;                                          // Delta to advance the level in the Z axis per frame.
