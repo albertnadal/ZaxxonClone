@@ -7,6 +7,7 @@
 #include <game_manager.h>
 #include <entity_data_manager.h>
 #include <entities/ship.h>
+#include <entities/fuel_tank.h>
 
 class GameManager;
 
