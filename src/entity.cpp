@@ -1,9 +1,13 @@
 #include <cassert>
 #include <entity.h>
 #include <collision/collision.h>
+#include <MersenneTwister/MersenneTwister.h>
+
+static MersenneTwister rng;
 
 IEntity::IEntity() {
   id = EntityIdentificator::NONE;
+  uniqueId = rng.integer(0, UINT_MAX);
   boundingBox = solidBoundingBox = {0, 0, 0, 0};
   isMarkedToDelete = false;
 }
@@ -12,6 +16,7 @@ IEntity::IEntity(EntityIdentificator _id, EntityType _type, unsigned char _maxSt
   StateMachine(_maxStates),
   id(_id),
   type(_type) {
+  uniqueId = rng.integer(0, UINT_MAX);
   boundingBox = solidBoundingBox = {0, 0, 0, 0};
 }
 

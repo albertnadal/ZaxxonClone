@@ -28,6 +28,6 @@ constexpr const char *ENTITIES_DATA_FILENAME = "entities.dat";                  
 constexpr int LEVEL_WIDTH = 100;                                                 // Width of the level.
 constexpr int LEVEL_HEIGHT = 100;                                                // Height of the level.
 constexpr int LEVEL_LENGTH = 10000;                                              // Length of the level.
-constexpr int SEGMENT_LENGTH = 10;                                               // Space between segments in the level.
+constexpr int SEGMENT_LENGTH = 5;                                                // Space between segments in the level.
 constexpr const char *LEVEL_FILENAME = "level.dat";                              // The file where the level is defined.
 constexpr float ADVANCE_Z_DELTA = 0.7f;                                          // Delta to advance the level in the Z axis per frame.
