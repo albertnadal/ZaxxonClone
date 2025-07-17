@@ -11,6 +11,7 @@ EntityFactory::EntityFactory(GameManager* _gameManager, EntityDataManager* _text
 void EntityFactory::RegisterEntities() {
 	Register(EntityIdentificator::SHIP, &Ship::Create);
 	Register(EntityIdentificator::FUEL_TANK, &FuelTank::Create);
+	Register(EntityIdentificator::RADAR_TOWER, &RadarTower::Create);
 }
 
 EntityFactory &EntityFactory::operator=(const EntityFactory &) {
