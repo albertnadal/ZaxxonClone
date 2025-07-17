@@ -12,8 +12,8 @@ void EntityFactory::RegisterEntities() {
 	Register(EntityIdentificator::SHIP, &Ship::Create);
 	Register(EntityIdentificator::FUEL_TANK, &FuelTank::Create);
 	Register(EntityIdentificator::RADAR_TOWER, &RadarTower::Create);
-	Register(EntityIdentificator::GUN_EMPLACEMENT_VERTICAL, &GunEmplacementVertical::Create);
-	Register(EntityIdentificator::GUN_EMPLACEMENT_HORIZONTAL, &GunEmplacementHorizontal::Create);
+	Register(EntityIdentificator::GUN_VERTICAL, &GunVertical::Create);
+	Register(EntityIdentificator::GUN_HORIZONTAL_NORTH, &GunHorizontalNorth::Create);
 }
 
 EntityFactory &EntityFactory::operator=(const EntityFactory &) {

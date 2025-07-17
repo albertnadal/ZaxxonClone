@@ -9,8 +9,8 @@
 #include <entities/ship.h>
 #include <entities/fuel_tank.h>
 #include <entities/radar_tower.h>
-#include <entities/gun_emplacement_ver.h>
-#include <entities/gun_emplacement_hor.h>
+#include <entities/gun_ver.h>
+#include <entities/gun_hor_north.h>
 
 class GameManager;
 

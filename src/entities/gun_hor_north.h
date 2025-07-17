@@ -1,5 +1,5 @@
-#ifndef GUN_EMPLACEMENT_HOR_H
-#define GUN_EMPLACEMENT_HOR_H
+#ifndef GUN_HOR_NORTH_H
+#define GUN_HOR_NORTH_H
 
 #include <iostream>
 #include <vector>
@@ -12,13 +12,13 @@
 
 using namespace std;
 
-class GunEmplacementHorizontal: public IEntity
+class GunHorizontalNorth: public IEntity
 {
   bool isExploding = false;
 
 public:
-  GunEmplacementHorizontal(EntityIdentificator, EntityType, unsigned char);
-  GunEmplacementHorizontal();
+  GunHorizontalNorth(EntityIdentificator, EntityType, unsigned char);
+  GunHorizontalNorth();
   virtual void InitWithSpriteSheet(EntitySpriteSheet*) override;
   virtual void PrintName() const override;
   bool Update(uint8_t) override;
@@ -35,16 +35,16 @@ private:
 
   // state map to define state function order
   BEGIN_STATE_MAP
-      STATE_MAP_ENTRY(&GunEmplacementHorizontal::STATE_Quiet)
-      STATE_MAP_ENTRY(&GunEmplacementHorizontal::STATE_Exploding)
+      STATE_MAP_ENTRY(&GunHorizontalNorth::STATE_Quiet)
+      STATE_MAP_ENTRY(&GunHorizontalNorth::STATE_Exploding)
   END_STATE_MAP
 
   // state enumeration order must match the order of state
   // method entries in the state map
-  enum GunEmplacementHorizontalStateIdentificator {
+  enum GunHorizontalNorthStateIdentificator {
       STATE_QUIET = 0, // Initial state
       STATE_EXPLODING,
-      GUN_EMPLACEMENT_HORIZONTAL_MAX_STATES
+      GUN_HORIZONTAL_NORTH_MAX_STATES
   };
 };
 
