@@ -20,6 +20,7 @@ enum ShipAnimation: uint16_t { STRAIGHT_FLIGHT = 0, ASCENDING = 1, DESCENDING = 
 enum FuelTankAnimation: uint16_t { FUEL_TANK_QUIET = 3, FUEL_TANK_EXPLODING = 4 };
 enum RadarTowerAnimation: uint16_t { RADAR_TOWER_QUIET = 5, RADAR_TOWER_EXPLODING = 6 };
 enum GunEmplacementVerticalAnimation: uint16_t { GUN_EMPLACEMENT_VERTICAL_QUIET = 7, GUN_EMPLACEMENT_VERTICAL_EXPLODING = 8 };
+enum GunEmplacementHorizontalAnimation: uint16_t { GUN_EMPLACEMENT_HORIZONTAL_QUIET = 9, GUN_EMPLACEMENT_HORIZONTAL_EXPLODING = 10 };
 
 // Others
 constexpr bool DEBUG = true;                                                     // Debug mode.

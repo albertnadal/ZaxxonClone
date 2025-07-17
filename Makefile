@@ -4,8 +4,8 @@ CFLAGS=-std=c++17 -stdlib=libc++ -Ofast -march=native -flto -fno-signed-zeros -f
 LDFLAGS=-Wl,-search_paths_first -Wl,-headerpad_max_install_names -framework OpenGL -framework Cocoa -framework IOKit -framework CoreAudio -framework CoreVideo -framework CoreFoundation -lraylib -Lthird_party/raylib/
 EXEC=main
 
-all: Rectangle.o sprite_rect_buffer.o position.o entity.o entity_factory.o ship.o ship_state_transitions.o fuel_tank.o radar_tower.o gun_emplacement_ver.o state_machine.o game_manager.o sprite.o entity_sprite_sheet_animation.o entity_sprite_sheet.o entity_data_manager.o
-	$(CXX) $(CFLAGS) $(LDFLAGS) main.cpp entity.o entity_factory.o ship.o ship_state_transitions.o fuel_tank.o radar_tower.o gun_emplacement_ver.o state_machine.o game_manager.o sprite.o entity_data_manager.o entity_sprite_sheet.o entity_sprite_sheet_animation.o position.o sprite_rect_buffer.o Rectangle.o -o $(EXEC)
+all: Rectangle.o sprite_rect_buffer.o position.o entity.o entity_factory.o ship.o ship_state_transitions.o fuel_tank.o radar_tower.o gun_emplacement_ver.o gun_emplacement_hor.o state_machine.o game_manager.o sprite.o entity_sprite_sheet_animation.o entity_sprite_sheet.o entity_data_manager.o
+	$(CXX) $(CFLAGS) $(LDFLAGS) main.cpp entity.o entity_factory.o ship.o ship_state_transitions.o fuel_tank.o radar_tower.o gun_emplacement_ver.o gun_emplacement_hor.o state_machine.o game_manager.o sprite.o entity_data_manager.o entity_sprite_sheet.o entity_sprite_sheet_animation.o position.o sprite_rect_buffer.o Rectangle.o -o $(EXEC)
 
 ship.o: src/entities/ship.cpp
 	$(CXX) -c $(CFLAGS) src/entities/ship.cpp
@@ -21,6 +21,9 @@ radar_tower.o: src/entities/radar_tower.cpp
 
 gun_emplacement_ver.o: src/entities/gun_emplacement_ver.cpp
 	$(CXX) -c $(CFLAGS) src/entities/gun_emplacement_ver.cpp
+
+gun_emplacement_hor.o: src/entities/gun_emplacement_hor.cpp
+	$(CXX) -c $(CFLAGS) src/entities/gun_emplacement_hor.cpp
 
 state_machine.o: src/state_machine.cpp
 	$(CXX) -c $(CFLAGS) src/state_machine.cpp

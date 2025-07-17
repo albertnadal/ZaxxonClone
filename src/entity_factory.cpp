@@ -13,6 +13,7 @@ void EntityFactory::RegisterEntities() {
 	Register(EntityIdentificator::FUEL_TANK, &FuelTank::Create);
 	Register(EntityIdentificator::RADAR_TOWER, &RadarTower::Create);
 	Register(EntityIdentificator::GUN_EMPLACEMENT_VERTICAL, &GunEmplacementVertical::Create);
+	Register(EntityIdentificator::GUN_EMPLACEMENT_HORIZONTAL, &GunEmplacementHorizontal::Create);
 }
 
 EntityFactory &EntityFactory::operator=(const EntityFactory &) {
