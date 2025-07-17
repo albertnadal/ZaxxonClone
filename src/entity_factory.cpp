@@ -14,6 +14,7 @@ void EntityFactory::RegisterEntities() {
 	Register(EntityIdentificator::RADAR_TOWER, &RadarTower::Create);
 	Register(EntityIdentificator::GUN_VERTICAL, &GunVertical::Create);
 	Register(EntityIdentificator::GUN_HORIZONTAL_NORTH, &GunHorizontalNorth::Create);
+	Register(EntityIdentificator::GUN_HORIZONTAL_SOUTH, &GunHorizontalSouth::Create);
 }
 
 EntityFactory &EntityFactory::operator=(const EntityFactory &) {

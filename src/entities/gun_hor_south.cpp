@@ -2,7 +2,7 @@
 #include <chrono>
 
 GunHorizontalSouth::GunHorizontalSouth() :
-        IEntity(EntityIdentificator::GUN_HORIZONTAL_NORTH, EntityType::ENEMY, GunHorizontalSouthStateIdentificator::GUN_HORIZONTAL_SOUTH_MAX_STATES) {
+        IEntity(EntityIdentificator::GUN_HORIZONTAL_SOUTH, EntityType::ENEMY, GunHorizontalSouthStateIdentificator::GUN_HORIZONTAL_SOUTH_MAX_STATES) {
 }
 
 GunHorizontalSouth::GunHorizontalSouth(EntityIdentificator _id, EntityType _type, unsigned char max_states) :

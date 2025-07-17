@@ -11,6 +11,7 @@
 #include <entities/radar_tower.h>
 #include <entities/gun_ver.h>
 #include <entities/gun_hor_north.h>
+#include <entities/gun_hor_south.h>
 
 class GameManager;
 
