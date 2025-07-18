@@ -12,6 +12,7 @@
 #include <entities/gun_ver.h>
 #include <entities/gun_hor_north.h>
 #include <entities/gun_hor_south.h>
+#include <entities/parked_plane.h>
 
 class GameManager;
 
