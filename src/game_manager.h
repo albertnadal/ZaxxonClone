@@ -16,6 +16,8 @@ struct LevelInfo { Texture2D bgTexture; Rectangle bgSource; Position bgPosition;
 
 class GameManager
 {
+  std::map<uint32_t, IEntity*> cubeBackObjects;
+  std::map<uint32_t, IEntity*> cubeFrontObjects;
   std::map<uint32_t, IEntity*> mobileObjects;
   std::map<uint32_t, IEntity*> staticObjects;
   std::vector<IEntity*> objectsToDelete;

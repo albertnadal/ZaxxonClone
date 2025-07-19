@@ -98,7 +98,29 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
     // Initial update to load the sprites and boundary box
     (*entity_ptr)->Update();
 
+    if (entity_id == EntityIdentificator::FUEL_TANK ||
+        entity_id == EntityIdentificator::RADAR_TOWER ||
+        entity_id == EntityIdentificator::PARKED_PLANE) {
+      std::optional<IEntity *> cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK);
+      cubeBackObjects[(*cube_back_ptr)->uniqueId] = *cube_back_ptr;
+      (*cube_back_ptr)->position.Copy(position);
+      (*cube_back_ptr)->position.AddX(-21.0);
+      (*cube_back_ptr)->position.AddZ(12.0);
+      (*cube_back_ptr)->Update();
+    }
+
     mobileObjects[(*entity_ptr)->uniqueId] = *entity_ptr;
+
+    if (entity_id == EntityIdentificator::FUEL_TANK ||
+        entity_id == EntityIdentificator::RADAR_TOWER ||
+        entity_id == EntityIdentificator::PARKED_PLANE) {
+      std::optional<IEntity *> cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT);
+      cubeFrontObjects[(*cube_front_ptr)->uniqueId] = *cube_front_ptr;
+      (*cube_front_ptr)->position.Copy(position);
+      (*cube_front_ptr)->position.AddX(-21.0);
+      (*cube_front_ptr)->position.AddZ(12.0);
+      (*cube_front_ptr)->Update();
+    }
   }
 
   return entity_ptr;
@@ -153,7 +175,25 @@ void GameManager::updateSpriteRectBuffers() {
     spriteRectBuffer->producer_buffer[i++] = SpriteRect(src, pos, boundaries, attackBoundaries, tint);
   }*/
 
+  for (auto const& x : cubeBackObjects) {
+    IEntity* entity_ptr = x.second;
+    Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
+    Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
+    Boundaries boundaries = entity_ptr->GetAbsoluteBoundaries();
+    spriteRectBuffer->buffer[i] = SpriteRect(src, pos, boundaries, WHITE);
+    i++;
+  }
+
   for (auto const& x : mobileObjects) {
+    IEntity* entity_ptr = x.second;
+    Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
+    Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
+    Boundaries boundaries = entity_ptr->GetAbsoluteBoundaries();
+    spriteRectBuffer->buffer[i] = SpriteRect(src, pos, boundaries, WHITE);
+    i++;
+  }
+
+  for (auto const& x : cubeFrontObjects) {
     IEntity* entity_ptr = x.second;
     Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
     Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
@@ -194,6 +234,8 @@ void GameManager::deleteUneededObjects() {
   for (auto entity_ptr : objectsToDelete) {
     staticObjects.erase(entity_ptr->uniqueId);
     mobileObjects.erase(entity_ptr->uniqueId);
+    cubeBackObjects.erase(entity_ptr->uniqueId);
+    cubeFrontObjects.erase(entity_ptr->uniqueId);
     delete entity_ptr;
   }
 
@@ -210,6 +252,8 @@ void GameManager::deleteAllObjects() {
   // Delete all instances marked to delete.
   deleteUneededObjects();
   mobileObjects.clear();
+  cubeBackObjects.clear();
+  cubeFrontObjects.clear();
 
   // Delete static object instances.
   for (auto& pair : staticObjects) {

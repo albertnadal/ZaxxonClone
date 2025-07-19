@@ -13,6 +13,8 @@
 #include <entities/gun_hor_north.h>
 #include <entities/gun_hor_south.h>
 #include <entities/parked_plane.h>
+#include <entities/cube_back.h>
+#include <entities/cube_front.h>
 
 class GameManager;
 
