@@ -85,6 +85,8 @@ LevelInfo GameManager::LoadLevelFromFile(const std::string& filename) {
 }
 
 std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator entity_id, Position position) {
+  std::optional<IEntity *> cube_back_ptr;
+  std::optional<IEntity *> cube_front_ptr;
   std::optional<IEntity *> entity_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(entity_id);
 
   if(entity_ptr.has_value()) {
@@ -101,11 +103,26 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
     if (entity_id == EntityIdentificator::FUEL_TANK ||
         entity_id == EntityIdentificator::RADAR_TOWER ||
         entity_id == EntityIdentificator::PARKED_PLANE) {
-      std::optional<IEntity *> cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK);
+      cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK);
       cubeBackObjects[(*cube_back_ptr)->uniqueId] = *cube_back_ptr;
       (*cube_back_ptr)->position.Copy(position);
       (*cube_back_ptr)->position.AddX(-21.0);
       (*cube_back_ptr)->position.AddZ(12.0);
+      (*cube_back_ptr)->Update();
+    } else if (entity_id == EntityIdentificator::GUN_VERTICAL) {
+      cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK_VERTICAL);
+      cubeBackObjects[(*cube_back_ptr)->uniqueId] = *cube_back_ptr;
+      (*cube_back_ptr)->position.Copy(position);
+      (*cube_back_ptr)->position.AddX(-11.0);
+      (*cube_back_ptr)->position.AddZ(2.0);
+      (*cube_back_ptr)->Update();
+    } else if (entity_id == EntityIdentificator::GUN_HORIZONTAL_NORTH ||
+               entity_id == EntityIdentificator::GUN_HORIZONTAL_SOUTH) {
+      cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK_HORIZONTAL);
+      cubeBackObjects[(*cube_back_ptr)->uniqueId] = *cube_back_ptr;
+      (*cube_back_ptr)->position.Copy(position);
+      (*cube_back_ptr)->position.AddX(-11.0);
+      (*cube_back_ptr)->position.AddZ(2.0);
       (*cube_back_ptr)->Update();
     }
 
@@ -114,11 +131,26 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
     if (entity_id == EntityIdentificator::FUEL_TANK ||
         entity_id == EntityIdentificator::RADAR_TOWER ||
         entity_id == EntityIdentificator::PARKED_PLANE) {
-      std::optional<IEntity *> cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT);
+      cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT);
       cubeFrontObjects[(*cube_front_ptr)->uniqueId] = *cube_front_ptr;
       (*cube_front_ptr)->position.Copy(position);
       (*cube_front_ptr)->position.AddX(-21.0);
       (*cube_front_ptr)->position.AddZ(12.0);
+      (*cube_front_ptr)->Update();
+    } else if (entity_id == EntityIdentificator::GUN_VERTICAL) {
+      cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT_VERTICAL);
+      cubeFrontObjects[(*cube_front_ptr)->uniqueId] = *cube_front_ptr;
+      (*cube_front_ptr)->position.Copy(position);
+      (*cube_front_ptr)->position.AddX(-11.0);
+      (*cube_front_ptr)->position.AddZ(2.0);
+      (*cube_front_ptr)->Update();
+    } else if (entity_id == EntityIdentificator::GUN_HORIZONTAL_NORTH ||
+               entity_id == EntityIdentificator::GUN_HORIZONTAL_SOUTH) {
+      cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT_HORIZONTAL);
+      cubeFrontObjects[(*cube_front_ptr)->uniqueId] = *cube_front_ptr;
+      (*cube_front_ptr)->position.Copy(position);
+      (*cube_front_ptr)->position.AddX(-11.0);
+      (*cube_front_ptr)->position.AddZ(2.0);
       (*cube_front_ptr)->Update();
     }
   }

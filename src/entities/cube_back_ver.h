@@ -1,5 +1,5 @@
-#ifndef CUBE_FRONT_H
-#define CUBE_FRONT_H
+#ifndef CUBE_BACK_VER_H
+#define CUBE_BACK_VER_H
 
 #include <iostream>
 #include <vector>
@@ -12,11 +12,11 @@
 
 using namespace std;
 
-class CubeFront: public IEntity
+class CubeBackVertical: public IEntity
 {
 public:
-  CubeFront(EntityIdentificator, EntityType, unsigned char);
-  CubeFront();
+  CubeBackVertical(EntityIdentificator, EntityType, unsigned char);
+  CubeBackVertical();
   virtual void InitWithSpriteSheet(EntitySpriteSheet*) override;
   virtual void PrintName() const override;
   bool Update(uint8_t) override;
@@ -28,14 +28,14 @@ private:
 
   // state map to define state function order
   BEGIN_STATE_MAP
-      STATE_MAP_ENTRY(&CubeFront::STATE_Quiet)
+      STATE_MAP_ENTRY(&CubeBackVertical::STATE_Quiet)
   END_STATE_MAP
 
   // state enumeration order must match the order of state
   // method entries in the state map
-  enum CubeFrontStateIdentificator {
+  enum CubeBackVerticalStateIdentificator {
       STATE_QUIET = 0, // Initial state
-      CUBE_FRONT_MAX_STATES
+      CUBE_BACK_VERTICAL_MAX_STATES
   };
 };
 

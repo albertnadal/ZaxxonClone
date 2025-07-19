@@ -18,6 +18,10 @@ void EntityFactory::RegisterEntities() {
 	Register(EntityIdentificator::PARKED_PLANE, &ParkedPlane::Create);
 	Register(EntityIdentificator::CUBE_BACK, &CubeBack::Create);
 	Register(EntityIdentificator::CUBE_FRONT, &CubeFront::Create);
+	Register(EntityIdentificator::CUBE_BACK_VERTICAL, &CubeBackVertical::Create);
+	Register(EntityIdentificator::CUBE_FRONT_VERTICAL, &CubeFrontVertical::Create);
+	Register(EntityIdentificator::CUBE_BACK_HORIZONTAL, &CubeBackHorizontal::Create);
+	Register(EntityIdentificator::CUBE_FRONT_HORIZONTAL, &CubeFrontHorizontal::Create);
 }
 
 EntityFactory &EntityFactory::operator=(const EntityFactory &) {

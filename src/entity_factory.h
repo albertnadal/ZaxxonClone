@@ -15,6 +15,10 @@
 #include <entities/parked_plane.h>
 #include <entities/cube_back.h>
 #include <entities/cube_front.h>
+#include <entities/cube_back_ver.h>
+#include <entities/cube_front_ver.h>
+#include <entities/cube_back_hor.h>
+#include <entities/cube_front_hor.h>
 
 class GameManager;
 

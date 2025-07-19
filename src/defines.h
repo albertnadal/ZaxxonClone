@@ -7,7 +7,7 @@
 enum KeyboardKeyCode: uint8_t { Z_KEY_LEFT = 0x80, Z_KEY_UP = 0x40, Z_KEY_RIGHT = 0x20, Z_KEY_DOWN = 0x10, Z_KEY_ESCAPE = 0x08, Z_KEY_PAUSE = 0x04, Z_KEY_ENTER = 0x02, Z_KEY_SPACE = 0x01, Z_KEY_NONE = 0x00 };
 
 // Object identificators
-enum EntityIdentificator: uint16_t { NONE = 0, SHIP = 1, FUEL_TANK = 2, RADAR_TOWER = 3, GUN_VERTICAL= 4, GUN_HORIZONTAL_NORTH = 5, GUN_HORIZONTAL_SOUTH = 6, PARKED_PLANE = 7, CUBE_BACK = 8, CUBE_FRONT = 9 };
+enum EntityIdentificator: uint16_t { NONE = 0, SHIP = 1, FUEL_TANK = 2, RADAR_TOWER = 3, GUN_VERTICAL= 4, GUN_HORIZONTAL_NORTH = 5, GUN_HORIZONTAL_SOUTH = 6, PARKED_PLANE = 7, CUBE_BACK = 8, CUBE_FRONT = 9, CUBE_BACK_VERTICAL = 10, CUBE_FRONT_VERTICAL = 11, CUBE_BACK_HORIZONTAL = 12, CUBE_FRONT_HORIZONTAL = 13 };
 
 // Object type
 enum EntityType: uint16_t { TERRAIN = 0, PLAYER = 1, ENEMY = 2 };
@@ -25,6 +25,10 @@ enum GunHorizontalSouthAnimation: uint16_t { GUN_HORIZONTAL_SOUTH_QUIET = 11, GU
 enum ParkedPlaneAnimation: uint16_t { PARKED_PLANE_QUIET = 13, PARKED_PLANE_EXPLODING = 14 };
 enum CubeBackAnimation: uint16_t { CUBE_BACK_QUIET = 15 };
 enum CubeFrontAnimation: uint16_t { CUBE_FRONT_QUIET = 16 };
+enum CubeBackVerticalAnimation: uint16_t { CUBE_BACK_VERTICAL_QUIET = 17 };
+enum CubeFrontVerticalAnimation: uint16_t { CUBE_FRONT_VERTICAL_QUIET = 18 };
+enum CubeBackHorizontalAnimation: uint16_t { CUBE_BACK_HORIZONTAL_QUIET = 19 };
+enum CubeFrontHorizontalAnimation: uint16_t { CUBE_FRONT_HORIZONTAL_QUIET = 20 };
 
 // Others
 constexpr bool DEBUG = true;                                                     // Debug mode.
