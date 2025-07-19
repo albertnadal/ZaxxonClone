@@ -19,6 +19,8 @@
 #include <entities/cube_front_ver.h>
 #include <entities/cube_back_hor.h>
 #include <entities/cube_front_hor.h>
+#include <entities/cube_ship_back.h>
+#include <entities/cube_ship_front.h>
 
 class GameManager;
 

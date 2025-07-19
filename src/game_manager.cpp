@@ -92,6 +92,15 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
   if(entity_ptr.has_value()) {
     if (entity_id == EntityIdentificator::SHIP) {
       ship = static_cast<Ship*>(*entity_ptr);
+
+      if (DEBUG) {
+        cubeShipBack = static_cast<CubeShipBack*>(EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_SHIP_BACK).value());
+        cubeShipFront = static_cast<CubeShipFront*>(EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_SHIP_FRONT).value());
+        cubeBackObjects[cubeShipBack->uniqueId] = cubeShipBack;
+        cubeFrontObjects[cubeShipFront->uniqueId] = cubeShipFront;
+        cubeShipBack->Update(0);
+        cubeShipFront->Update(0);
+      } 
     }
 
     // Set the initial position of the object in the screen
@@ -100,58 +109,62 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
     // Initial update to load the sprites and boundary box
     (*entity_ptr)->Update();
 
-    if (entity_id == EntityIdentificator::FUEL_TANK ||
-        entity_id == EntityIdentificator::RADAR_TOWER ||
-        entity_id == EntityIdentificator::PARKED_PLANE) {
-      cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK);
-      cubeBackObjects[(*cube_back_ptr)->uniqueId] = *cube_back_ptr;
-      (*cube_back_ptr)->position.Copy(position);
-      (*cube_back_ptr)->position.AddX(-21.0);
-      (*cube_back_ptr)->position.AddZ(12.0);
-      (*cube_back_ptr)->Update();
-    } else if (entity_id == EntityIdentificator::GUN_VERTICAL) {
-      cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK_VERTICAL);
-      cubeBackObjects[(*cube_back_ptr)->uniqueId] = *cube_back_ptr;
-      (*cube_back_ptr)->position.Copy(position);
-      (*cube_back_ptr)->position.AddX(-11.0);
-      (*cube_back_ptr)->position.AddZ(2.0);
-      (*cube_back_ptr)->Update();
-    } else if (entity_id == EntityIdentificator::GUN_HORIZONTAL_NORTH ||
-               entity_id == EntityIdentificator::GUN_HORIZONTAL_SOUTH) {
-      cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK_HORIZONTAL);
-      cubeBackObjects[(*cube_back_ptr)->uniqueId] = *cube_back_ptr;
-      (*cube_back_ptr)->position.Copy(position);
-      (*cube_back_ptr)->position.AddX(-11.0);
-      (*cube_back_ptr)->position.AddZ(2.0);
-      (*cube_back_ptr)->Update();
+    if (DEBUG) {
+      if (entity_id == EntityIdentificator::FUEL_TANK ||
+          entity_id == EntityIdentificator::RADAR_TOWER ||
+          entity_id == EntityIdentificator::PARKED_PLANE) {
+        cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK);
+        cubeBackObjects[(*cube_back_ptr)->uniqueId] = *cube_back_ptr;
+        (*cube_back_ptr)->position.Copy(position);
+        (*cube_back_ptr)->position.AddX(-21.0);
+        (*cube_back_ptr)->position.AddZ(12.0);
+        (*cube_back_ptr)->Update();
+      } else if (entity_id == EntityIdentificator::GUN_VERTICAL) {
+        cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK_VERTICAL);
+        cubeBackObjects[(*cube_back_ptr)->uniqueId] = *cube_back_ptr;
+        (*cube_back_ptr)->position.Copy(position);
+        (*cube_back_ptr)->position.AddX(-11.0);
+        (*cube_back_ptr)->position.AddZ(2.0);
+        (*cube_back_ptr)->Update();
+      } else if (entity_id == EntityIdentificator::GUN_HORIZONTAL_NORTH ||
+                entity_id == EntityIdentificator::GUN_HORIZONTAL_SOUTH) {
+        cube_back_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_BACK_HORIZONTAL);
+        cubeBackObjects[(*cube_back_ptr)->uniqueId] = *cube_back_ptr;
+        (*cube_back_ptr)->position.Copy(position);
+        (*cube_back_ptr)->position.AddX(-11.0);
+        (*cube_back_ptr)->position.AddZ(2.0);
+        (*cube_back_ptr)->Update();
+      }
     }
 
     mobileObjects[(*entity_ptr)->uniqueId] = *entity_ptr;
 
-    if (entity_id == EntityIdentificator::FUEL_TANK ||
-        entity_id == EntityIdentificator::RADAR_TOWER ||
-        entity_id == EntityIdentificator::PARKED_PLANE) {
-      cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT);
-      cubeFrontObjects[(*cube_front_ptr)->uniqueId] = *cube_front_ptr;
-      (*cube_front_ptr)->position.Copy(position);
-      (*cube_front_ptr)->position.AddX(-21.0);
-      (*cube_front_ptr)->position.AddZ(12.0);
-      (*cube_front_ptr)->Update();
-    } else if (entity_id == EntityIdentificator::GUN_VERTICAL) {
-      cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT_VERTICAL);
-      cubeFrontObjects[(*cube_front_ptr)->uniqueId] = *cube_front_ptr;
-      (*cube_front_ptr)->position.Copy(position);
-      (*cube_front_ptr)->position.AddX(-11.0);
-      (*cube_front_ptr)->position.AddZ(2.0);
-      (*cube_front_ptr)->Update();
-    } else if (entity_id == EntityIdentificator::GUN_HORIZONTAL_NORTH ||
-               entity_id == EntityIdentificator::GUN_HORIZONTAL_SOUTH) {
-      cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT_HORIZONTAL);
-      cubeFrontObjects[(*cube_front_ptr)->uniqueId] = *cube_front_ptr;
-      (*cube_front_ptr)->position.Copy(position);
-      (*cube_front_ptr)->position.AddX(-11.0);
-      (*cube_front_ptr)->position.AddZ(2.0);
-      (*cube_front_ptr)->Update();
+    if (DEBUG) {
+      if (entity_id == EntityIdentificator::FUEL_TANK ||
+          entity_id == EntityIdentificator::RADAR_TOWER ||
+          entity_id == EntityIdentificator::PARKED_PLANE) {
+        cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT);
+        cubeFrontObjects[(*cube_front_ptr)->uniqueId] = *cube_front_ptr;
+        (*cube_front_ptr)->position.Copy(position);
+        (*cube_front_ptr)->position.AddX(-21.0);
+        (*cube_front_ptr)->position.AddZ(12.0);
+        (*cube_front_ptr)->Update();
+      } else if (entity_id == EntityIdentificator::GUN_VERTICAL) {
+        cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT_VERTICAL);
+        cubeFrontObjects[(*cube_front_ptr)->uniqueId] = *cube_front_ptr;
+        (*cube_front_ptr)->position.Copy(position);
+        (*cube_front_ptr)->position.AddX(-11.0);
+        (*cube_front_ptr)->position.AddZ(2.0);
+        (*cube_front_ptr)->Update();
+      } else if (entity_id == EntityIdentificator::GUN_HORIZONTAL_NORTH ||
+                entity_id == EntityIdentificator::GUN_HORIZONTAL_SOUTH) {
+        cube_front_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(EntityIdentificator::CUBE_FRONT_HORIZONTAL);
+        cubeFrontObjects[(*cube_front_ptr)->uniqueId] = *cube_front_ptr;
+        (*cube_front_ptr)->position.Copy(position);
+        (*cube_front_ptr)->position.AddX(-11.0);
+        (*cube_front_ptr)->position.AddZ(2.0);
+        (*cube_front_ptr)->Update();
+      }
     }
   }
 
@@ -207,13 +220,15 @@ void GameManager::updateSpriteRectBuffers() {
     spriteRectBuffer->producer_buffer[i++] = SpriteRect(src, pos, boundaries, attackBoundaries, tint);
   }*/
 
-  for (auto const& x : cubeBackObjects) {
-    IEntity* entity_ptr = x.second;
-    Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
-    Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
-    Boundaries boundaries = entity_ptr->GetAbsoluteBoundaries();
-    spriteRectBuffer->buffer[i] = SpriteRect(src, pos, boundaries, WHITE);
-    i++;
+  if (DEBUG) {
+    for (auto const& x : cubeBackObjects) {
+      IEntity* entity_ptr = x.second;
+      Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
+      Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
+      Boundaries boundaries = entity_ptr->GetAbsoluteBoundaries();
+      spriteRectBuffer->buffer[i] = SpriteRect(src, pos, boundaries, WHITE);
+      i++;
+    }
   }
 
   for (auto const& x : mobileObjects) {
@@ -225,13 +240,15 @@ void GameManager::updateSpriteRectBuffers() {
     i++;
   }
 
-  for (auto const& x : cubeFrontObjects) {
-    IEntity* entity_ptr = x.second;
-    Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
-    Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
-    Boundaries boundaries = entity_ptr->GetAbsoluteBoundaries();
-    spriteRectBuffer->buffer[i] = SpriteRect(src, pos, boundaries, WHITE);
-    i++;
+  if (DEBUG) {
+    for (auto const& x : cubeFrontObjects) {
+      IEntity* entity_ptr = x.second;
+      Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
+      Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
+      Boundaries boundaries = entity_ptr->GetAbsoluteBoundaries();
+      spriteRectBuffer->buffer[i] = SpriteRect(src, pos, boundaries, WHITE);
+      i++;
+    }
   }
 
   spriteRectBuffer->bufferLength = i;
@@ -256,6 +273,10 @@ void GameManager::updateEntities(std::map<uint32_t, IEntity*>& objects, std::opt
 
 void GameManager::updateMobileObjects(uint8_t pressedKeys) {
     updateEntities(mobileObjects, pressedKeys);
+    cubeShipBack->position.Copy(ship->position);
+    cubeShipBack->position.AddX(-21.0);
+    cubeShipBack->position.AddZ(12.0);
+    cubeShipFront->position.Copy(cubeShipBack->position);
 }
 
 void GameManager::updateStaticObjects() {
@@ -279,6 +300,10 @@ void GameManager::deleteAllObjects() {
   if (ship != nullptr) {
     ship->isMarkedToDelete = true;
     ship = nullptr;
+    cubeShipBack->isMarkedToDelete = true;
+    cubeShipBack = nullptr;
+    cubeShipFront->isMarkedToDelete = true;
+    cubeShipFront = nullptr;
   }
 
   // Delete all instances marked to delete.

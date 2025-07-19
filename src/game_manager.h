@@ -5,11 +5,15 @@
 #include <optional>
 #include <entity_factory.h>
 #include <entities/ship.h>
+#include <entities/cube_ship_back.h>
+#include <entities/cube_ship_front.h>
 #include <entity_data_manager.h>
 #include <sprite_rect_buffer.h>
 #include <utils.h>
 
 class Ship;
+class CubeShipBack;
+class CubeShipFront;
 
 struct UpdateInfo { Position cameraPosition; int lifeCounter; bool gameFinished; };
 struct LevelInfo { Texture2D bgTexture; Rectangle bgSource; Position bgPosition; };
@@ -22,6 +26,8 @@ class GameManager
   std::map<uint32_t, IEntity*> staticObjects;
   std::vector<IEntity*> objectsToDelete;
   Ship* ship = nullptr;
+  CubeShipBack* cubeShipBack = nullptr;
+  CubeShipFront* cubeShipFront = nullptr;
   int lifeCounter = 1;
   bool isGameFinished = false;
   bool isGameOver = false;

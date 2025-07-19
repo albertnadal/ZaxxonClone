@@ -22,6 +22,8 @@ void EntityFactory::RegisterEntities() {
 	Register(EntityIdentificator::CUBE_FRONT_VERTICAL, &CubeFrontVertical::Create);
 	Register(EntityIdentificator::CUBE_BACK_HORIZONTAL, &CubeBackHorizontal::Create);
 	Register(EntityIdentificator::CUBE_FRONT_HORIZONTAL, &CubeFrontHorizontal::Create);
+	Register(EntityIdentificator::CUBE_SHIP_BACK, &CubeShipBack::Create);
+	Register(EntityIdentificator::CUBE_SHIP_FRONT, &CubeShipFront::Create);
 }
 
 EntityFactory &EntityFactory::operator=(const EntityFactory &) {
