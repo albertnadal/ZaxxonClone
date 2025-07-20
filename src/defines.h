@@ -33,7 +33,7 @@ enum CubeShipBackAnimation: uint16_t { CUBE_SHIP_BACK_QUIET = 21 };
 enum CubeShipFrontAnimation: uint16_t { CUBE_SHIP_FRONT_QUIET = 22 };
 
 // Others
-constexpr bool DEBUG = true;                                                     // Debug mode.
+constexpr bool DEBUG = false;                                                     // Debug mode.
 constexpr int MILLISECONDS_PER_TICK = 16;                                        // Game logic frequency in milliseconds. 16ms ≈ 60 ticks per second ≈ 60 frames per second.
 constexpr float ZOOM = 3.0f;                                                     // Game display zoom.
 constexpr const char *WINDOW_TITLE = "Zaxxon Clone";                             // Title to show in the application window bar.

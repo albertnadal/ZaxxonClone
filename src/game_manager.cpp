@@ -273,10 +273,12 @@ void GameManager::updateEntities(std::map<uint32_t, IEntity*>& objects, std::opt
 
 void GameManager::updateMobileObjects(uint8_t pressedKeys) {
     updateEntities(mobileObjects, pressedKeys);
-    cubeShipBack->position.Copy(ship->position);
-    cubeShipBack->position.AddX(-21.0);
-    cubeShipBack->position.AddZ(12.0);
-    cubeShipFront->position.Copy(cubeShipBack->position);
+    if(cubeShipBack != nullptr && cubeShipFront != nullptr) {
+      cubeShipBack->position.Copy(ship->position);
+      cubeShipBack->position.AddX(-21.0);
+      cubeShipBack->position.AddZ(12.0);
+      cubeShipFront->position.Copy(cubeShipBack->position);
+    }
 }
 
 void GameManager::updateStaticObjects() {
