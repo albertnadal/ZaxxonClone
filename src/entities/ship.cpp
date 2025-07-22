@@ -82,6 +82,12 @@ void Ship::ProcessPressedKeys(bool checkPreviousPressedKeys) {
         DownKeyReleased();
     }
 
+    if ((pressedKeys & KeyboardKeyCode::Z_KEY_SPACE) == KeyboardKeyCode::Z_KEY_SPACE) {
+        if ((!checkPreviousPressedKeys) || ((checkPreviousPressedKeys) && ((prevPressedKeys & KeyboardKeyCode::Z_KEY_SPACE) != KeyboardKeyCode::Z_KEY_SPACE))) {
+            FireLaserBolt();
+        }
+    }
+
     prevPressedKeys = pressedKeys;
 }
 
@@ -106,6 +112,15 @@ void Ship::MoveToYAxis(Direction direction, bool flySlow) {
     // Update the player position.
     float verticalVelocity = flySlow ? 1.5f : 2.0f;
     PositionAddY(direction == Direction::DOWN ? verticalVelocity : -1 * verticalVelocity);
+}
+
+void Ship::FireLaserBolt() {
+    Position laserPosition;
+    laserPosition.Copy(position);
+    laserPosition.AddZ(4.0f);
+    laserPosition.AddY(-4.0f);
+    laserPosition.AddX(12.0f);
+    gameManager->CreateEntityWithId(EntityIdentificator::LASER_BOLT_GREEN, laserPosition);
 }
 
 void Ship::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {

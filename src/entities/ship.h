@@ -29,6 +29,7 @@ class Ship: public IEntity
   void UpdateCollisions();
   void MoveToXAxis(Direction);
   void MoveToYAxis(Direction, bool);
+  void FireLaserBolt();
 
 public:
   Ship();

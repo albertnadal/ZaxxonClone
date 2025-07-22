@@ -13,6 +13,7 @@
 #include <entities/gun_hor_north.h>
 #include <entities/gun_hor_south.h>
 #include <entities/parked_plane.h>
+#include <entities/laser_bolt_green.h>
 
 class GameManager;
 
