@@ -7,6 +7,7 @@
 #include <entities/ship.h>
 #include <entity_data_manager.h>
 #include <sprite_rect_buffer.h>
+#include <aabbcc/AABB.h>
 #include <utils.h>
 
 class Ship;
@@ -16,6 +17,7 @@ struct LevelInfo { Texture2D bgTexture; Rectangle bgSource; Position bgPosition;
 
 class GameManager
 {
+  aabb::Tree<IEntity*> *spacePartitionObjectsTree = nullptr;
   std::map<uint32_t, IEntity*> mobileObjects;
   std::map<uint32_t, IEntity*> staticObjects;
   std::vector<IEntity*> objectsToDelete;

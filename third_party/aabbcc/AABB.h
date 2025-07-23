@@ -32,15 +32,22 @@
 #include <cstdlib>
 #include <iostream>
 #include <limits>
+#include <map>
 #include <stdexcept>
-#include <unordered_map>
 #include <vector>
+#include <optional>
 
 /// Null node flag.
 const unsigned int NULL_NODE = 0xffffffff;
 
 namespace aabb
 {
+    template <class T>
+    struct AABBIntersection {
+        T particle;
+        int leftIntersectionX, rightIntersectionX, topIntersectionY, bottomIntersectionY;
+    };
+
     /*! \brief The axis-aligned bounding box object.
 
         Axis-aligned bounding boxes (AABBs) store information for the minimum
@@ -54,72 +61,6 @@ namespace aabb
     class AABB
     {
     public:
-        /// Constructor.
-        AABB();
-
-        //! Constructor.
-        /*! \param dimension
-                The dimensionality of the system.
-         */
-        AABB(unsigned int);
-
-        //! Constructor.
-        /*! \param lowerBound_
-                The lower bound in each dimension.
-
-            \param upperBound_
-                The upper bound in each dimension.
-         */
-        AABB(const std::vector<double>&, const std::vector<double>&);
-
-        /// Compute the surface area of the box.
-        double computeSurfaceArea() const;
-
-        /// Get the surface area of the box.
-        double getSurfaceArea() const;
-
-        //! Merge two AABBs into this one.
-        /*! \param aabb1
-                A reference to the first AABB.
-
-            \param aabb2
-                A reference to the second AABB.
-         */
-        void merge(const AABB&, const AABB&);
-
-        //! Test whether the AABB is contained within this one.
-        /*! \param aabb
-                A reference to the AABB.
-
-            \return
-                Whether the AABB is fully contained.
-         */
-        bool contains(const AABB&) const;
-
-        //! Test whether the AABB overlaps this one.
-        /*! \param aabb
-                A reference to the AABB.
-
-            \param touchIsOverlap
-                Does touching constitute an overlap?
-
-            \return
-                Whether the AABB overlaps.
-         */
-        bool overlaps(const AABB&, bool touchIsOverlap) const;
-
-        //! Compute the centre of the AABB.
-        /*! \returns
-                The position vector of the AABB centre.
-         */
-        std::vector<double> computeCentre();
-
-        //! Set the dimensionality of the AABB.
-        /*! \param dimension
-                The dimensionality of the system.
-         */
-        void setDimension(unsigned int);
-
         /// Lower bound of AABB in each dimension.
         std::vector<double> lowerBound;
 
@@ -131,8 +72,167 @@ namespace aabb
 
         /// The AABB's surface area.
         double surfaceArea;
+
+        AABB()
+        {
+        }
+
+        AABB(unsigned int dimension)
+        {
+            assert(dimension >= 2);
+
+            lowerBound.resize(dimension);
+            upperBound.resize(dimension);
+        }
+
+        AABB(const std::vector<double>& lowerBound_, const std::vector<double>& upperBound_) :
+            lowerBound(lowerBound_), upperBound(upperBound_)
+        {
+            // Validate the dimensionality of the bounds vectors.
+            if (lowerBound.size() != upperBound.size())
+            {
+                throw std::invalid_argument("[ERROR]: Dimensionality mismatch!");
+            }
+
+            // Validate that the upper bounds exceed the lower bounds.
+            for (unsigned int i=0;i<lowerBound.size();i++)
+            {
+                // Validate the bound.
+                if (lowerBound[i] > upperBound[i])
+                {
+                    throw std::invalid_argument("[ERROR]: AABB lower bound is greater than the upper bound!");
+                }
+            }
+
+            surfaceArea = computeSurfaceArea();
+            centre = computeCentre();
+        }
+
+        double computeSurfaceArea() const
+        {
+            // Sum of "area" of all the sides.
+            double sum = 0;
+
+            // General formula for one side: hold one dimension constant
+            // and multiply by all the other ones.
+            for (unsigned int d1 = 0; d1 < lowerBound.size(); d1++)
+            {
+                // "Area" of current side.
+                double product = 1;
+
+                for (unsigned int d2 = 0; d2 < lowerBound.size(); d2++)
+                {
+                    if (d1 == d2)
+                        continue;
+
+                    double dx = upperBound[d2] - lowerBound[d2];
+                    product *= dx;
+                }
+
+                // Update the sum.
+                sum += product;
+            }
+
+            return 2.0 * sum;
+        }
+
+        double getSurfaceArea() const
+        {
+            return surfaceArea;
+        }
+
+        void merge(const AABB& aabb1, const AABB& aabb2)
+        {
+            assert(aabb1.lowerBound.size() == aabb2.lowerBound.size());
+            assert(aabb1.upperBound.size() == aabb2.upperBound.size());
+
+            lowerBound.resize(aabb1.lowerBound.size());
+            upperBound.resize(aabb1.lowerBound.size());
+
+            for (unsigned int i=0;i<lowerBound.size();i++)
+            {
+                lowerBound[i] = std::min(aabb1.lowerBound[i], aabb2.lowerBound[i]);
+                upperBound[i] = std::max(aabb1.upperBound[i], aabb2.upperBound[i]);
+            }
+
+            surfaceArea = computeSurfaceArea();
+            centre = computeCentre();
+        }
+
+        bool contains(const AABB& aabb) const
+        {
+            assert(aabb.lowerBound.size() == lowerBound.size());
+
+            for (unsigned int i=0;i<lowerBound.size();i++)
+            {
+                if (aabb.lowerBound[i] < lowerBound[i]) return false;
+                if (aabb.upperBound[i] > upperBound[i]) return false;
+            }
+
+            return true;
+        }
+
+        bool overlaps(const AABB& aabb, bool touchIsOverlap) const
+        {
+            assert(aabb.lowerBound.size() == 2); // Only 2 dimensional boundaries allowed
+            assert(aabb.lowerBound.size() == lowerBound.size());
+
+            bool rv = true;
+
+            if (touchIsOverlap)
+            {
+                for (unsigned int i = 0; i < lowerBound.size(); ++i)
+                {
+                    if (aabb.upperBound[i] < lowerBound[i] || aabb.lowerBound[i] > upperBound[i])
+                    {
+                        rv = false;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (unsigned int i = 0; i < lowerBound.size(); ++i)
+                {
+                    if (aabb.upperBound[i] <= lowerBound[i] || aabb.lowerBound[i] >= upperBound[i])
+                    {
+                        rv = false;
+                        break;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        std::vector<double> computeCentre()
+        {
+            std::vector<double> position(lowerBound.size());
+
+            for (unsigned int i=0;i<position.size();i++)
+                position[i] = 0.5 * (lowerBound[i] + upperBound[i]);
+
+            return position;
+        }
+
+        void setDimension(unsigned int dimension)
+        {
+            assert(dimension >= 2);
+
+            lowerBound.resize(dimension);
+            upperBound.resize(dimension);
+        }
+
     };
 
+    template <class T>
+    struct ClassComparator
+    {
+       bool operator() (const T& lhs, const T& rhs) const
+       {
+           return lhs->uniqueId < rhs->uniqueId;
+       }
+    };
     /*! \brief A node of the AABB tree.
 
         Each node of the tree contains an AABB object which corresponds to a
@@ -145,6 +245,7 @@ namespace aabb
         function allows the tree to query whether the node is a leaf, i.e. to
         determine whether it holds a single particle.
      */
+    template <class T>
     struct Node
     {
         /// Constructor.
@@ -169,7 +270,7 @@ namespace aabb
         int height;
 
         /// The index of the particle that the node contains (leaf nodes only).
-        unsigned int particle;
+        T particle;
 
         //! Test whether the node is a leaf.
         /*! \return
@@ -186,6 +287,7 @@ namespace aabb
         periodic and non-periodic boxes, as well as boxes with partial
         periodicity, e.g. periodic along specific axes.
      */
+    template <class T>
     class Tree
     {
     public:
@@ -229,6 +331,8 @@ namespace aabb
         Tree(unsigned int, double, const std::vector<bool>&, const std::vector<double>&,
             unsigned int nParticles = 16, bool touchIsOverlap=true);
 
+        void setDimension(const int dimension);
+
         //! Set the periodicity of the simulation box.
         /*! \param periodicity_
                 Whether the system is periodic in each dimension.
@@ -251,7 +355,7 @@ namespace aabb
             \param radius
                 The radius of the particle.
          */
-        void insertParticle(unsigned int, std::vector<double>&, double);
+        void insertParticle(T, std::vector<double>&, double);
 
         //! Insert a particle into the tree (arbitrary shape with bounding box).
         /*! \param index
@@ -263,7 +367,18 @@ namespace aabb
             \param upperBound
                 The upper bound in each dimension.
          */
-        void insertParticle(unsigned int, std::vector<double>&, std::vector<double>&);
+        void insertParticle(T, std::vector<int>&, std::vector<int>&);
+        //! Insert a particle into the tree (arbitrary shape with bounding box).
+        /*! \param index
+                The index of the particle.
+
+            \param lowerBound
+                The lower bound in each dimension.
+
+            \param upperBound
+                The upper bound in each dimension.
+         */
+        void insertParticle(T, std::vector<double>&, std::vector<double>&);
 
         /// Return the number of particles in the tree.
         unsigned int nParticles();
@@ -272,7 +387,7 @@ namespace aabb
         /*! \param particle
                 The particle index (particleMap will be used to map the node).
          */
-        void removeParticle(unsigned int);
+        void removeParticle(T);
 
         /// Remove all particles from the tree.
         void removeAll();
@@ -293,7 +408,7 @@ namespace aabb
             \return
                 Whether the particle was reinserted.
          */
-        bool updateParticle(unsigned int, std::vector<double>&, double, bool alwaysReinsert=false);
+        bool updateParticle(T, std::vector<double>&, double, bool alwaysReinsert=false);
 
         //! Update the tree if a particle moves outside its fattened AABB.
         /*! \param particle
@@ -308,7 +423,28 @@ namespace aabb
             \param alwaysReinsert
                 Always reinsert the particle, even if it's within its old AABB (default: false)
          */
-        bool updateParticle(unsigned int, std::vector<double>&, std::vector<double>&, bool alwaysReinsert=false);
+        bool updateParticle(T, std::vector<int>&, std::vector<int>&, bool alwaysReinsert=false);
+
+        //! Update the tree if a particle moves outside its fattened AABB.
+        /*! \param particle
+                The particle index (particleMap will be used to map the node).
+
+            \param lowerBound
+                The lower bound in each dimension.
+
+            \param upperBound
+                The upper bound in each dimension.
+
+            \param alwaysReinsert
+                Always reinsert the particle, even if it's within its old AABB (default: false)
+         */
+        bool updateParticle(T, std::vector<double>&, std::vector<double>&, bool alwaysReinsert=false);
+
+        //! Specifies if the requested particle is present in the tree.
+        /*! \param particle
+                The particle index (particleMap will be used to map the node).
+         */
+        bool particleExists(T);
 
         //! Query the tree to find candidate interactions for a particle.
         /*! \param particle
@@ -317,7 +453,7 @@ namespace aabb
             \return particles
                 A vector of particle indices.
          */
-        std::vector<unsigned int> query(unsigned int);
+        std::vector<T> query(T);
 
         //! Query the tree to find candidate interactions for an AABB.
         /*! \param particle
@@ -326,25 +462,37 @@ namespace aabb
             \param aabb
                 The AABB.
 
-            \return particles
-                A vector of particle indices.
+            \return intersections
+                A vector of intersections with particle indices and intersection values.
          */
-        std::vector<unsigned int> query(unsigned int, const AABB&);
+        std::vector<AABBIntersection<T>> query(T, const AABB&);
+
+        //! Query the tree to find candidate interactions for an AABB.
+        /*! \param lowerbound
+                The lowerbound coordinate.
+
+            \param upperbound
+                The upperbound coordinate.
+
+            \return intersections
+                A vector of intersections with particle indices and intersection values.
+         */
+        std::vector<AABBIntersection<T>> query(const std::vector<int>, const std::vector<int>);
 
         //! Query the tree to find candidate interactions for an AABB.
         /*! \param aabb
                 The AABB.
 
-            \return particles
-                A vector of particle indices.
+            \return intersections
+                A vector of intersections with particle indices and intersection values.
          */
-        std::vector<unsigned int> query(const AABB&);
+        std::vector<AABBIntersection<T>> query(const AABB&);
 
         //! Get a particle AABB.
         /*! \param particle
                 The particle index.
          */
-        const AABB& getAABB(unsigned int);
+        const AABB& getAABB(T);
 
         //! Get the height of the tree.
         /*! \return
@@ -383,7 +531,7 @@ namespace aabb
         unsigned int root;
 
         /// The dynamic tree.
-        std::vector<Node> nodes;
+        std::vector<Node<T> > nodes;
 
         /// The current number of nodes in the tree.
         unsigned int nodeCount;
@@ -416,7 +564,7 @@ namespace aabb
         std::vector<double> posMinImage;
 
         /// A map between particle and node indices.
-        std::unordered_map<unsigned int, unsigned int> particleMap;
+        std::map<T, unsigned int, ClassComparator<T> > particleMap;
 
         /// Does touching count as overlapping in tree queries?
         bool touchIsOverlap;
@@ -478,12 +626,6 @@ namespace aabb
          */
         void validateMetrics(unsigned int) const;
 
-        //! Apply periodic boundary conditions.
-        /* \param position
-                The position vector.
-         */
-        void periodicBoundaries(std::vector<double>&);
-
         //! Compute minimum image separation.
         /*! \param separation
                 The separation vector.
@@ -496,169 +638,24 @@ namespace aabb
          */
         bool minimumImage(std::vector<double>&, std::vector<double>&);
     };
-}
 
-namespace aabb
-{
-    AABB::AABB()
+    template <class T>
+    Node<T>::Node()
     {
     }
 
-    AABB::AABB(unsigned int dimension)
-    {
-        assert(dimension >= 2);
-
-        lowerBound.resize(dimension);
-        upperBound.resize(dimension);
-    }
-
-    AABB::AABB(const std::vector<double>& lowerBound_, const std::vector<double>& upperBound_) :
-        lowerBound(lowerBound_), upperBound(upperBound_)
-    {
-        // Validate the dimensionality of the bounds vectors.
-        if (lowerBound.size() != upperBound.size())
-        {
-            throw std::invalid_argument("[ERROR]: Dimensionality mismatch!");
-        }
-
-        // Validate that the upper bounds exceed the lower bounds.
-        for (unsigned int i=0;i<lowerBound.size();i++)
-        {
-            // Validate the bound.
-            if (lowerBound[i] > upperBound[i])
-            {
-                throw std::invalid_argument("[ERROR]: AABB lower bound is greater than the upper bound!");
-            }
-        }
-
-        surfaceArea = computeSurfaceArea();
-        centre = computeCentre();
-    }
-
-    double AABB::computeSurfaceArea() const
-    {
-        // Sum of "area" of all the sides.
-        double sum = 0;
-
-        // General formula for one side: hold one dimension constant
-        // and multiply by all the other ones.
-        for (unsigned int d1 = 0; d1 < lowerBound.size(); d1++)
-        {
-            // "Area" of current side.
-            double product = 1;
-
-            for (unsigned int d2 = 0; d2 < lowerBound.size(); d2++)
-            {
-                if (d1 == d2)
-                    continue;
-
-                double dx = upperBound[d2] - lowerBound[d2];
-                product *= dx;
-            }
-
-            // Update the sum.
-            sum += product;
-        }
-
-        return 2.0 * sum;
-    }
-
-    double AABB::getSurfaceArea() const
-    {
-        return surfaceArea;
-    }
-
-    void AABB::merge(const AABB& aabb1, const AABB& aabb2)
-    {
-        assert(aabb1.lowerBound.size() == aabb2.lowerBound.size());
-        assert(aabb1.upperBound.size() == aabb2.upperBound.size());
-
-        lowerBound.resize(aabb1.lowerBound.size());
-        upperBound.resize(aabb1.lowerBound.size());
-
-        for (unsigned int i=0;i<lowerBound.size();i++)
-        {
-            lowerBound[i] = std::min(aabb1.lowerBound[i], aabb2.lowerBound[i]);
-            upperBound[i] = std::max(aabb1.upperBound[i], aabb2.upperBound[i]);
-        }
-
-        surfaceArea = computeSurfaceArea();
-        centre = computeCentre();
-    }
-
-    bool AABB::contains(const AABB& aabb) const
-    {
-        assert(aabb.lowerBound.size() == lowerBound.size());
-
-        for (unsigned int i=0;i<lowerBound.size();i++)
-        {
-            if (aabb.lowerBound[i] < lowerBound[i]) return false;
-            if (aabb.upperBound[i] > upperBound[i]) return false;
-        }
-
-        return true;
-    }
-
-    bool AABB::overlaps(const AABB& aabb, bool touchIsOverlap) const
-    {
-        assert(aabb.lowerBound.size() == lowerBound.size());
-
-        bool rv = true;
-
-        if (touchIsOverlap)
-        {
-            for (unsigned int i = 0; i < lowerBound.size(); ++i)
-            {
-                if (aabb.upperBound[i] < lowerBound[i] || aabb.lowerBound[i] > upperBound[i])
-                {
-                    rv = false;
-                    break;
-                }
-            }
-        }
-        else
-        {
-            for (unsigned int i = 0; i < lowerBound.size(); ++i)
-            {
-                if (aabb.upperBound[i] <= lowerBound[i] || aabb.lowerBound[i] >= upperBound[i])
-                {
-                    rv = false;
-                    break;
-                }
-            }
-        }
-
-        return rv;
-    }
-
-    std::vector<double> AABB::computeCentre()
-    {
-        std::vector<double> position(lowerBound.size());
-
-        for (unsigned int i=0;i<position.size();i++)
-            position[i] = 0.5 * (lowerBound[i] + upperBound[i]);
-
-        return position;
-    }
-
-    void AABB::setDimension(unsigned int dimension)
-    {
-        assert(dimension >= 2);
-
-        lowerBound.resize(dimension);
-        upperBound.resize(dimension);
-    }
-
-    Node::Node()
-    {
-    }
-
-    bool Node::isLeaf() const
+    template <class T>
+    bool Node<T>::isLeaf() const
     {
         return (left == NULL_NODE);
     }
 
-    Tree::Tree(unsigned int dimension_,
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+    template <class T>
+    Tree<T>::Tree(unsigned int dimension_,
                double skinThickness_,
                unsigned int nParticles,
                bool touchIsOverlap_) :
@@ -694,7 +691,10 @@ namespace aabb
         freeList = 0;
     }
 
-    Tree::Tree(unsigned int dimension_,
+/*****************************************************************************/
+
+    template <class T>
+    Tree<T>::Tree(unsigned int dimension_,
                double skinThickness_,
                const std::vector<bool>& periodicity_,
                const std::vector<double>& boxSize_,
@@ -718,6 +718,7 @@ namespace aabb
 
         // Initialise the tree.
         root = NULL_NODE;
+        touchIsOverlap = true;
         nodeCount = 0;
         nodeCapacity = nParticles;
         nodes.resize(nodeCapacity);
@@ -748,17 +749,28 @@ namespace aabb
         }
     }
 
-    void Tree::setPeriodicity(const std::vector<bool>& periodicity_)
+/*****************************************************************************/
+
+    template <class T>
+    void Tree<T>::setDimension(const int dimension_)
+    {
+        dimension = dimension_;
+    }
+
+    template <class T>
+    void Tree<T>::setPeriodicity(const std::vector<bool>& periodicity_)
     {
         periodicity = periodicity_;
     }
 
-    void Tree::setBoxSize(const std::vector<double>& boxSize_)
+    template <class T>
+    void Tree<T>::setBoxSize(const std::vector<double>& boxSize_)
     {
         boxSize = boxSize_;
     }
 
-    unsigned int Tree::allocateNode()
+    template <class T>
+    unsigned int Tree<T>::allocateNode()
     {
         // Exand the node pool as needed.
         if (freeList == NULL_NODE)
@@ -795,7 +807,10 @@ namespace aabb
         return node;
     }
 
-    void Tree::freeNode(unsigned int node)
+/*****************************************************************************/
+
+    template <class T>
+    void Tree<T>::freeNode(unsigned int node)
     {
         assert(node < nodeCapacity);
         assert(0 < nodeCount);
@@ -806,7 +821,10 @@ namespace aabb
         nodeCount--;
     }
 
-    void Tree::insertParticle(unsigned int particle, std::vector<double>& position, double radius)
+/*****************************************************************************/
+
+    template <class T>
+    void Tree<T>::insertParticle(T particle, std::vector<double>& position, double radius)
     {
         // Make sure the particle doesn't already exist.
         if (particleMap.count(particle) != 0)
@@ -850,13 +868,31 @@ namespace aabb
         insertLeaf(node);
 
         // Add the new particle to the map.
-        particleMap.insert(std::unordered_map<unsigned int, unsigned int>::value_type(particle, node));
+        particleMap.insert(std::pair<T,int>(particle,node));
 
         // Store the particle index.
         nodes[node].particle = particle;
     }
 
-    void Tree::insertParticle(unsigned int particle, std::vector<double>& lowerBound, std::vector<double>& upperBound)
+    template <class T>
+    void Tree<T>::insertParticle(T particle, std::vector<int>& lowerBound_, std::vector<int>& upperBound_)
+    {
+        std::vector<double> lowerBound;
+        std::vector<double> upperBound;
+
+        for(int i=0; i<lowerBound_.size(); i++) {
+          lowerBound.push_back((double)lowerBound_.at(i));
+        }
+
+        for(int i=0; i<upperBound_.size(); i++) {
+          upperBound.push_back((double)upperBound_.at(i));
+        }
+
+        insertParticle(particle, lowerBound, upperBound);
+    }
+
+    template <class T>
+    void Tree<T>::insertParticle(T particle, std::vector<double>& lowerBound, std::vector<double>& upperBound)
     {
         // Make sure the particle doesn't already exist.
         if (particleMap.count(particle) != 0)
@@ -906,21 +942,23 @@ namespace aabb
         insertLeaf(node);
 
         // Add the new particle to the map.
-        particleMap.insert(std::unordered_map<unsigned int, unsigned int>::value_type(particle, node));
+        particleMap.insert(std::pair<T,int>(particle,node));
 
         // Store the particle index.
         nodes[node].particle = particle;
     }
 
-    unsigned int Tree::nParticles()
+    template <class T>
+    unsigned int Tree<T>::nParticles()
     {
         return particleMap.size();
     }
 
-    void Tree::removeParticle(unsigned int particle)
+    template <class T>
+    void Tree<T>::removeParticle(T particle)
     {
         // Map iterator.
-        std::unordered_map<unsigned int, unsigned int>::iterator it;
+        typename std::map<T, unsigned int>::iterator it;
 
         // Find the particle.
         it = particleMap.find(particle);
@@ -928,7 +966,7 @@ namespace aabb
         // The particle doesn't exist.
         if (it == particleMap.end())
         {
-            throw std::invalid_argument("[ERROR]: Invalid particle index!");
+            return;
         }
 
         // Extract the node index.
@@ -944,10 +982,11 @@ namespace aabb
         freeNode(node);
     }
 
-    void Tree::removeAll()
+    template <class T>
+    void Tree<T>::removeAll()
     {
         // Iterator pointing to the start of the particle map.
-        std::unordered_map<unsigned int, unsigned int>::iterator it = particleMap.begin();
+        typename std::map<T, unsigned int>::iterator it = particleMap.begin();
 
         // Iterate over the map.
         while (it != particleMap.end())
@@ -968,7 +1007,8 @@ namespace aabb
         particleMap.clear();
     }
 
-    bool Tree::updateParticle(unsigned int particle, std::vector<double>& position, double radius,
+    template <class T>
+    bool Tree<T>::updateParticle(T particle, std::vector<double>& position, double radius,
                               bool alwaysReinsert)
     {
         // Validate the dimensionality of the position vector.
@@ -992,7 +1032,25 @@ namespace aabb
         return updateParticle(particle, lowerBound, upperBound, alwaysReinsert);
     }
 
-    bool Tree::updateParticle(unsigned int particle, std::vector<double>& lowerBound,
+    template <class T>
+    bool Tree<T>::updateParticle(T particle, std::vector<int>& lowerBound_, std::vector<int>& upperBound_, bool alwaysReinsert)
+    {
+        std::vector<double> lowerBound;
+        std::vector<double> upperBound;
+
+        for(int i=0; i<lowerBound_.size(); i++) {
+          lowerBound.push_back((double)lowerBound_.at(i));
+        }
+
+        for(int i=0; i<upperBound_.size(); i++) {
+          upperBound.push_back((double)upperBound_.at(i));
+        }
+
+        return updateParticle(particle, lowerBound, upperBound, alwaysReinsert);
+    }
+
+    template <class T>
+    bool Tree<T>::updateParticle(T particle, std::vector<double>& lowerBound,
                               std::vector<double>& upperBound, bool alwaysReinsert)
     {
         // Validate the dimensionality of the bounds vectors.
@@ -1002,7 +1060,7 @@ namespace aabb
         }
 
         // Map iterator.
-        std::unordered_map<unsigned int, unsigned int>::iterator it;
+        typename std::map<T, unsigned int>::iterator it;
 
         // Find the particle.
         it = particleMap.find(particle);
@@ -1010,7 +1068,7 @@ namespace aabb
         // The particle doesn't exist.
         if (it == particleMap.end())
         {
-            throw std::invalid_argument("[ERROR]: Invalid particle index!");
+            return false;
         }
 
         // Extract the node index.
@@ -1063,7 +1121,14 @@ namespace aabb
         return true;
     }
 
-    std::vector<unsigned int> Tree::query(unsigned int particle)
+    template <class T>
+    bool Tree<T>::particleExists(T particle)
+    {
+        return (particleMap.count(particle) != 0);
+    }
+
+    template <class T>
+    std::vector<T> Tree<T>::query(T particle)
     {
         // Make sure that this is a valid particle.
         if (particleMap.count(particle) == 0)
@@ -1075,13 +1140,14 @@ namespace aabb
         return query(particle, nodes[particleMap.find(particle)->second].aabb);
     }
 
-    std::vector<unsigned int> Tree::query(unsigned int particle, const AABB& aabb)
+    template <class T>
+    std::vector<AABBIntersection<T>> Tree<T>::query(T particle, const AABB& aabb)
     {
         std::vector<unsigned int> stack;
         stack.reserve(256);
         stack.push_back(root);
 
-        std::vector<unsigned int> particles;
+        std::vector<AABBIntersection<T>> intersections;
 
         while (stack.size() > 0)
         {
@@ -1119,10 +1185,15 @@ namespace aabb
                 // Check that we're at a leaf node.
                 if (nodes[node].isLeaf())
                 {
+
                     // Can't interact with itself.
                     if (nodes[node].particle != particle)
                     {
-                        particles.push_back(nodes[node].particle);
+                        int rightIntersectionX = static_cast<int>(nodeAABB.lowerBound[0] - aabb.upperBound[0]);
+                        int leftIntersectionX = static_cast<int>(nodeAABB.upperBound[0] - aabb.lowerBound[0]);
+                        int bottomIntersectionY = static_cast<int>(nodeAABB.lowerBound[1] - aabb.upperBound[1]);
+                        int topIntersectionY = static_cast<int>(nodeAABB.upperBound[1] - aabb.lowerBound[1]);
+                        intersections.push_back({nodes[node].particle, leftIntersectionX, rightIntersectionX, topIntersectionY, bottomIntersectionY});
                     }
                 }
                 else
@@ -1133,27 +1204,48 @@ namespace aabb
             }
         }
 
-        return particles;
+        return intersections;
     }
 
-    std::vector<unsigned int> Tree::query(const AABB& aabb)
+    template <class T>
+    std::vector<AABBIntersection<T>> Tree<T>::query(const std::vector<int> lowerBound_, const std::vector<int> upperBound_)
+    {
+        std::vector<double> lowerBound;
+        std::vector<double> upperBound;
+
+        for(int i=0; i<lowerBound_.size(); i++) {
+          lowerBound.push_back((double)lowerBound_.at(i));
+        }
+
+        for(int i=0; i<upperBound_.size(); i++) {
+          upperBound.push_back((double)upperBound_.at(i));
+        }
+
+        AABB aabb(lowerBound, upperBound);
+        return query(aabb);
+    }
+
+    template <class T>
+    std::vector<AABBIntersection<T>> Tree<T>::query(const AABB& aabb)
     {
         // Make sure the tree isn't empty.
         if (particleMap.size() == 0)
         {
-            return std::vector<unsigned int>();
+            return std::vector<AABBIntersection<T>>();
         }
 
         // Test overlap of AABB against all particles.
-        return query(std::numeric_limits<unsigned int>::max(), aabb);
+        return query(std::numeric_limits<T>::max(), aabb);
     }
 
-    const AABB& Tree::getAABB(unsigned int particle)
+    template <class T>
+    const AABB& Tree<T>::getAABB(T particle)
     {
         return nodes[particleMap[particle]].aabb;
     }
 
-    void Tree::insertLeaf(unsigned int leaf)
+    template <class T>
+    void Tree<T>::insertLeaf(unsigned int leaf)
     {
         if (root == NULL_NODE)
         {
@@ -1276,7 +1368,8 @@ namespace aabb
         }
     }
 
-    void Tree::removeLeaf(unsigned int leaf)
+    template <class T>
+    void Tree<T>::removeLeaf(unsigned int leaf)
     {
         if (leaf == root)
         {
@@ -1323,7 +1416,8 @@ namespace aabb
         }
     }
 
-    unsigned int Tree::balance(unsigned int node)
+    template <class T>
+    unsigned int Tree<T>::balance(unsigned int node)
     {
         assert(node != NULL_NODE);
 
@@ -1447,12 +1541,14 @@ namespace aabb
         return node;
     }
 
-    unsigned int Tree::computeHeight() const
+    template <class T>
+    unsigned int Tree<T>::computeHeight() const
     {
         return computeHeight(root);
     }
 
-    unsigned int Tree::computeHeight(unsigned int node) const
+    template <class T>
+    unsigned int Tree<T>::computeHeight(unsigned int node) const
     {
         assert(node < nodeCapacity);
 
@@ -1464,18 +1560,21 @@ namespace aabb
         return 1 + std::max(height1, height2);
     }
 
-    unsigned int Tree::getHeight() const
+    template <class T>
+    unsigned int Tree<T>::getHeight() const
     {
         if (root == NULL_NODE) return 0;
         return nodes[root].height;
     }
 
-    unsigned int Tree::getNodeCount() const
+    template <class T>
+    unsigned int Tree<T>::getNodeCount() const
     {
         return nodeCount;
     }
 
-    unsigned int Tree::computeMaximumBalance() const
+    template <class T>
+    unsigned int Tree<T>::computeMaximumBalance() const
     {
         unsigned int maxBalance = 0;
         for (unsigned int i=0; i<nodeCapacity; i++)
@@ -1492,7 +1591,8 @@ namespace aabb
         return maxBalance;
     }
 
-    double Tree::computeSurfaceAreaRatio() const
+    template <class T>
+    double Tree<T>::computeSurfaceAreaRatio() const
     {
         if (root == NULL_NODE) return 0.0;
 
@@ -1509,7 +1609,8 @@ namespace aabb
         return totalArea / rootArea;
     }
 
-    void Tree::validate() const
+    template <class T>
+    void Tree<T>::validate() const
     {
 #ifndef NDEBUG
         validateStructure(root);
@@ -1530,7 +1631,8 @@ namespace aabb
 #endif
     }
 
-    void Tree::rebuild()
+    template <class T>
+    void Tree<T>::rebuild()
     {
         std::vector<unsigned int> nodeIndices(nodeCount);
         unsigned int count = 0;
@@ -1597,7 +1699,8 @@ namespace aabb
         validate();
     }
 
-    void Tree::validateStructure(unsigned int node) const
+    template <class T>
+    void Tree<T>::validateStructure(unsigned int node) const
     {
         if (node == NULL_NODE) return;
 
@@ -1624,7 +1727,8 @@ namespace aabb
         validateStructure(right);
     }
 
-    void Tree::validateMetrics(unsigned int node) const
+    template <class T>
+    void Tree<T>::validateMetrics(unsigned int node) const
     {
         if (node == NULL_NODE) return;
 
@@ -1661,25 +1765,8 @@ namespace aabb
         validateMetrics(right);
     }
 
-    void Tree::periodicBoundaries(std::vector<double>& position)
-    {
-        for (unsigned int i=0;i<dimension;i++)
-        {
-            if (position[i] < 0)
-            {
-                position[i] += boxSize[i];
-            }
-            else
-            {
-                if (position[i] >= boxSize[i])
-                {
-                    position[i] -= boxSize[i];
-                }
-            }
-        }
-    }
-
-    bool Tree::minimumImage(std::vector<double>& separation, std::vector<double>& shift)
+    template <class T>
+    bool Tree<T>::minimumImage(std::vector<double>& separation, std::vector<double>& shift)
     {
         bool isShifted = false;
 
@@ -1704,6 +1791,7 @@ namespace aabb
 
         return isShifted;
     }
+
 }
 
 #endif /* _AABB_H */

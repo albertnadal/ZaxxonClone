@@ -8,6 +8,8 @@ GameManager::GameManager(EntityDataManager* _textureManager, SpriteRectBuffer* _
         textureManager = _textureManager;
         spriteRectBuffer = _spriteRectBuffer;
         maxObjects = _maxObjects;
+        spacePartitionObjectsTree = new aabb::Tree<IEntity*>();
+        spacePartitionObjectsTree->setDimension(3);
         resetLevelValues();
 }
 
@@ -97,6 +99,11 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
 
     // Initial update to load the sprites and boundary box
     (*entity_ptr)->Update();
+
+    // Insert the object into the space partition tree used for object collision detection
+    std::vector<int> lowerBound = (*entity_ptr)->GetLowerBound();
+    std::vector<int> upperBound = (*entity_ptr)->GetUpperBound();
+    spacePartitionObjectsTree->insertParticle(*entity_ptr, lowerBound, upperBound);
 
     mobileObjects[(*entity_ptr)->uniqueId] = *entity_ptr;
   }
