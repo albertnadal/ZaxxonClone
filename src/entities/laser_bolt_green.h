@@ -22,6 +22,9 @@ public:
   bool Update(uint8_t) override;
   static IEntity* Create();
 
+  // Laser bold action update functions
+  void UpdateCollisions();
+
 private:
   // state machine state functions
   virtual void STATE_Quiet();

@@ -14,22 +14,24 @@
 #include <entities/gun_hor_south.h>
 #include <entities/parked_plane.h>
 #include <entities/laser_bolt_green.h>
+#include <aabbcc/AABB.h>
 
 class GameManager;
 
 class EntityFactory
 {
 private:
-  EntityFactory(GameManager*, EntityDataManager*);
+  EntityFactory(GameManager*, EntityDataManager*, aabb::Tree<IEntity*>*);
   EntityFactory &operator=(const EntityFactory &);
   void RegisterEntities();
   typedef std::map<EntityIdentificator, CreateEntityFn> EntityFactoryMap;
   EntityFactoryMap entityFactoryMap;
   GameManager *gameManager = nullptr;
   EntityDataManager *textureManager = nullptr;
+  aabb::Tree<IEntity*> *spacePartitionObjectsTree = nullptr;
 public:
 	~EntityFactory();
-	static EntityFactory *Get(GameManager*, EntityDataManager*);
+	static EntityFactory *Get(GameManager*, EntityDataManager*, aabb::Tree<IEntity*>*);
 	void Register(const EntityIdentificator, CreateEntityFn);
 	std::optional<IEntity*> CreateEntity(const EntityIdentificator) const;
 };

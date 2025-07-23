@@ -10,7 +10,7 @@ enum KeyboardKeyCode: uint8_t { Z_KEY_LEFT = 0x80, Z_KEY_UP = 0x40, Z_KEY_RIGHT 
 enum EntityIdentificator: uint16_t { NONE = 0, SHIP = 1, FUEL_TANK = 2, RADAR_TOWER = 3, GUN_VERTICAL= 4, GUN_HORIZONTAL_NORTH = 5, GUN_HORIZONTAL_SOUTH = 6, PARKED_PLANE = 7, LASER_BOLT_GREEN = 8 };
 
 // Object type
-enum EntityType: uint16_t { TERRAIN = 0, PLAYER = 1, ENEMY = 2 };
+enum EntityType: uint16_t { TERRAIN = 0, PLAYER = 1, ENEMY = 2, FRIENDLY_FIRE = 3 };
 
 // Object movement direction
 enum Direction: uint8_t { RIGHT = 0, LEFT = 1, UP = 2, DOWN = 3 };

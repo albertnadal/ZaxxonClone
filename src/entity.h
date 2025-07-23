@@ -8,6 +8,7 @@
 #include <entity_sprite_sheet.h>
 #include <sprite.h>
 #include <state_machine.h>
+#include <aabbcc/AABB.h>
 
 using namespace std;
 
@@ -22,6 +23,7 @@ class IEntity : public StateMachine
 {
 protected:
   GameManager *gameManager = nullptr;
+  aabb::Tree<IEntity*> *spacePartitionObjectsTree = nullptr;
   std::vector<SpriteData> currentAnimationSprites;
   std::vector<SpriteData>::iterator currentAnimationSpriteIterator;
   EntitySpriteSheet *spriteSheet = nullptr;
@@ -46,6 +48,7 @@ public:
   uint32_t uniqueId;
   bool isMarkedToDelete = false;
   void SetGameManager(GameManager*);
+  void SetSpacePartitionObjectsTree(aabb::Tree<IEntity*>*);
   void PositionSetXYZ(float, float, float);
   void PositionSetX(float);
   void PositionSetY(float);

@@ -24,6 +24,10 @@ void IEntity::SetGameManager(GameManager *_gameManager) {
   gameManager = _gameManager;
 }
 
+void IEntity::SetSpacePartitionObjectsTree(aabb::Tree<IEntity*> *_spacePartitionObjectsTree) {
+  spacePartitionObjectsTree = _spacePartitionObjectsTree;
+}
+
 void IEntity::PositionSetXYZ(float x, float y, float z) {
   position.SetXYZ(x, y, z);
 }

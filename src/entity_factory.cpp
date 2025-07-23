@@ -2,9 +2,10 @@
 #include <entity_sprite_sheet.h>
 #include <map>
 
-EntityFactory::EntityFactory(GameManager* _gameManager, EntityDataManager* _textureManager) {
+EntityFactory::EntityFactory(GameManager* _gameManager, EntityDataManager* _textureManager, aabb::Tree<IEntity*>* _spacePartitionObjectsTree) {
 	gameManager = _gameManager;
 	textureManager = _textureManager;
+	spacePartitionObjectsTree = _spacePartitionObjectsTree;
 	RegisterEntities();
 }
 
@@ -40,6 +41,7 @@ std::optional<IEntity*> EntityFactory::CreateEntity(const EntityIdentificator en
 		std::optional<EntitySpriteSheet *> entitySpriteSheet = textureManager->GetSpriteSheetByEntityIdentificator(entity->Id());
 		assert(entitySpriteSheet != std::nullopt);
 		entity->SetGameManager(gameManager);
+		entity->SetSpacePartitionObjectsTree(spacePartitionObjectsTree);
 		entity->InitWithSpriteSheet(*entitySpriteSheet);
 		return entity;
 	}
@@ -47,8 +49,8 @@ std::optional<IEntity*> EntityFactory::CreateEntity(const EntityIdentificator en
 	return std::nullopt;
 }
 
-EntityFactory *EntityFactory::Get(GameManager* _gameManager, EntityDataManager* _textureManager)
+EntityFactory *EntityFactory::Get(GameManager* _gameManager, EntityDataManager* _textureManager, aabb::Tree<IEntity*>* _spacePartitionObjectsTree)
 {
-	static EntityFactory instance(_gameManager, _textureManager);
+	static EntityFactory instance(_gameManager, _textureManager, _spacePartitionObjectsTree);
 	return &instance;
 }

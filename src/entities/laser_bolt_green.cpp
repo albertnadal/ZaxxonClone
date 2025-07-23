@@ -2,7 +2,7 @@
 #include <chrono>
 
 LaserBoltGreen::LaserBoltGreen() :
-        IEntity(EntityIdentificator::LASER_BOLT_GREEN, EntityType::ENEMY, LaserBoltGreenStateIdentificator::LASER_BOLT_GREEN_MAX_STATES) {
+        IEntity(EntityIdentificator::LASER_BOLT_GREEN, EntityType::FRIENDLY_FIRE, LaserBoltGreenStateIdentificator::LASER_BOLT_GREEN_MAX_STATES) {
 }
 
 LaserBoltGreen::LaserBoltGreen(EntityIdentificator _id, EntityType _type, unsigned char max_states) :
@@ -22,6 +22,9 @@ bool LaserBoltGreen::Update(uint8_t pressedKeys_) {
 
         bool needRedraw = false;
 
+        // Check for collisions
+        UpdateCollisions();
+
         if(!animationLoaded) {
                 return false;
         }
@@ -37,6 +40,17 @@ bool LaserBoltGreen::Update(uint8_t pressedKeys_) {
         }
 
         return needRedraw;
+}
+
+void LaserBoltGreen::UpdateCollisions() {
+        std::vector<aabb::AABBIntersection<IEntity*>> objectIntersections = spacePartitionObjectsTree->query(GetLowerBound(), GetUpperBound());
+
+        for (auto intersection : objectIntersections) {
+                if (intersection.particle->type == EntityType::ENEMY) {
+                        std::cout << "Laser Bolt Green collision with object: " << intersection.particle->Id() << std::endl;
+                        //intersection.particle->Hit();
+                }
+        }
 }
 
 void LaserBoltGreen::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {

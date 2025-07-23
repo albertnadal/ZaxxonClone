@@ -174,7 +174,7 @@ namespace aabb
 
         bool overlaps(const AABB& aabb, bool touchIsOverlap) const
         {
-            assert(aabb.lowerBound.size() == 2); // Only 2 dimensional boundaries allowed
+            assert(aabb.lowerBound.size() == 3); // Only 3 dimensional boundaries allowed
             assert(aabb.lowerBound.size() == lowerBound.size());
 
             bool rv = true;

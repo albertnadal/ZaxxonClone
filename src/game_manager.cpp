@@ -87,7 +87,7 @@ LevelInfo GameManager::LoadLevelFromFile(const std::string& filename) {
 }
 
 std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator entity_id, Position position) {
-  std::optional<IEntity *> entity_ptr = EntityFactory::Get(this, textureManager)->CreateEntity(entity_id);
+  std::optional<IEntity *> entity_ptr = EntityFactory::Get(this, textureManager, spacePartitionObjectsTree)->CreateEntity(entity_id);
 
   if(entity_ptr.has_value()) {
     if (entity_id == EntityIdentificator::SHIP) {
