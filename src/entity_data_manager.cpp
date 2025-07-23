@@ -94,7 +94,11 @@ void EntityDataManager::LoadObjectsDataFromFile(std::string filename)
 }
 
 Texture2D EntityDataManager::LoadTextureAtlas() const {
-        return LoadTexture(FileSystem::getPath(textureFilename).c_str());
+        Image img = LoadImage(FileSystem::getPath(textureFilename).c_str());
+        ImageColorReplace(&img, CHROMA_KEY_COLOR, BLANK);
+        Texture2D texture = LoadTextureFromImage(img);
+        UnloadImage(img);
+        return texture;
 }
 
 std::optional<EntitySpriteSheet*> EntityDataManager::GetSpriteSheetByEntityIdentificator(EntityIdentificator entityId) const {
