@@ -20,6 +20,21 @@ GameManager *gameManager;
 int gameLoopFrequency = MILLISECONDS_PER_TICK;
 bool paused = false;
 
+inline void drawBoundaries(const ProjectedBoundaries &boundaries, Color color) {
+        DrawLineV(boundaries.a, boundaries.b, color);
+        DrawLineV(boundaries.b, boundaries.c, color);
+        DrawLineV(boundaries.c, boundaries.d, color);
+        DrawLineV(boundaries.d, boundaries.a, color);
+        DrawLineV(boundaries.e, boundaries.f, color);
+        DrawLineV(boundaries.f, boundaries.g, color);
+        DrawLineV(boundaries.g, boundaries.h, color);
+        DrawLineV(boundaries.h, boundaries.e, color);
+        DrawLineV(boundaries.a, boundaries.e, color);
+        DrawLineV(boundaries.b, boundaries.f, color);
+        DrawLineV(boundaries.c, boundaries.g, color);
+        DrawLineV(boundaries.d, boundaries.h, color);
+}
+
 inline void processKeyboardInput() {
         if (IsKeyPressed(KEY_RIGHT) || IsKeyReleased(KEY_RIGHT)) pressedKeys ^= Z_KEY_RIGHT;
         if (IsKeyPressed(KEY_LEFT) || IsKeyReleased(KEY_LEFT)) pressedKeys ^= Z_KEY_LEFT;
@@ -88,6 +103,9 @@ int main()
                                                 auto source = spriteRectBuffer->buffer[i].source;
                                                 auto tint = spriteRectBuffer->buffer[i].tint;
                                                 DrawTextureRec(textureAtlas, source, position, tint);
+                                                if (DEBUG) {
+                                                        drawBoundaries(spriteRectBuffer->buffer[i].boundaries, (Color){ 0, 255, 68, 255 });
+                                                }
                                         }
                                 EndMode2D();
 

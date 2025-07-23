@@ -14,7 +14,8 @@ using namespace std;
 class IEntity;
 class GameManager;
 
-struct Boundaries { int lowerBoundX, lowerBoundY, upperBoundX, upperBoundY; };
+struct Boundaries { int lX, lY, lZ, uX, uY, uZ; };
+struct ProjectedBoundaries { Vector2 a, b, c, d, e, f, g, h; };
 struct ObjectCollision { IEntity* object; int horizontalCorrection; int verticalCorrection; };
 
 class IEntity : public StateMachine
@@ -50,7 +51,9 @@ public:
   void PositionSetY(float);
   void PositionAddX(float);
   void PositionAddY(float);
-  virtual Boundaries GetAbsoluteBoundaries() const;
+  virtual std::vector<int> GetLowerBound() const;
+  virtual std::vector<int> GetUpperBound() const;
+  virtual ProjectedBoundaries GetProjectedBoundaries() const;
   virtual EntityIdentificator Id() const;
   virtual EntityType Type() const;
   virtual void InitWithSpriteSheet(EntitySpriteSheet*);

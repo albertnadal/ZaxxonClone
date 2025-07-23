@@ -14,8 +14,8 @@ private:
 public:
   Position();
   ~Position();
-
   Vector2 GetProjectedCoordinate() const;
+  static Vector2 AddAndGetProjectedCoordinate(Position, float, float, float);
   Vector3 GetCoordinates() const;
   Vector3 GetOffset() const;
   void SetXYZ(float, float, float);

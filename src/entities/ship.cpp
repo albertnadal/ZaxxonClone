@@ -151,7 +151,7 @@ void Ship::LoadNextSprite() {
     // Adjusts object position according to the sprite offset
     //PositionSetOffset(spriteData.xOffset, spriteData.yOffset);
 
-    boundingBox = {spriteData.lowerBoundX, spriteData.lowerBoundY, spriteData.upperBoundX, spriteData.upperBoundY};
+    boundingBox = {spriteData.lowerBoundX, spriteData.lowerBoundY, spriteData.lowerBoundZ, spriteData.upperBoundX, spriteData.upperBoundY, spriteData.upperBoundZ};
     solidBoundingBox = {spriteData.lowerBoundX, spriteData.lowerBoundY, spriteData.upperBoundX, spriteData.upperBoundY};
     firstSpriteOfCurrentAnimationIsLoaded = true;
 }

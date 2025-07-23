@@ -59,7 +59,7 @@ void EntityDataManager::LoadObjectsDataFromFile(std::string filename)
                 }
 
                 if(currentLineType == OBJ_SPRITE) {
-                        if(currentFrameValues.size() >= 13) {
+                        if(currentFrameValues.size() >= 15) {
                                 int width = stoi(currentFrameValues.at(0));
                                 int height = stoi(currentFrameValues.at(1));
                                 int xOffset = stoi(currentFrameValues.at(2));
@@ -71,21 +71,23 @@ void EntityDataManager::LoadObjectsDataFromFile(std::string filename)
                                 int duration = stoi(currentFrameValues.at(8));
                                 int lowerBoundX = stoi(currentFrameValues.at(9));
                                 int lowerBoundY = stoi(currentFrameValues.at(10));
-                                int upperBoundX = stoi(currentFrameValues.at(11));
-                                int upperBoundY = stoi(currentFrameValues.at(12));
+                                int lowerBoundZ = stoi(currentFrameValues.at(11));
+                                int upperBoundX = stoi(currentFrameValues.at(12));
+                                int upperBoundY = stoi(currentFrameValues.at(13));
+                                int upperBoundZ = stoi(currentFrameValues.at(14));
                                 bool hasAttack = false;
                                 int attackLowerBoundX = 0, attackLowerBoundY = 0, attackUpperBoundX = 0, attackUpperBoundY = 0;
 
-                                if(currentFrameValues.size() == 17) {
-                                        attackLowerBoundX = stoi(currentFrameValues.at(13));
-                                        attackLowerBoundY = stoi(currentFrameValues.at(14));
-                                        attackUpperBoundX = stoi(currentFrameValues.at(15));
-                                        attackUpperBoundY = stoi(currentFrameValues.at(16));
+                                if(currentFrameValues.size() == 19) {
+                                        attackLowerBoundX = stoi(currentFrameValues.at(15));
+                                        attackLowerBoundY = stoi(currentFrameValues.at(16));
+                                        attackUpperBoundX = stoi(currentFrameValues.at(17));
+                                        attackUpperBoundY = stoi(currentFrameValues.at(18));
                                         hasAttack = true;
                                 }
 
                                 // An sprite may contain areas defined by rectangles in order to check for basic and attack collisions with other objects during the gameplay
-                                currentEntitySpriteSheetAnimation->AddSprite({ width, height, xOffset, yOffset, u1, v1, u2, v2, duration, false, lowerBoundX, lowerBoundY, upperBoundX, upperBoundY, hasAttack, attackLowerBoundX, attackLowerBoundY, attackUpperBoundX, attackUpperBoundY });
+                                currentEntitySpriteSheetAnimation->AddSprite({ width, height, xOffset, yOffset, u1, v1, u2, v2, duration, false, lowerBoundX, lowerBoundY, lowerBoundZ, upperBoundX, upperBoundY, upperBoundZ, hasAttack, attackLowerBoundX, attackLowerBoundY, attackUpperBoundX, attackUpperBoundY });
                         }
                 }
         }

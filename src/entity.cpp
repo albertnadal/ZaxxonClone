@@ -36,6 +36,16 @@ void IEntity::PositionAddY(float y) {
   position.AddY(y);
 }
 
+std::vector<int> IEntity::GetLowerBound() const {
+  Vector3 coord = position.GetCoordinates();
+  return {static_cast<int>(coord.x) + boundingBox.lX, static_cast<int>(coord.y) + boundingBox.lY, static_cast<int>(coord.z) + boundingBox.lZ};
+}
+
+std::vector<int> IEntity::GetUpperBound() const {
+  Vector3 coord = position.GetCoordinates();
+  return {static_cast<int>(coord.x) + boundingBox.uX, static_cast<int>(coord.y) + boundingBox.uY, static_cast<int>(coord.z) + boundingBox.uZ};
+}
+
 void IEntity::LoadAnimationWithId(uint16_t animationId) {
     std::optional<EntitySpriteSheetAnimation *> currentAnimation = spriteSheet->GetAnimationWithId(animationId);
     assert(currentAnimation != std::nullopt);
@@ -66,7 +76,7 @@ void IEntity::LoadNextSprite()
   currentSprite.v1 = spriteData.v1;
   currentSprite.u2 = spriteData.u2;
   currentSprite.v2 = spriteData.v2;
-  boundingBox = { spriteData.lowerBoundX, spriteData.lowerBoundY, spriteData.upperBoundX, spriteData.upperBoundY };
+  boundingBox = {spriteData.lowerBoundX, spriteData.lowerBoundY, spriteData.lowerBoundZ, spriteData.upperBoundX, spriteData.upperBoundY, spriteData.upperBoundZ};
   firstSpriteOfCurrentAnimationIsLoaded = true;
 }
 
@@ -88,12 +98,16 @@ bool IEntity::ShouldBeginAnimationLoopAgain()
     return false;
 }
 
-Boundaries IEntity::GetAbsoluteBoundaries() const {
-  Vector2 projection = position.GetProjectedCoordinate();
-  return {static_cast<int>(projection.x) + boundingBox.upperBoundX,
-          static_cast<int>(projection.y) + boundingBox.upperBoundY,
-          static_cast<int>(projection.x) + boundingBox.lowerBoundX,
-          static_cast<int>(projection.y) + boundingBox.lowerBoundY};
+ProjectedBoundaries IEntity::GetProjectedBoundaries() const {
+  Vector2 a = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX, boundingBox.lY, boundingBox.lZ);
+  Vector2 b = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX, boundingBox.lY + boundingBox.uY, boundingBox.lZ);
+  Vector2 c = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX, boundingBox.lY + boundingBox.uY, boundingBox.lZ + boundingBox.uZ);
+  Vector2 d = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX, boundingBox.lY, boundingBox.lZ + boundingBox.uZ);
+  Vector2 e = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX + boundingBox.uX, boundingBox.lY, boundingBox.lZ);
+  Vector2 f = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX + boundingBox.uX, boundingBox.lY + boundingBox.uY, boundingBox.lZ);
+  Vector2 g = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX + boundingBox.uX, boundingBox.lY + boundingBox.uY, boundingBox.lZ + boundingBox.uZ);
+  Vector2 h = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX + boundingBox.uX, boundingBox.lY, boundingBox.lZ + boundingBox.uZ);
+  return {a, b, c, d, e, f, g, h};
 }
 
 EntityIdentificator IEntity::Id() const {

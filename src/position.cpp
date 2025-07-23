@@ -11,6 +11,15 @@ Vector2 Position::GetProjectedCoordinate() const {
     return { projected_x, projected_y };
 }
 
+Vector2 Position::AddAndGetProjectedCoordinate(Position _p, float _x, float _y, float _z) {
+    Position p;
+    p.Copy(_p);
+    p.AddX(_x);
+    p.AddY(_y);
+    p.AddZ(_z);
+    return p.GetProjectedCoordinate();
+}
+
 Vector3 Position::GetCoordinates() const {
     return { x, y, z };
 }
