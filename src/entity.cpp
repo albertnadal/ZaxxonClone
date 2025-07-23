@@ -43,7 +43,7 @@ std::vector<int> IEntity::GetLowerBound() const {
 
 std::vector<int> IEntity::GetUpperBound() const {
   Vector3 coord = position.GetCoordinates();
-  return {static_cast<int>(coord.x) + boundingBox.uX, static_cast<int>(coord.y) + boundingBox.uY, static_cast<int>(coord.z) + boundingBox.uZ};
+  return {static_cast<int>(coord.x) + boundingBox.lX + boundingBox.uX, static_cast<int>(coord.y) + boundingBox.lY + boundingBox.uY, static_cast<int>(coord.z) + boundingBox.lZ + boundingBox.uZ};
 }
 
 void IEntity::LoadAnimationWithId(uint16_t animationId) {
