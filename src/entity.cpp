@@ -64,10 +64,12 @@ void IEntity::LoadAnimationWithId(uint16_t animationId) {
 void IEntity::LoadNextSprite()
 {
   SpriteData spriteData = NextSpriteData();
-  if(spriteData.beginNewLoop) {
-          if(ShouldBeginAnimationLoopAgain()) {
-            spriteData = NextSpriteData();
-          }
+  if (spriteData.beginNewLoop && !ShouldBeginAnimationLoopAgain()) {
+      return;
+  }
+
+  if (spriteData.beginNewLoop) {
+      spriteData = NextSpriteData();
   }
 
   nextSpriteTime = (chrono::system_clock::now() + std::chrono::milliseconds(spriteData.duration));
@@ -91,6 +93,10 @@ SpriteData IEntity::NextSpriteData() {
     }
 
     return *currentAnimationSpriteIterator++;
+}
+
+void IEntity::RemoveFromSpacePartitionObjectsTree() {
+  spacePartitionObjectsTree->removeParticle(this);
 }
 
 inline bool IEntity::ReachedScreenEdge() const {
@@ -151,5 +157,5 @@ void IEntity::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {
   spriteSheet = _spriteSheet;
 }
 
-void IEntity::Hit(bool) {
+void IEntity::Hit() {
 }

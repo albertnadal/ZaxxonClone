@@ -37,9 +37,20 @@ bool ParkedPlane::Update(uint8_t pressedKeys_) {
         return needRedraw;
 }
 
-void ParkedPlane::Hit(bool propelToRight) {
-        //TODO: Implement RemoveFromSpacePartitionObjectsTree();
-        Explode();
+void ParkedPlane::Hit() {
+        if(!isExploding) {
+                RemoveFromSpacePartitionObjectsTree();
+                isExploding = true;
+                LoadAnimationWithId(ParkedPlaneAnimation::PARKED_PLANE_EXPLODING);  // The object will be marked to delete once the animation finishes
+        }
+}
+
+bool ParkedPlane::ShouldBeginAnimationLoopAgain() {
+    if (isExploding) {
+        isMarkedToDelete = true;
+    }
+
+    return false;
 }
 
 void ParkedPlane::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {
@@ -51,20 +62,4 @@ IEntity* ParkedPlane::Create() {
         return new ParkedPlane();
 }
 
-void ParkedPlane::Explode()
-{
-        BEGIN_TRANSITION_MAP                            // - Current State -
-                TRANSITION_MAP_ENTRY (STATE_EXPLODING)  // STATE_Quiet
-                TRANSITION_MAP_ENTRY (EVENT_IGNORED)    // STATE_Exploding
-        END_TRANSITION_MAP(NULL)
-}
-
-void ParkedPlane::STATE_Quiet()
-{
-        LoadAnimationWithId(ParkedPlaneAnimation::PARKED_PLANE_QUIET);
-}
-
-void ParkedPlane::STATE_Exploding()
-{
-        LoadAnimationWithId(ParkedPlaneAnimation::PARKED_PLANE_EXPLODING);
-}
+ParkedPlane::~ParkedPlane() = default;

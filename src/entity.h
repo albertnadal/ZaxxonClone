@@ -66,7 +66,7 @@ public:
   virtual bool Update();
   virtual bool Update(const uint8_t);
   virtual void UpdatePositionInSpacePartitionTree();
-  virtual void Hit(bool);
+  virtual void Hit();
   virtual bool ShouldBeginAnimationLoopAgain();
 };
 

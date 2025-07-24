@@ -47,8 +47,9 @@ void LaserBoltGreen::UpdateCollisions() {
 
         for (auto intersection : objectIntersections) {
                 if (intersection.particle->type == EntityType::ENEMY) {
-                        std::cout << "Laser Bolt Green collision with object: " << intersection.particle->Id() << std::endl;
-                        //intersection.particle->Hit();
+                        intersection.particle->Hit();
+                        RemoveFromSpacePartitionObjectsTree();
+                        isMarkedToDelete = true;
                 }
         }
 }
@@ -62,7 +63,4 @@ IEntity* LaserBoltGreen::Create() {
         return new LaserBoltGreen();
 }
 
-void LaserBoltGreen::STATE_Quiet()
-{
-        LoadAnimationWithId(LaserBoltGreenAnimation::LASER_BOLT_GREEN_QUIET);
-}
+LaserBoltGreen::~LaserBoltGreen() = default;

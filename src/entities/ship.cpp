@@ -160,8 +160,6 @@ IEntity *Ship::Create() {
     return new Ship();
 }
 
-Ship::~Ship() = default;
-
 bool Ship::ShouldBeginAnimationLoopAgain() {
     return false;
 }
@@ -183,3 +181,5 @@ void Ship::STATE_Descending() {
     LoadAnimationWithId(ShipAnimation::DESCENDING);
     ProcessPressedKeys(false);
 }
+
+Ship::~Ship() = default;

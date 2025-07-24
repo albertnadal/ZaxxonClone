@@ -37,9 +37,20 @@ bool GunVertical::Update(uint8_t pressedKeys_) {
         return needRedraw;
 }
 
-void GunVertical::Hit(bool propelToRight) {
-        //TODO: Implement RemoveFromSpacePartitionObjectsTree();
-        Explode();
+void GunVertical::Hit() {
+        if(!isExploding) {
+                RemoveFromSpacePartitionObjectsTree();
+                isExploding = true;
+                LoadAnimationWithId(GunVerticalAnimation::GUN_VERTICAL_EXPLODING);  // The object will be marked to delete once the animation finishes
+        }
+}
+
+bool GunVertical::ShouldBeginAnimationLoopAgain() {
+    if (isExploding) {
+        isMarkedToDelete = true;
+    }
+
+    return false;
 }
 
 void GunVertical::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {
@@ -51,20 +62,4 @@ IEntity* GunVertical::Create() {
         return new GunVertical();
 }
 
-void GunVertical::Explode()
-{
-        BEGIN_TRANSITION_MAP                            // - Current State -
-                TRANSITION_MAP_ENTRY (STATE_EXPLODING)  // STATE_Quiet
-                TRANSITION_MAP_ENTRY (EVENT_IGNORED)    // STATE_Exploding
-        END_TRANSITION_MAP(NULL)
-}
-
-void GunVertical::STATE_Quiet()
-{
-        LoadAnimationWithId(GunVerticalAnimation::GUN_VERTICAL_QUIET);
-}
-
-void GunVertical::STATE_Exploding()
-{
-        LoadAnimationWithId(GunVerticalAnimation::GUN_VERTICAL_EXPLODING);
-}
+GunVertical::~GunVertical() = default;

@@ -37,9 +37,20 @@ bool GunHorizontalSouth::Update(uint8_t pressedKeys_) {
         return needRedraw;
 }
 
-void GunHorizontalSouth::Hit(bool propelToRight) {
-        //TODO: Implement RemoveFromSpacePartitionObjectsTree();
-        Explode();
+void GunHorizontalSouth::Hit() {
+        if(!isExploding) {
+                RemoveFromSpacePartitionObjectsTree();
+                isExploding = true;
+                LoadAnimationWithId(GunHorizontalSouthAnimation::GUN_HORIZONTAL_SOUTH_EXPLODING);  // The object will be marked to delete once the animation finishes
+        }
+}
+
+bool GunHorizontalSouth::ShouldBeginAnimationLoopAgain() {
+    if (isExploding) {
+        isMarkedToDelete = true;
+    }
+
+    return false;
 }
 
 void GunHorizontalSouth::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {
@@ -51,20 +62,4 @@ IEntity* GunHorizontalSouth::Create() {
         return new GunHorizontalSouth();
 }
 
-void GunHorizontalSouth::Explode()
-{
-        BEGIN_TRANSITION_MAP                            // - Current State -
-                TRANSITION_MAP_ENTRY (STATE_EXPLODING)  // STATE_Quiet
-                TRANSITION_MAP_ENTRY (EVENT_IGNORED)    // STATE_Exploding
-        END_TRANSITION_MAP(NULL)
-}
-
-void GunHorizontalSouth::STATE_Quiet()
-{
-        LoadAnimationWithId(GunHorizontalSouthAnimation::GUN_HORIZONTAL_SOUTH_QUIET);
-}
-
-void GunHorizontalSouth::STATE_Exploding()
-{
-        LoadAnimationWithId(GunHorizontalSouthAnimation::GUN_HORIZONTAL_SOUTH_EXPLODING);
-}
+GunHorizontalSouth::~GunHorizontalSouth() = default;

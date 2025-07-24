@@ -37,9 +37,20 @@ bool RadarTower::Update(uint8_t pressedKeys_) {
         return needRedraw;
 }
 
-void RadarTower::Hit(bool propelToRight) {
-        //TODO: Implement RemoveFromSpacePartitionObjectsTree();
-        Explode();
+void RadarTower::Hit() {
+        if(!isExploding) {
+                RemoveFromSpacePartitionObjectsTree();
+                isExploding = true;
+                LoadAnimationWithId(RadarTowerAnimation::RADAR_TOWER_EXPLODING);  // The object will be marked to delete once the animation finishes
+        }
+}
+
+bool RadarTower::ShouldBeginAnimationLoopAgain() {
+    if (isExploding) {
+        isMarkedToDelete = true;
+    }
+
+    return false;
 }
 
 void RadarTower::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {
@@ -51,20 +62,4 @@ IEntity* RadarTower::Create() {
         return new RadarTower();
 }
 
-void RadarTower::Explode()
-{
-        BEGIN_TRANSITION_MAP                            // - Current State -
-                TRANSITION_MAP_ENTRY (STATE_EXPLODING)  // STATE_Quiet
-                TRANSITION_MAP_ENTRY (EVENT_IGNORED)    // STATE_Exploding
-        END_TRANSITION_MAP(NULL)
-}
-
-void RadarTower::STATE_Quiet()
-{
-        LoadAnimationWithId(RadarTowerAnimation::RADAR_TOWER_QUIET);
-}
-
-void RadarTower::STATE_Exploding()
-{
-        LoadAnimationWithId(RadarTowerAnimation::RADAR_TOWER_EXPLODING);
-}
+RadarTower::~RadarTower() = default;

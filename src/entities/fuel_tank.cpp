@@ -37,9 +37,20 @@ bool FuelTank::Update(uint8_t pressedKeys_) {
         return needRedraw;
 }
 
-void FuelTank::Hit(bool propelToRight) {
-        //TODO: Implement RemoveFromSpacePartitionObjectsTree();
-        Explode();
+void FuelTank::Hit() {
+        if(!isExploding) {
+                RemoveFromSpacePartitionObjectsTree();
+                isExploding = true;
+                LoadAnimationWithId(FuelTankAnimation::FUEL_TANK_EXPLODING);  // The object will be marked to delete once the animation finishes
+        }
+}
+
+bool FuelTank::ShouldBeginAnimationLoopAgain() {
+    if (isExploding) {
+        isMarkedToDelete = true;
+    }
+
+    return false;
 }
 
 void FuelTank::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {
@@ -51,20 +62,4 @@ IEntity* FuelTank::Create() {
         return new FuelTank();
 }
 
-void FuelTank::Explode()
-{
-        BEGIN_TRANSITION_MAP                            // - Current State -
-                TRANSITION_MAP_ENTRY (STATE_EXPLODING)  // STATE_Quiet
-                TRANSITION_MAP_ENTRY (EVENT_IGNORED)    // STATE_Exploding
-        END_TRANSITION_MAP(NULL)
-}
-
-void FuelTank::STATE_Quiet()
-{
-        LoadAnimationWithId(FuelTankAnimation::FUEL_TANK_QUIET);
-}
-
-void FuelTank::STATE_Exploding()
-{
-        LoadAnimationWithId(FuelTankAnimation::FUEL_TANK_EXPLODING);
-}
+FuelTank::~FuelTank() = default;
