@@ -48,6 +48,7 @@ void ParkedPlane::Hit() {
 bool ParkedPlane::ShouldBeginAnimationLoopAgain() {
     if (isExploding) {
         isMarkedToDelete = true;
+        CreateRune();
     }
 
     return false;

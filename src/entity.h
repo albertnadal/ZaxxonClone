@@ -36,6 +36,7 @@ protected:
   void LoadNextSprite();
   SpriteData NextSpriteData();
   virtual bool ReachedScreenEdge() const;
+  virtual void CreateRune() const;
 public:
   IEntity();
   IEntity(EntityIdentificator, EntityType, unsigned char);

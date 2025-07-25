@@ -2,6 +2,7 @@
 #include <entity.h>
 #include <collision/collision.h>
 #include <MersenneTwister/MersenneTwister.h>
+#include <game_manager.h>
 
 static MersenneTwister rng;
 
@@ -158,4 +159,10 @@ void IEntity::InitWithSpriteSheet(EntitySpriteSheet *_spriteSheet) {
 }
 
 void IEntity::Hit() {
+}
+
+void IEntity::CreateRune() const {
+  Position runePosition;
+  runePosition.Copy(position);
+  gameManager->CreateEntityWithId(EntityIdentificator::ENEMY_RUNE, runePosition);
 }

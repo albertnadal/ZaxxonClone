@@ -48,6 +48,7 @@ void GunVertical::Hit() {
 bool GunVertical::ShouldBeginAnimationLoopAgain() {
     if (isExploding) {
         isMarkedToDelete = true;
+        CreateRune();
     }
 
     return false;

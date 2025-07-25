@@ -48,6 +48,7 @@ void GunHorizontalSouth::Hit() {
 bool GunHorizontalSouth::ShouldBeginAnimationLoopAgain() {
     if (isExploding) {
         isMarkedToDelete = true;
+        CreateRune();
     }
 
     return false;

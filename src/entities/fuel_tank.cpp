@@ -48,6 +48,7 @@ void FuelTank::Hit() {
 bool FuelTank::ShouldBeginAnimationLoopAgain() {
     if (isExploding) {
         isMarkedToDelete = true;
+        CreateRune();
     }
 
     return false;

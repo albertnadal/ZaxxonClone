@@ -69,3 +69,6 @@
 ##8 //EntityIdentificator::LASER_BOLT_GREEN
 #15 //LASER_BOLT_GREEN_QUIET
 16 9 0 0 92 0 16 9 0 0 6 0 2 2 14
+##9 //EntityIdentificator::ENEMY_RUNE
+#16 //ENEMY_RUNE_QUIET
+32 32 0 0 0 83 32 32 0 0 21 1 15 4 15

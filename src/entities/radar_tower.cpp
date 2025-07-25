@@ -48,6 +48,7 @@ void RadarTower::Hit() {
 bool RadarTower::ShouldBeginAnimationLoopAgain() {
     if (isExploding) {
         isMarkedToDelete = true;
+        CreateRune();
     }
 
     return false;
