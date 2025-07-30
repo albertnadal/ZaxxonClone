@@ -19,6 +19,14 @@ bool LaserBoltGreen::Update(uint8_t pressedKeys_) {
         }
 
         position.AddZ(LASER_BOLT_GREEN_Z_DELTA); // Advance the laser bolt in the Z axis.
+        distanceTraveled+=LASER_BOLT_GREEN_Z_DELTA;
+
+        // Check if the laser bolt has traveled enough distance to be removed
+        if (distanceTraveled >= LASER_BOLT_GREEN_MAX_RANGE) {
+                RemoveFromSpacePartitionObjectsTree();
+                isMarkedToDelete = true;
+                return false;
+        }
 
         bool needRedraw = false;
 

@@ -39,4 +39,5 @@ constexpr int SEGMENT_LENGTH = 5;                                               
 constexpr const char *LEVEL_FILENAME = "level.dat";                              // The file where the level is defined.
 constexpr float ADVANCE_Z_DELTA = 0.7f;                                          // Delta to advance the level in the Z axis per frame.
 constexpr float LASER_BOLT_GREEN_Z_DELTA = 2.5f;                                 // Delta to advance the laser bolt in the Z axis per frame.
+constexpr float LASER_BOLT_GREEN_MAX_RANGE = 250.0f;                             // Maximum range of the laser bolt in the Z axis.
 constexpr Color CHROMA_KEY_COLOR = {255, 0, 255, 255};                           // Color used as chroma key in the sprite sheet.

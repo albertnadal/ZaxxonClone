@@ -27,6 +27,8 @@ public:
   void UpdateCollisions();
 
 private:
+  float distanceTraveled = 0.0f;
+
   // state map to define state function order
   BEGIN_STATE_MAP
   END_STATE_MAP
