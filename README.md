@@ -1,1 +1,31 @@
 # Remake of "Zaxxon" (Arcade) game
+
+Hi! I've been working on a first proof of concept, and it looks like everything is taking shape and gaining momentum. I'm sharing my journey in a devlog format, and the project's source code is 100% open, meaning the entire process is as transparent as possible. I encourage you to sit in the co-pilot's seat and observe the journey from a privileged point of view. I think it could be a lot of fun!
+
+# Build instructions
+
+## macOS
+
+```
+brew install glfw3
+$ vim ~/.zshrc
+> export CPATH=/opt/homebrew/include
+> export LIBRARY_PATH=/opt/homebrew/lib
+```
+
+```
+wget https://github.com/raysan5/raylib/archive/master.zip
+unzip master.zip
+cd raylib-master/src
+make PLATFORM=PLATFORM_DESKTOP
+cp libraylib.a ../../ZaxxonClone/third_party/raylib
+```
+
+```
+make all
+./main
+```
+
+# Devlog #1 - Introducing the project
+
+[![Remaking Zaxxon from Scratch - C++ & Raylib - Devlog #1](https://img.youtube.com/vi/EavRmM_2MA0/0.jpg)](https://www.youtube.com/watch?v=EavRmM_2MA0)
