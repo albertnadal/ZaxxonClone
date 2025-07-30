@@ -100,10 +100,6 @@ void IEntity::RemoveFromSpacePartitionObjectsTree() {
   spacePartitionObjectsTree->removeParticle(this);
 }
 
-inline bool IEntity::ReachedScreenEdge() const {
-    return false;
-}
-
 bool IEntity::ShouldBeginAnimationLoopAgain()
 {
     return false;

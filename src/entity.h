@@ -34,8 +34,7 @@ protected:
   void LoadAnimationWithId(uint16_t);
   void LoadNextSprite();
   SpriteData NextSpriteData();
-  virtual bool ReachedScreenEdge() const;
-  virtual void CreateRune() const;
+  void CreateRune() const;
 public:
   IEntity();
   IEntity(EntityIdentificator, EntityType, unsigned char);
@@ -55,15 +54,15 @@ public:
   void PositionAddX(float);
   void PositionAddY(float);
   void RemoveFromSpacePartitionObjectsTree();
+  std::vector<int> GetLowerBound() const;
+  std::vector<int> GetUpperBound() const;
+  ProjectedBoundaries GetProjectedBoundaries() const;
   Vector2 GetRightmostProjectedCoordinate() const;
-  virtual std::vector<int> GetLowerBound() const;
-  virtual std::vector<int> GetUpperBound() const;
-  virtual ProjectedBoundaries GetProjectedBoundaries() const;
-  virtual EntityIdentificator Id() const;
-  virtual EntityType Type() const;
+  EntityIdentificator Id() const;
+  EntityType Type() const;
+  int Width() const;
+  int Height() const;
   virtual void InitWithSpriteSheet(EntitySpriteSheet*);
-  virtual int Width() const;
-  virtual int Height() const;
   virtual void PrintName() const;
   virtual bool Update();
   virtual bool Update(const uint8_t);
