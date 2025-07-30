@@ -31,7 +31,6 @@ protected:
   bool animationLoaded = false;
   bool firstSpriteOfCurrentAnimationIsLoaded = false;
   bool animationHasOnlyOneSprite = false;
-  void RemoveFromSpacePartitionObjectsTree();
   void LoadAnimationWithId(uint16_t);
   void LoadNextSprite();
   SpriteData NextSpriteData();
@@ -55,6 +54,8 @@ public:
   void PositionSetY(float);
   void PositionAddX(float);
   void PositionAddY(float);
+  void RemoveFromSpacePartitionObjectsTree();
+  Vector2 GetRightmostProjectedCoordinate() const;
   virtual std::vector<int> GetLowerBound() const;
   virtual std::vector<int> GetUpperBound() const;
   virtual ProjectedBoundaries GetProjectedBoundaries() const;

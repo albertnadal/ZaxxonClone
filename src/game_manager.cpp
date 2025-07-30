@@ -176,6 +176,12 @@ void GameManager::updateEntities(std::map<uint32_t, IEntity*>& objects, std::opt
     for (auto const& x : objects) {
         IEntity* entity_ptr = x.second;
 
+        // Mark the object to delete if it is out of the screen.
+        if(std::abs(cameraPosition.GetProjectedCoordinate().x) > entity_ptr->GetRightmostProjectedCoordinate().x * ZOOM) {
+            entity_ptr->RemoveFromSpacePartitionObjectsTree();
+            entity_ptr->isMarkedToDelete = true;
+        }
+
         if (entity_ptr->isMarkedToDelete) {
             objectsToDelete.push_back(entity_ptr);
             continue;

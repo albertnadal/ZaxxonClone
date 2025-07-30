@@ -121,6 +121,10 @@ ProjectedBoundaries IEntity::GetProjectedBoundaries() const {
   return {a, b, c, d, e, f, g, h};
 }
 
+Vector2 IEntity::GetRightmostProjectedCoordinate() const {
+  return Position::AddAndGetProjectedCoordinate(position, boundingBox.lX + boundingBox.uX, boundingBox.lY + boundingBox.uY, boundingBox.lZ + boundingBox.uZ);
+}
+
 EntityIdentificator IEntity::Id() const {
   return id;
 }
