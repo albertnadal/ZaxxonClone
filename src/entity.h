@@ -17,7 +17,6 @@ class GameManager;
 
 struct Boundaries { int lX, lY, lZ, uX, uY, uZ; };
 struct ProjectedBoundaries { Vector2 a, b, c, d, e, f, g, h; };
-struct ObjectCollision { IEntity* object; int horizontalCorrection; int verticalCorrection; };
 
 class IEntity : public StateMachine
 {

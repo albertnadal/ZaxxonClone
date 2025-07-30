@@ -44,15 +44,7 @@ bool Ship::Update(const uint8_t pressedKeys_) {
     return needRedraw;
 }
 
-void Ship::GetSolidCollisions(std::vector<ObjectCollision> &collisions, bool& playerIsSuspendedInTheAir) {
-
-}
-
 void Ship::UpdateCollisions() {
-
-}
-
-void Ship::UpdatePreviousDirection() {
 
 }
 
@@ -165,19 +157,16 @@ bool Ship::ShouldBeginAnimationLoopAgain() {
 }
 
 void Ship::STATE_Straight_Flight() {
-    UpdatePreviousDirection();
     LoadAnimationWithId(ShipAnimation::STRAIGHT_FLIGHT);
     ProcessPressedKeys(false);
 }
 
 void Ship::STATE_Ascending() {
-    UpdatePreviousDirection();
     LoadAnimationWithId(ShipAnimation::ASCENDING);
     ProcessPressedKeys(false);
 }
 
 void Ship::STATE_Descending() {
-    UpdatePreviousDirection();
     LoadAnimationWithId(ShipAnimation::DESCENDING);
     ProcessPressedKeys(false);
 }

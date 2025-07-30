@@ -22,8 +22,6 @@ class Ship: public IEntity
   void ProcessPressedKeys(bool = true);
   void ProcessReleasedKeys();
   void LoadNextSprite();
-  void UpdatePreviousDirection();
-  void GetSolidCollisions(std::vector<ObjectCollision>&, bool&);
 
   // Ship action update functions
   void UpdateCollisions();
