@@ -45,7 +45,16 @@ bool Ship::Update(const uint8_t pressedKeys_) {
 }
 
 void Ship::UpdateCollisions() {
+    std::vector<aabb::AABBIntersection<IEntity*>> objectIntersections = spacePartitionObjectsTree->query(GetLowerBound(), GetUpperBound());
 
+    for (auto intersection : objectIntersections) {
+        if ((intersection.particle->type == EntityType::ENEMY) ||
+            (intersection.particle->type == EntityType::ENEMY_FIRE) ||
+            (intersection.particle->type == EntityType::TERRAIN)) {
+            intersection.particle->Hit();
+            Explode();
+        }
+    }
 }
 
 void Ship::ProcessPressedKeys(bool checkPreviousPressedKeys) {
@@ -168,6 +177,11 @@ void Ship::STATE_Ascending() {
 
 void Ship::STATE_Descending() {
     LoadAnimationWithId(ShipAnimation::DESCENDING);
+    ProcessPressedKeys(false);
+}
+
+void Ship::STATE_Exploding() {
+    LoadAnimationWithId(ShipAnimation::EXPLODING);
     ProcessPressedKeys(false);
 }
 

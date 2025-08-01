@@ -43,18 +43,21 @@ public:
   void UpKeyReleased();
   void DownKeyPressed();
   void DownKeyReleased();
+  void Explode();
 
 private:
   // state machine state functions
   void STATE_Straight_Flight();
   void STATE_Ascending();
   void STATE_Descending();
+  void STATE_Exploding();
 
   // state map to define state function order
   BEGIN_STATE_MAP
       STATE_MAP_ENTRY(&Ship::STATE_Straight_Flight)
       STATE_MAP_ENTRY(&Ship::STATE_Ascending)
       STATE_MAP_ENTRY(&Ship::STATE_Descending)
+      STATE_MAP_ENTRY(&Ship::STATE_Exploding)
   END_STATE_MAP
 
   // state enumeration order must match the order of state
@@ -63,6 +66,7 @@ private:
       STATE_STRAIGHT_FLIGHT = 0, // Initial state
       STATE_ASCENDING = 1,
       STATE_DESCENDING = 2,
+      STATE_EXPLODING = 3,
       SHIP_MAX_STATES
   };
 };
