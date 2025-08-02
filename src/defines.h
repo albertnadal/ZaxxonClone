@@ -7,10 +7,10 @@
 enum KeyboardKeyCode: uint8_t { Z_KEY_LEFT = 0x80, Z_KEY_UP = 0x40, Z_KEY_RIGHT = 0x20, Z_KEY_DOWN = 0x10, Z_KEY_ESCAPE = 0x08, Z_KEY_PAUSE = 0x04, Z_KEY_ENTER = 0x02, Z_KEY_SPACE = 0x01, Z_KEY_NONE = 0x00 };
 
 // Object identificators
-enum EntityIdentificator: uint16_t { NONE = 0, SHIP = 1, FUEL_TANK = 2, RADAR_TOWER = 3, GUN_VERTICAL= 4, GUN_HORIZONTAL_NORTH = 5, GUN_HORIZONTAL_SOUTH = 6, PARKED_PLANE = 7, LASER_BOLT_GREEN = 8, ENEMY_RUNE = 9 };
+enum EntityIdentificator: uint16_t { NONE = 0, SHIP = 1, FUEL_TANK = 2, RADAR_TOWER = 3, GUN_VERTICAL= 4, GUN_HORIZONTAL_NORTH = 5, GUN_HORIZONTAL_SOUTH = 6, PARKED_PLANE = 7, LASER_BOLT_GREEN = 8, ENEMY_RUNE = 9, SHIP_SHADOW = 10 };
 
 // Object type
-enum EntityType: uint16_t { TERRAIN = 0, PLAYER = 1, ENEMY = 2, FRIENDLY_FIRE = 3, RUNE = 4, ENEMY_FIRE = 5 };
+enum EntityType: uint16_t { TERRAIN = 0, PLAYER = 1, ENEMY = 2, FRIENDLY_FIRE = 3, RUNE = 4, ENEMY_FIRE = 5, SHADOW = 6 };
 
 // Object movement direction
 enum Direction: uint8_t { RIGHT = 0, LEFT = 1, UP = 2, DOWN = 3 };
@@ -25,6 +25,7 @@ enum GunHorizontalSouthAnimation: uint16_t { GUN_HORIZONTAL_SOUTH_QUIET = 13, GU
 enum ParkedPlaneAnimation: uint16_t { PARKED_PLANE_QUIET = 15, PARKED_PLANE_EXPLODING = 16 };
 enum LaserBoltGreenAnimation: uint16_t { LASER_BOLT_GREEN_QUIET = 17 };
 enum EnemyRuneAnimation: uint16_t { ENEMY_RUNE_QUIET = 18 };
+enum ShipShadowAnimation: uint16_t { SHIP_SHADOW_QUIET = 19 };
 
 // Others
 constexpr bool DEBUG = true;                                                     // Debug mode.

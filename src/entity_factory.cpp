@@ -19,6 +19,7 @@ void EntityFactory::RegisterEntities() {
 	Register(EntityIdentificator::PARKED_PLANE, &ParkedPlane::Create);
 	Register(EntityIdentificator::LASER_BOLT_GREEN, &LaserBoltGreen::Create);
 	Register(EntityIdentificator::ENEMY_RUNE, &EnemyRune::Create);
+	Register(EntityIdentificator::SHIP_SHADOW, &ShipShadow::Create);
 }
 
 EntityFactory &EntityFactory::operator=(const EntityFactory &) {

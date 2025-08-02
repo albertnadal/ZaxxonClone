@@ -15,6 +15,7 @@
 #include <entities/parked_plane.h>
 #include <entities/laser_bolt_green.h>
 #include <entities/enemy_rune.h>
+#include <entities/ship_shadow.h>
 #include <aabbcc/AABB.h>
 
 class GameManager;
