@@ -45,6 +45,10 @@ bool Ship::Update(const uint8_t pressedKeys_) {
 }
 
 void Ship::UpdateCollisions() {
+    if (isExploding || isNotVisible) {
+        return;
+    }
+
     std::vector<aabb::AABBIntersection<IEntity*>> objectIntersections = spacePartitionObjectsTree->query(GetLowerBound(), GetUpperBound());
 
     for (auto intersection : objectIntersections) {
@@ -58,6 +62,10 @@ void Ship::UpdateCollisions() {
 }
 
 void Ship::ProcessPressedKeys(bool checkPreviousPressedKeys) {
+    if(isExploding || isNotVisible) {
+        return;
+    }
+
     bool shipIsMovingInXAxis = true;
     if ((pressedKeys & KeyboardKeyCode::Z_KEY_RIGHT) == KeyboardKeyCode::Z_KEY_RIGHT) {
         MoveToXAxis(Direction::RIGHT);
@@ -161,6 +169,11 @@ IEntity *Ship::Create() {
 }
 
 bool Ship::ShouldBeginAnimationLoopAgain() {
+    if (currentState == ShipStateIdentificator::STATE_EXPLODING) {
+        ExternalEvent(ShipStateIdentificator::STATE_NOT_VISIBLE, nullptr);
+        return true;
+    }
+
     return false;
 }
 
@@ -180,7 +193,16 @@ void Ship::STATE_Descending() {
 }
 
 void Ship::STATE_Exploding() {
+    isExploding = true;
+    isNotVisible = false;
     LoadAnimationWithId(ShipAnimation::EXPLODING);
+    ProcessPressedKeys(false);
+}
+
+void Ship::STATE_Not_Visible() {
+    isExploding = false;
+    isNotVisible = true;
+    LoadAnimationWithId(ShipAnimation::NOT_VISIBLE);
     ProcessPressedKeys(false);
 }
 

@@ -16,15 +16,15 @@ enum EntityType: uint16_t { TERRAIN = 0, PLAYER = 1, ENEMY = 2, FRIENDLY_FIRE = 
 enum Direction: uint8_t { RIGHT = 0, LEFT = 1, UP = 2, DOWN = 3 };
 
 // Object animation identificators
-enum ShipAnimation: uint16_t { STRAIGHT_FLIGHT = 0, ASCENDING = 1, DESCENDING = 2, EXPLODING = 3 };
-enum FuelTankAnimation: uint16_t { FUEL_TANK_QUIET = 4, FUEL_TANK_EXPLODING = 5 };
-enum RadarTowerAnimation: uint16_t { RADAR_TOWER_QUIET = 6, RADAR_TOWER_EXPLODING = 7 };
-enum GunVerticalAnimation: uint16_t { GUN_VERTICAL_QUIET = 8, GUN_VERTICAL_EXPLODING = 9 };
-enum GunHorizontalNorthAnimation: uint16_t { GUN_HORIZONTAL_NORTH_QUIET = 10, GUN_HORIZONTAL_NORTH_EXPLODING = 11 };
-enum GunHorizontalSouthAnimation: uint16_t { GUN_HORIZONTAL_SOUTH_QUIET = 12, GUN_HORIZONTAL_SOUTH_EXPLODING = 13 };
-enum ParkedPlaneAnimation: uint16_t { PARKED_PLANE_QUIET = 14, PARKED_PLANE_EXPLODING = 15 };
-enum LaserBoltGreenAnimation: uint16_t { LASER_BOLT_GREEN_QUIET = 16 };
-enum EnemyRuneAnimation: uint16_t { ENEMY_RUNE_QUIET = 17 };
+enum ShipAnimation: uint16_t { STRAIGHT_FLIGHT = 0, ASCENDING = 1, DESCENDING = 2, EXPLODING = 3, NOT_VISIBLE = 4 };
+enum FuelTankAnimation: uint16_t { FUEL_TANK_QUIET = 5, FUEL_TANK_EXPLODING = 6 };
+enum RadarTowerAnimation: uint16_t { RADAR_TOWER_QUIET = 7, RADAR_TOWER_EXPLODING = 8 };
+enum GunVerticalAnimation: uint16_t { GUN_VERTICAL_QUIET = 9, GUN_VERTICAL_EXPLODING = 10 };
+enum GunHorizontalNorthAnimation: uint16_t { GUN_HORIZONTAL_NORTH_QUIET = 11, GUN_HORIZONTAL_NORTH_EXPLODING = 12 };
+enum GunHorizontalSouthAnimation: uint16_t { GUN_HORIZONTAL_SOUTH_QUIET = 13, GUN_HORIZONTAL_SOUTH_EXPLODING = 14 };
+enum ParkedPlaneAnimation: uint16_t { PARKED_PLANE_QUIET = 15, PARKED_PLANE_EXPLODING = 16 };
+enum LaserBoltGreenAnimation: uint16_t { LASER_BOLT_GREEN_QUIET = 17 };
+enum EnemyRuneAnimation: uint16_t { ENEMY_RUNE_QUIET = 18 };
 
 // Others
 constexpr bool DEBUG = true;                                                     // Debug mode.
