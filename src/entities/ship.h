@@ -22,10 +22,12 @@ class Ship: public IEntity
   void ProcessPressedKeys(bool = true);
   void ProcessReleasedKeys();
   void LoadNextSprite();
+  chrono::system_clock::time_point endRespawnTime;
 
   // Action states
   bool isExploding = false;
-  bool isNotVisible = false;
+  bool isDead = false;
+  bool isRespawning = false;
 
   // Ship action update functions
   void UpdateCollisions();
@@ -49,7 +51,6 @@ public:
   void DownKeyPressed();
   void DownKeyReleased();
   void Explode();
-  void MakeNotVisible();
 
 private:
   // state machine state functions
@@ -57,7 +58,7 @@ private:
   void STATE_Ascending();
   void STATE_Descending();
   void STATE_Exploding();
-  void STATE_Not_Visible();
+  void STATE_Dead();
 
   // state map to define state function order
   BEGIN_STATE_MAP
@@ -65,7 +66,7 @@ private:
       STATE_MAP_ENTRY(&Ship::STATE_Ascending)
       STATE_MAP_ENTRY(&Ship::STATE_Descending)
       STATE_MAP_ENTRY(&Ship::STATE_Exploding)
-      STATE_MAP_ENTRY(&Ship::STATE_Not_Visible)
+      STATE_MAP_ENTRY(&Ship::STATE_Dead)
   END_STATE_MAP
 
   // state enumeration order must match the order of state
@@ -75,7 +76,7 @@ private:
       STATE_ASCENDING = 1,
       STATE_DESCENDING = 2,
       STATE_EXPLODING = 3,
-      STATE_NOT_VISIBLE = 4,
+      STATE_DEAD = 4,
       SHIP_MAX_STATES
   };
 };

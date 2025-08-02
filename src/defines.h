@@ -16,7 +16,7 @@ enum EntityType: uint16_t { TERRAIN = 0, PLAYER = 1, ENEMY = 2, FRIENDLY_FIRE = 
 enum Direction: uint8_t { RIGHT = 0, LEFT = 1, UP = 2, DOWN = 3 };
 
 // Object animation identificators
-enum ShipAnimation: uint16_t { STRAIGHT_FLIGHT = 0, ASCENDING = 1, DESCENDING = 2, EXPLODING = 3, NOT_VISIBLE = 4 };
+enum ShipAnimation: uint16_t { STRAIGHT_FLIGHT = 0, ASCENDING = 1, DESCENDING = 2, EXPLODING = 3, DEAD = 4 };
 enum FuelTankAnimation: uint16_t { FUEL_TANK_QUIET = 5, FUEL_TANK_EXPLODING = 6 };
 enum RadarTowerAnimation: uint16_t { RADAR_TOWER_QUIET = 7, RADAR_TOWER_EXPLODING = 8 };
 enum GunVerticalAnimation: uint16_t { GUN_VERTICAL_QUIET = 9, GUN_VERTICAL_EXPLODING = 10 };

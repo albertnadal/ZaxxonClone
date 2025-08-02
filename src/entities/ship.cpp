@@ -17,6 +17,22 @@ bool Ship::Update(const uint8_t pressedKeys_) {
         position.AddZ(ADVANCE_Z_DELTA); // Advance the ship in the Z axis.
     }
 
+    if(isRespawning) {
+        auto now = chrono::system_clock::now();
+        if (now >= endRespawnTime) {
+            isRespawning = false;
+            tintColor = WHITE;
+        } else {
+            auto diff = chrono::duration_cast<chrono::milliseconds>(endRespawnTime - now).count();
+            int centiseconds = (diff / 10);
+            if (centiseconds >= 0 && centiseconds <= 500 && centiseconds % 2 == 0) {
+                tintColor = WHITE;
+            } else {
+                tintColor = { 255, 255, 255, 128 }; // Semi-transparent
+            }
+        }
+    }
+
     if (pressedKeys != KeyboardKeyCode::Z_KEY_NONE) {
         ProcessPressedKeys();
     } else if (pressedKeys != prevPressedKeys) {
@@ -47,7 +63,7 @@ bool Ship::Update(const uint8_t pressedKeys_) {
 }
 
 void Ship::UpdateCollisions() {
-    if (isExploding || isNotVisible) {
+    if (isExploding || isDead || isRespawning) {
         return;
     }
 
@@ -64,7 +80,15 @@ void Ship::UpdateCollisions() {
 }
 
 void Ship::ProcessPressedKeys(bool checkPreviousPressedKeys) {
-    if(isExploding || isNotVisible) {
+    if(isExploding || isDead) {
+        if (isDead && ((pressedKeys & KeyboardKeyCode::Z_KEY_SPACE) == KeyboardKeyCode::Z_KEY_SPACE)) {
+            // Respawn the ship
+            endRespawnTime = chrono::system_clock::now() + chrono::milliseconds(4000);
+            isDead = false;
+            isRespawning = true;
+            ExternalEvent(ShipStateIdentificator::STATE_STRAIGHT_FLIGHT, nullptr);
+        }
+
         return;
     }
 
@@ -172,7 +196,7 @@ IEntity *Ship::Create() {
 
 bool Ship::ShouldBeginAnimationLoopAgain() {
     if (currentState == ShipStateIdentificator::STATE_EXPLODING) {
-        ExternalEvent(ShipStateIdentificator::STATE_NOT_VISIBLE, nullptr);
+        ExternalEvent(ShipStateIdentificator::STATE_DEAD, nullptr);
         return true;
     }
 
@@ -180,7 +204,7 @@ bool Ship::ShouldBeginAnimationLoopAgain() {
 }
 
 bool Ship::IsStopped() const {
-    return isExploding || isNotVisible;
+    return isExploding || isDead;
 }
 
 void Ship::STATE_Straight_Flight() {
@@ -200,15 +224,15 @@ void Ship::STATE_Descending() {
 
 void Ship::STATE_Exploding() {
     isExploding = true;
-    isNotVisible = false;
+    isDead = false;
     LoadAnimationWithId(ShipAnimation::EXPLODING);
     ProcessPressedKeys(false);
 }
 
-void Ship::STATE_Not_Visible() {
+void Ship::STATE_Dead() {
     isExploding = false;
-    isNotVisible = true;
-    LoadAnimationWithId(ShipAnimation::NOT_VISIBLE);
+    isDead = true;
+    LoadAnimationWithId(ShipAnimation::DEAD);
     ProcessPressedKeys(false);
 }
 

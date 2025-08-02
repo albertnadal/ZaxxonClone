@@ -43,6 +43,7 @@ public:
   Position position;
   Boundaries boundingBox;
   Boundaries solidBoundingBox;
+  Color tintColor = WHITE;
   uint32_t uniqueId;
   bool isMarkedToDelete = false;
   void SetGameManager(GameManager*);

@@ -29,6 +29,7 @@ class GameManager
   SpriteRectBuffer *spriteRectBuffer;
   uint32_t maxObjects;
   Position cameraPosition;
+  Position shipRespawnPosition;
   float currentLevelZPosition;
   LevelInfo LoadLevelFromFile(const std::string&);
   void resetLevelValues();
