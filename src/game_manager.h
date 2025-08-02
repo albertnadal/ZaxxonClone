@@ -5,6 +5,7 @@
 #include <optional>
 #include <entity_factory.h>
 #include <entities/ship.h>
+#include <entities/ship_shadow.h>
 #include <entity_data_manager.h>
 #include <sprite_rect_buffer.h>
 #include <aabbcc/AABB.h>
@@ -22,6 +23,7 @@ class GameManager
   std::map<uint32_t, IEntity*> staticObjects;
   std::vector<IEntity*> objectsToDelete;
   Ship* ship = nullptr;
+  ShipShadow* shipShadow = nullptr;
   int lifeCounter = 1;
   bool isGameFinished = false;
   bool isGameOver = false;
@@ -29,7 +31,6 @@ class GameManager
   SpriteRectBuffer *spriteRectBuffer;
   uint32_t maxObjects;
   Position cameraPosition;
-  Position shipRespawnPosition;
   float currentLevelZPosition;
   LevelInfo LoadLevelFromFile(const std::string&);
   void resetLevelValues();

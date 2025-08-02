@@ -90,6 +90,8 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
   if(entity_ptr.has_value()) {
     if (entity_id == EntityIdentificator::SHIP) {
       ship = static_cast<Ship*>(*entity_ptr);
+    } else if (entity_id == EntityIdentificator::SHIP_SHADOW) {
+      shipShadow = static_cast<ShipShadow*>(*entity_ptr);
     }
 
     // Set the initial position of the object in the screen
@@ -118,9 +120,11 @@ std::optional<Position *> GameManager::GetPlayerPosition() const { // TODO: To b
 }
 
 UpdateInfo GameManager::Update(uint8_t pressedKeys) {
-  if ((ship != nullptr) && !ship->IsStopped()) {
+  if ((shipShadow != nullptr) && (ship != nullptr) && !ship->IsStopped()) {
     currentLevelZPosition += ADVANCE_Z_DELTA;
     cameraPosition.AddZ(-ADVANCE_Z_DELTA*ZOOM);
+    Vector3 coord = ship->position.GetCoordinates();
+    shipShadow->PositionSetXYZ(coord.x, GROUND_LEVEL_Y, coord.z);
   }
 
   updateMobileObjects(pressedKeys);
@@ -214,10 +218,14 @@ void GameManager::deleteUneededObjects() {
 }
 
 void GameManager::deleteAllObjects() {
-  // Mark the Ship instance to delete.
   if (ship != nullptr) {
     ship->isMarkedToDelete = true;
     ship = nullptr;
+  }
+
+  if (shipShadow != nullptr) {
+    shipShadow->isMarkedToDelete = true;
+    shipShadow = nullptr;
   }
 
   // Delete all instances marked to delete.
