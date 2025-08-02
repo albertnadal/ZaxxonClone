@@ -13,10 +13,7 @@ class Sprite
 {
 
 public:
-  int width;
-  int height;
-  int xOffset;
-  int yOffset;
+  int width, height, xOffset, yOffset, zOffset;
   float u1, v1, u2, v2;
   Sprite();
   ~Sprite();

@@ -18,6 +18,7 @@ public:
   static Vector2 AddAndGetProjectedCoordinate(Position, float, float, float);
   Vector3 GetCoordinates() const;
   Vector3 GetOffset() const;
+  Vector3 GetCoordinatesWithOffset() const;
   void SetXYZ(float, float, float);
   void SetXYZOffset(float, float, float);
   void AddX(float);

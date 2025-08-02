@@ -42,12 +42,12 @@ void IEntity::PositionAddY(float y) {
 }
 
 std::vector<int> IEntity::GetLowerBound() const {
-  Vector3 coord = position.GetCoordinates();
+  Vector3 coord = position.GetCoordinatesWithOffset();
   return {static_cast<int>(coord.x) + boundingBox.lX, static_cast<int>(coord.y) + boundingBox.lY, static_cast<int>(coord.z) + boundingBox.lZ};
 }
 
 std::vector<int> IEntity::GetUpperBound() const {
-  Vector3 coord = position.GetCoordinates();
+  Vector3 coord = position.GetCoordinatesWithOffset();
   return {static_cast<int>(coord.x) + boundingBox.lX + boundingBox.uX, static_cast<int>(coord.y) + boundingBox.lY + boundingBox.uY, static_cast<int>(coord.z) + boundingBox.lZ + boundingBox.uZ};
 }
 
@@ -74,16 +74,17 @@ void IEntity::LoadNextSprite()
   }
 
   nextSpriteTime = (chrono::system_clock::now() + std::chrono::milliseconds(spriteData.duration));
-
   currentSprite.width = spriteData.width;
   currentSprite.height = spriteData.height;
   currentSprite.xOffset = spriteData.xOffset;
   currentSprite.yOffset = spriteData.yOffset;
+  currentSprite.zOffset = spriteData.zOffset;
   currentSprite.u1 = spriteData.u1;
   currentSprite.v1 = spriteData.v1;
   currentSprite.u2 = spriteData.u2;
   currentSprite.v2 = spriteData.v2;
   boundingBox = {spriteData.lowerBoundX, spriteData.lowerBoundY, spriteData.lowerBoundZ, spriteData.upperBoundX, spriteData.upperBoundY, spriteData.upperBoundZ};
+  position.SetXYZOffset(spriteData.xOffset, spriteData.yOffset, spriteData.zOffset);
   firstSpriteOfCurrentAnimationIsLoaded = true;
 }
 

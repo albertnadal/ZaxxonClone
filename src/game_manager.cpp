@@ -56,8 +56,6 @@ LevelInfo GameManager::LoadLevelFromFile(const std::string& filename) {
         if (colonPos == std::string::npos) continue;
 
         std::string segmentName = segmentData.substr(0, colonPos);
-        std::cout << "Loading segment: " << segmentName << std::endl;
-
         std::string entitiesStr = segmentData.substr(colonPos + 1);
         std::stringstream entitiesStream(entitiesStr);
         std::string entityData;

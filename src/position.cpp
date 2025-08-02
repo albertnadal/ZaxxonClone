@@ -28,6 +28,10 @@ Vector3 Position::GetOffset() const {
     return { x_offset, y_offset, z_offset };
 }
 
+Vector3 Position::GetCoordinatesWithOffset() const {
+    return { x + x_offset, y + y_offset, z + z_offset };
+}
+
 void Position::CalculateProjectionCoordinate() {
     // 0.5 is the tangent of 26.565 degrees, which is used for calculating the isometric projection
     projected_y = (y + y_offset) + (x + x_offset) * 0.5; // Projection on the Y axis from the X axis
