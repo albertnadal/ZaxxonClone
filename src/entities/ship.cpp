@@ -13,7 +13,9 @@ bool Ship::Update(const uint8_t pressedKeys_) {
     bool needRedraw = false;
     pressedKeys = pressedKeys_;
 
-    position.AddZ(ADVANCE_Z_DELTA); // Advance the ship in the Z axis.
+    if(!IsStopped()) {
+        position.AddZ(ADVANCE_Z_DELTA); // Advance the ship in the Z axis.
+    }
 
     if (pressedKeys != KeyboardKeyCode::Z_KEY_NONE) {
         ProcessPressedKeys();
@@ -175,6 +177,10 @@ bool Ship::ShouldBeginAnimationLoopAgain() {
     }
 
     return false;
+}
+
+bool Ship::IsStopped() const {
+    return isExploding || isNotVisible;
 }
 
 void Ship::STATE_Straight_Flight() {

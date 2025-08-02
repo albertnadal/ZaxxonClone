@@ -118,8 +118,10 @@ std::optional<Position *> GameManager::GetPlayerPosition() const { // TODO: To b
 }
 
 UpdateInfo GameManager::Update(uint8_t pressedKeys) {
-  currentLevelZPosition += ADVANCE_Z_DELTA;
-  cameraPosition.AddZ(-ADVANCE_Z_DELTA*ZOOM);
+  if ((ship != nullptr) && !ship->IsStopped()) {
+    currentLevelZPosition += ADVANCE_Z_DELTA;
+    cameraPosition.AddZ(-ADVANCE_Z_DELTA*ZOOM);
+  }
 
   updateMobileObjects(pressedKeys);
   //updateStaticObjects();

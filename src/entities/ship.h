@@ -40,6 +40,7 @@ public:
   void PrintName() const override;
   bool Update(uint8_t) override;
   bool ShouldBeginAnimationLoopAgain() override;
+  bool IsStopped() const;
   static IEntity* Create();
 
   // state machine triggers
