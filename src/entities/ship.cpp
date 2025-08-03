@@ -153,9 +153,9 @@ void Ship::MoveToYAxis(Direction direction, bool flySlow) {
 void Ship::FireLaserBolt() {
     Position laserPosition;
     laserPosition.Copy(position);
-    laserPosition.AddZ(4.0f);
-    laserPosition.AddY(-4.0f);
-    laserPosition.AddX(12.0f);
+    laserPosition.AddZ(5.0f);
+    laserPosition.AddY(2.0f);
+    laserPosition.AddX(5.0f);
     gameManager->CreateEntityWithId(EntityIdentificator::LASER_BOLT_GREEN, laserPosition);
 }
 
