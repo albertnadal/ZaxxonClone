@@ -13,7 +13,7 @@
 
 class Ship;
 
-struct UpdateInfo { Position cameraPosition; int lifeCounter; bool gameFinished; };
+struct UpdateInfo { Position cameraPosition; int lifeCounter; bool gameFinished; Position shadowPosition; }; // TODO: Remove 'shadowPosition' in the future. Its used only for debug purposes.
 struct LevelInfo { Texture2D bgTexture; Rectangle bgSource; Position bgPosition; };
 
 class GameManager

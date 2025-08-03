@@ -134,6 +134,7 @@ UpdateInfo GameManager::Update(uint8_t pressedKeys) {
 
   UpdateInfo info; // TODO: To avoid creating a new object every time, we can use a static variable here or make it a member variable.
   info.cameraPosition = cameraPosition;
+  info.shadowPosition.Copy(shipShadow->position); // TODO: Remove this line and the 'shadowPosition' member in the future. Its used only for debug purposes.
   return info;
 }
 

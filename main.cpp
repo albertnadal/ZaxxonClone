@@ -19,6 +19,7 @@ EntityDataManager *entityTextureManager;
 GameManager *gameManager;
 int gameLoopFrequency = MILLISECONDS_PER_TICK;
 bool paused = false;
+char textBuffer[128]; // TODO: Must be eliminated in the future. Its used only for debug purposes.
 
 inline void drawBoundaries(const ProjectedBoundaries &boundaries, Color color) {
         DrawLineV(boundaries.a, boundaries.b, color);
@@ -44,9 +45,7 @@ inline void processKeyboardInput() {
         if (IsKeyPressed(KEY_ESCAPE) || IsKeyReleased(KEY_ESCAPE)) pressedKeys ^= Z_KEY_ESCAPE;
 
         if (DEBUG) {
-                if (IsKeyPressed(KEY_P)) gameLoopFrequency += 10;
-                if (IsKeyPressed(KEY_O)) gameLoopFrequency -= 10;
-                if (IsKeyPressed(KEY_M)) paused = !paused;
+                if (IsKeyPressed(KEY_P)) paused = !paused;
         }
 }
 
@@ -85,11 +84,13 @@ int main()
                         processKeyboardInput();
 
                         auto t0 = std::chrono::high_resolution_clock::now();
-                        info = gameManager->Update(pressedKeys);
-                        isGameFinished = info.gameFinished;
+                        if (!paused) {
+                                info = gameManager->Update(pressedKeys);
+                                isGameFinished = info.gameFinished;
 
-                        // Update game camera position
-                        gameCamera.offset = info.cameraPosition.GetProjectedCoordinate();
+                                // Update game camera position
+                                gameCamera.offset = info.cameraPosition.GetProjectedCoordinate();
+                        }
 
                         BeginDrawing();
                                 ClearBackground(BLACK);
@@ -111,6 +112,9 @@ int main()
 
                                 if (DEBUG) {
                                         DrawFPS(16, 16);
+                                        Vector3 coord = info.shadowPosition.GetCoordinates();
+                                        snprintf(textBuffer, sizeof(textBuffer), "X: %.2f, Y: %d, Z: %.2f", coord.x, GROUND_LEVEL_Y, coord.z); // TODO: To be deleted in the future.
+                                        DrawText(textBuffer, 16, 50, 20, WHITE);
                                 }
                         EndDrawing();
 
