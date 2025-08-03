@@ -137,6 +137,12 @@ UpdateInfo GameManager::Update(uint8_t pressedKeys) {
   return info;
 }
 
+void GameManager::SetShipShadowVisible(bool value) {
+  if (shipShadow != nullptr) {
+    shipShadow->tintColor = value ? WHITE : (Color){ 255, 255, 255, 0 };
+  }
+}
+
 void GameManager::updateSpriteRectBuffers() {
   int i = 0;
   //std::vector<aabb::AABBIntersection<IEntity*>> objectIntersections = spacePartitionObjectsTree->query(player->GetLowerBound(), player->GetUpperBound());

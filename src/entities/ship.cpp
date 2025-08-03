@@ -87,6 +87,7 @@ void Ship::ProcessPressedKeys(bool checkPreviousPressedKeys) {
             isDead = false;
             isRespawning = true;
             ExternalEvent(ShipStateIdentificator::STATE_STRAIGHT_FLIGHT, nullptr);
+            gameManager->SetShipShadowVisible(true);
         }
 
         return;
@@ -227,6 +228,7 @@ void Ship::STATE_Exploding() {
     isDead = false;
     LoadAnimationWithId(ShipAnimation::EXPLODING);
     ProcessPressedKeys(false);
+    gameManager->SetShipShadowVisible(false);
 }
 
 void Ship::STATE_Dead() {
@@ -234,6 +236,7 @@ void Ship::STATE_Dead() {
     isDead = true;
     LoadAnimationWithId(ShipAnimation::DEAD);
     ProcessPressedKeys(false);
+    gameManager->SetShipShadowVisible(false);
 }
 
 Ship::~Ship() = default;
