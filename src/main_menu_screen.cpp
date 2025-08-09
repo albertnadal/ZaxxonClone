@@ -14,9 +14,8 @@ static inline void renderMainMenuScreen(Texture2D &textureAtlas, Camera2D &stati
     BeginDrawing();
             ClearBackground(BLACK);
             BeginMode2D(staticCamera);
-                    DrawTextureRec(textureAtlas, {0,237,224,256}, {0,0}, WHITE); // Background image
-                    DrawTextureRec(textureAtlas, {0,493,139,35}, {73,9}, { 255, 255, 255, static_cast<unsigned char>(logoTransparency) }); // Logo
-                    std::cout << "CAST - logoTransparency: " << static_cast<unsigned char>(logoTransparency) << std::endl;
+                    DrawTextureRec(textureAtlas, {0,238,224,256}, {0,0}, WHITE); // Background image
+                    DrawTextureRec(textureAtlas, {0,494,139,35}, {73,9}, { 255, 255, 255, static_cast<unsigned char>(logoTransparency) }); // Logo
 
                     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(t0.time_since_epoch()).count();
                     int centiseconds = ms % 1000;
