@@ -133,15 +133,15 @@ int main()
                         computingTimePerUpdate = t1 - t0;
                         std::this_thread::sleep_for(std::chrono::milliseconds(gameLoopFrequency) - computingTimePerUpdate);
                 } else if (currentGameScreen == GameScreenType::MAIN_MENU) {
-                        PollInputEvents();
                         renderMainMenuScreen(textureAtlas, staticCamera, highScore);
 
                         if (IsKeyPressed(KEY_ESCAPE)) {
                                 exitGame = true;
-                        } else if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
+                        } else if (IsKeyPressed(KEY_SPACE)) {
                                 isGameFinished = false;
-                                pressedKeys = Z_KEY_NONE;
                                 currentGameScreen = GameScreenType::GAME_PLAY;
+                                pressedKeys = Z_KEY_NONE;
+                                std::this_thread::sleep_for(std::chrono::milliseconds(500));
                         }
                 }
         }
