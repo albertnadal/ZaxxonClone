@@ -25,7 +25,7 @@ static inline void renderMainMenuScreen(Texture2D &textureAtlas, Camera2D &stati
 
                     Utils::renderNumberAtPosition(textureAtlas, 1982, 4, 187, 245, false, WHITE); // 1982
                     Utils::renderTextAtPosition(textureAtlas, "SEGA", 150, 245, WHITE); // SEGA
-                    DrawTextureRec(textureAtlas, {289,229,9,8}, {138, 245}, WHITE); // Copyright symbol
+                    DrawTextureRec(textureAtlas, {289,230,9,8}, {138, 245}, WHITE); // Copyright symbol
             EndMode2D();
 
     if (DEBUG) {
