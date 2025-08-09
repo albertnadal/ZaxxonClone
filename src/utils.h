@@ -37,6 +37,29 @@ public:
         result.insert(result.begin(), zerosToAdd, paddingValue);
     }
 
+    static void renderNumberAtPosition(Texture2D &textureAtlas, int number, std::size_t minSize, float x, float y, bool fillWithZeros, Color tint) {
+        std::vector<int> digits;
+        extractDigits(number, digits, minSize, fillWithZeros ? 0 : -1);
+
+        for (std::size_t i = 0; i < digits.size(); ++i) {
+            float digitXPos = ZERO_NUMBER_X + (digits[i] * NUMBER_SPRITE_WIDTH);
+            Rectangle source = (digits[i] != -1) ? (Rectangle){digitXPos, ZERO_NUMBER_Y, NUMBER_SPRITE_WIDTH, NUMBER_SPRITE_WIDTH} : (Rectangle){0,0,0,0};
+            DrawTextureRec(textureAtlas, source, {x + (i * NUMBER_SPRITE_WIDTH), y}, tint);
+        }
+    }
+
+    static void renderTextAtPosition(Texture2D &textureAtlas, const std::string& text, float x, float y, Color tint) {
+        for (std::size_t i = 0; i < text.size(); ++i) {
+            char c = text[i];
+
+            if (c >= 'A' && c <= 'Z') {
+                int letter = c - 'A';
+                float letterXPos = ALPHABET_X + (letter * LETTER_SPRITE_WIDTH);
+                Rectangle source = {letterXPos, ALPHABET_Y, LETTER_SPRITE_WIDTH, LETTER_SPRITE_WIDTH};
+                DrawTextureRec(textureAtlas, source, {x + (i * LETTER_SPRITE_WIDTH), y}, tint);
+            }
+        }
+    }
 };
 
 #endif // UTILS_H

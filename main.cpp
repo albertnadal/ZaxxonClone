@@ -6,6 +6,7 @@
 #include <entity_data_manager.h>
 #include <game_manager.h>
 #include <utils.h>
+#include <main_menu_screen.cpp>
 
 constexpr float SCR_WIDTH = 224.0f;
 constexpr float SCR_HEIGHT = 256.0f;
@@ -15,6 +16,8 @@ std::chrono::duration<float> computingTimePerUpdate;
 uint8_t pressedKeys = Z_KEY_NONE;
 bool exitGame = false;
 bool isGameFinished = false;
+int highScore = 0;
+GameScreenType currentGameScreen;
 EntityDataManager *entityTextureManager;
 GameManager *gameManager;
 int gameLoopFrequency = MILLISECONDS_PER_TICK;
@@ -67,6 +70,13 @@ int main()
         gameCamera.rotation = 0.0f;
         gameCamera.zoom = ZOOM;
 
+        Camera2D staticCamera;
+        staticCamera.target = (Vector2){ 0, 0 };
+        staticCamera.offset = (Vector2){ 0, 0 };
+        staticCamera.rotation = 0.0f;
+        staticCamera.zoom = ZOOM;
+
+        currentGameScreen = GameScreenType::MAIN_MENU;
         entityTextureManager = new EntityDataManager();
         SpriteRectBuffer *spriteRectBuffer = new SpriteRectBuffer(MAX_OBJECTS);
         gameManager = new GameManager(entityTextureManager, spriteRectBuffer, MAX_OBJECTS);
@@ -81,6 +91,7 @@ int main()
 
         while (!WindowShouldClose() && !exitGame)
         {
+                if (currentGameScreen == GameScreenType::GAME_PLAY) {
                         processKeyboardInput();
 
                         auto t0 = std::chrono::high_resolution_clock::now();
@@ -121,6 +132,18 @@ int main()
                         auto t1 = std::chrono::high_resolution_clock::now();
                         computingTimePerUpdate = t1 - t0;
                         std::this_thread::sleep_for(std::chrono::milliseconds(gameLoopFrequency) - computingTimePerUpdate);
+                } else if (currentGameScreen == GameScreenType::MAIN_MENU) {
+                        PollInputEvents();
+                        renderMainMenuScreen(textureAtlas, staticCamera, highScore);
+
+                        if (IsKeyPressed(KEY_ESCAPE)) {
+                                exitGame = true;
+                        } else if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
+                                isGameFinished = false;
+                                pressedKeys = Z_KEY_NONE;
+                                currentGameScreen = GameScreenType::GAME_PLAY;
+                        }
+                }
         }
 
         exitGame = true;

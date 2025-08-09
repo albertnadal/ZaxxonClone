@@ -3,6 +3,9 @@
 #include <cstdint>
 #include <raylib/raylib.h>
 
+// Screen types
+enum GameScreenType: uint16_t { MAIN_MENU = 0, GAME_PLAY = 1 };
+
 // Keyboard key codes
 enum KeyboardKeyCode: uint8_t { Z_KEY_LEFT = 0x80, Z_KEY_UP = 0x40, Z_KEY_RIGHT = 0x20, Z_KEY_DOWN = 0x10, Z_KEY_ESCAPE = 0x08, Z_KEY_PAUSE = 0x04, Z_KEY_ENTER = 0x02, Z_KEY_SPACE = 0x01, Z_KEY_NONE = 0x00 };
 
@@ -43,3 +46,9 @@ constexpr float ADVANCE_Z_DELTA = 0.7f;                                         
 constexpr float LASER_BOLT_GREEN_Z_DELTA = 2.5f;                                 // Delta to advance the laser bolt in the Z axis per frame.
 constexpr float LASER_BOLT_GREEN_MAX_RANGE = 250.0f;                             // Maximum range of the laser bolt in the Z axis.
 constexpr Color CHROMA_KEY_COLOR = {255, 0, 255, 255};                           // Color used as chroma key in the sprite sheet.
+constexpr float NUMBER_SPRITE_WIDTH = 8.0f;                                      // Width and height in pixels of a number sprite in the tilemap.
+constexpr float ZERO_NUMBER_X = 208.0f;                                          // X coordinate of the zero-number sprite in the tilemap.
+constexpr float ZERO_NUMBER_Y = 229.0f;                                          // Y coordinate of the zero-number sprite in the tilemap.
+constexpr float ALPHABET_X = 0.0f;                                               // X coordinate of the A letter sprite in the tilemap.
+constexpr float ALPHABET_Y = 229.0f;                                             // Y coordinate of the A letter sprite in the tilemap.
+constexpr float LETTER_SPRITE_WIDTH = 8.0f;                                      // Width and height in pixels of a letter sprite in the tilemap.
