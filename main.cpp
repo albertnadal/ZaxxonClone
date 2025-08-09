@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <thread>
 #include <bitset>
 #include <raylib/raylib.h>
@@ -17,6 +18,7 @@ uint8_t pressedKeys = Z_KEY_NONE;
 bool exitGame = false;
 bool isGameFinished = false;
 int highScore = 0;
+float logoTransparency = 0;
 GameScreenType currentGameScreen;
 EntityDataManager *entityTextureManager;
 GameManager *gameManager;
@@ -133,11 +135,16 @@ int main()
                         computingTimePerUpdate = t1 - t0;
                         std::this_thread::sleep_for(std::chrono::milliseconds(gameLoopFrequency) - computingTimePerUpdate);
                 } else if (currentGameScreen == GameScreenType::MAIN_MENU) {
-                        renderMainMenuScreen(textureAtlas, staticCamera, highScore);
+                        if (logoTransparency < 255.0f) {
+                                logoTransparency = std::min(255.0f, logoTransparency + (MILLISECONDS_PER_TICK * 2.5f) / 16.0f);
+                        }
+
+                        std::cout << "logoTransparency: " << logoTransparency << std::endl;
+                        renderMainMenuScreen(textureAtlas, staticCamera, highScore, logoTransparency);
 
                         if (IsKeyPressed(KEY_ESCAPE)) {
                                 exitGame = true;
-                        } else if (IsKeyPressed(KEY_SPACE)) {
+                        } else if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
                                 isGameFinished = false;
                                 currentGameScreen = GameScreenType::GAME_PLAY;
                                 pressedKeys = Z_KEY_NONE;

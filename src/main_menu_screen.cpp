@@ -7,7 +7,7 @@
 #include <defines.h>
 #include <utils.h>
 
-static inline void renderMainMenuScreen(Texture2D &textureAtlas, Camera2D &staticCamera, int highScore) {
+static inline void renderMainMenuScreen(Texture2D &textureAtlas, Camera2D &staticCamera, int highScore, float logoTransparency) {
     std::chrono::duration<float> computingTimePerLoop;
     auto t0 = std::chrono::high_resolution_clock::now();
 
@@ -15,6 +15,8 @@ static inline void renderMainMenuScreen(Texture2D &textureAtlas, Camera2D &stati
             ClearBackground(BLACK);
             BeginMode2D(staticCamera);
                     DrawTextureRec(textureAtlas, {0,237,224,256}, {0,0}, WHITE); // Background image
+                    DrawTextureRec(textureAtlas, {0,493,139,35}, {73,9}, { 255, 255, 255, static_cast<unsigned char>(logoTransparency) }); // Logo
+                    std::cout << "CAST - logoTransparency: " << static_cast<unsigned char>(logoTransparency) << std::endl;
 
                     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(t0.time_since_epoch()).count();
                     int centiseconds = ms % 1000;
