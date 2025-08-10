@@ -123,6 +123,10 @@ int main()
                                         }
                                 EndMode2D();
 
+                                BeginMode2D(staticCamera);
+                                        DrawTextureRec(textureAtlas, {224,238,75,20}, {145,232}, WHITE);
+                                EndMode2D();
+
                                 if (DEBUG) {
                                         DrawFPS(16, 16);
                                         Vector3 coord = info.shadowPosition.GetCoordinates();
@@ -139,7 +143,6 @@ int main()
                                 logoTransparency = std::min(255.0f, logoTransparency + (MILLISECONDS_PER_TICK * 2.5f) / 16.0f);
                         }
 
-                        std::cout << "logoTransparency: " << logoTransparency << std::endl;
                         renderMainMenuScreen(textureAtlas, staticCamera, highScore, logoTransparency);
 
                         if (IsKeyPressed(KEY_ESCAPE)) {
