@@ -18,6 +18,7 @@ uint8_t pressedKeys = Z_KEY_NONE;
 bool exitGame = false;
 bool isGameFinished = false;
 int highScore = 0;
+int lifeCounter = 3;
 float logoTransparency = 0;
 GameScreenType currentGameScreen;
 EntityDataManager *entityTextureManager;
@@ -124,7 +125,9 @@ int main()
                                 EndMode2D();
 
                                 BeginMode2D(staticCamera);
-                                        DrawTextureRec(textureAtlas, {224,238,75,20}, {145,232}, WHITE);
+                                        DrawTextureRec(textureAtlas, {224,238,75,20}, {145,232}, WHITE); // Fuel bar
+                                        DrawTextureRec(textureAtlas, {299,238,24,10}, {187,214}, WHITE); // Life indicator
+                                        Utils::renderNumberAtPosition(textureAtlas, lifeCounter, 1, 212, 216, false, WHITE); // Life counter
                                 EndMode2D();
 
                                 if (DEBUG) {
