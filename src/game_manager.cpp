@@ -175,8 +175,12 @@ void GameManager::updateSpriteRectBuffers() {
     IEntity* entity_ptr = x.second;
     Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
     Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
+#if DEBUG
     ProjectedBoundaries boundaries = entity_ptr->GetProjectedBoundaries();
     spriteRectBuffer->buffer[i] = SpriteRect(src, pos, boundaries, entity_ptr->tintColor);
+#else
+    spriteRectBuffer->buffer[i] = SpriteRect(src, pos);
+#endif
     i++;
   }
 

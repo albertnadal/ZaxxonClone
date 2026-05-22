@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef DEBUG
+#define DEBUG false
+#endif
+
 #include <cstdint>
 #include <raylib/raylib.h>
 
@@ -31,7 +35,6 @@ enum EnemyRuneAnimation: uint16_t { ENEMY_RUNE_QUIET = 18 };
 enum ShipShadowAnimation: uint16_t { SHIP_SHADOW_QUIET = 19 };
 
 // Others
-constexpr bool DEBUG = true;                                                     // Debug mode.
 constexpr int MILLISECONDS_PER_TICK = 16;                                        // Game logic frequency in milliseconds. 16ms ≈ 60 ticks per second ≈ 60 frames per second.
 constexpr float ZOOM = 3.0f;                                                     // Game display zoom.
 constexpr const char *WINDOW_TITLE = "Zaxxon Clone";                             // Title to show in the application window bar.

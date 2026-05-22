@@ -12,25 +12,25 @@ static inline void renderMainMenuScreen(Texture2D &textureAtlas, Camera2D &stati
     auto t0 = std::chrono::high_resolution_clock::now();
 
     BeginDrawing();
-            ClearBackground(BLACK);
-            BeginMode2D(staticCamera);
-                    DrawTextureRec(textureAtlas, {0,238,224,256}, {0,0}, WHITE); // Background image
-                    DrawTextureRec(textureAtlas, {0,494,139,35}, {73,9}, { 255, 255, 255, static_cast<unsigned char>(logoTransparency) }); // Logo
+        ClearBackground(BLACK);
+        BeginMode2D(staticCamera);
+            DrawTextureRec(textureAtlas, {0,238,224,256}, {0,0}, WHITE); // Background image
+            DrawTextureRec(textureAtlas, {0,494,139,35}, {73,9}, { 255, 255, 255, static_cast<unsigned char>(logoTransparency) }); // Logo
 
-                    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(t0.time_since_epoch()).count();
-                    int centiseconds = ms % 1000;
-                    if (centiseconds >= 0 && centiseconds <= 700) {
-                        Utils::renderTextAtPosition(textureAtlas, "PRESS SPACE TO START", 34, 180, WHITE); // Press space to start
-                    }
+            auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(t0.time_since_epoch()).count();
+            int centiseconds = ms % 1000;
+            if (centiseconds >= 0 && centiseconds <= 700) {
+                Utils::renderTextAtPosition(textureAtlas, "PRESS SPACE TO START", 34, 180, WHITE); // Press space to start
+            }
 
-                    Utils::renderNumberAtPosition(textureAtlas, 1982, 4, 187, 245, false, WHITE); // 1982
-                    Utils::renderTextAtPosition(textureAtlas, "SEGA", 150, 245, WHITE); // SEGA
-                    DrawTextureRec(textureAtlas, {289,230,9,8}, {138, 245}, WHITE); // Copyright symbol
-            EndMode2D();
+            Utils::renderNumberAtPosition(textureAtlas, 1982, 4, 187, 245, false, WHITE); // 1982
+            Utils::renderTextAtPosition(textureAtlas, "SEGA", 150, 245, WHITE); // SEGA
+            DrawTextureRec(textureAtlas, {289,230,9,8}, {138, 245}, WHITE); // Copyright symbol
+        EndMode2D();
 
-    if (DEBUG) {
+#if DEBUG
         DrawFPS(16, 16);
-    }
+#endif
     EndDrawing();
 
     auto t1 = std::chrono::high_resolution_clock::now();

@@ -8,11 +8,15 @@
 struct SpriteRect {
     Rectangle source;
     Vector2 position;
-    ProjectedBoundaries boundaries; // Used only for debug purposes.
-    Color tint;  // Used only for debug purposes.
-
+#if DEBUG
+    ProjectedBoundaries boundaries;
+    Color tint;
     SpriteRect() : source({0,0,0,0}), position({0,0}), boundaries({0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}), tint(WHITE) {}
     SpriteRect(Rectangle src, Vector2 pos, ProjectedBoundaries boundaries, Color tint) : source(src), position(pos), boundaries(boundaries), tint(tint) {}
+#else
+    SpriteRect() : source({0,0,0,0}), position({0,0}) {}
+    SpriteRect(Rectangle src, Vector2 pos) : source(src), position(pos) {}
+#endif
 };
 
 class SpriteRectBuffer {

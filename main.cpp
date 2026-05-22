@@ -116,11 +116,11 @@ int main()
                                         for(int i=0; i<spriteRectBuffer->bufferLength; i++) {
                                                 auto position = spriteRectBuffer->buffer[i].position;
                                                 auto source = spriteRectBuffer->buffer[i].source;
-                                                auto tint = spriteRectBuffer->buffer[i].tint;
-                                                DrawTextureRec(textureAtlas, source, position, tint);
-                                                if (DEBUG) {
-                                                        drawBoundaries(spriteRectBuffer->buffer[i].boundaries, (Color){ 0, 255, 68, 255 });
-                                                }
+#if DEBUG
+                                                DrawTextureRec(textureAtlas, source, position, spriteRectBuffer->buffer[i].tint);
+                                                drawBoundaries(spriteRectBuffer->buffer[i].boundaries, (Color){ 0, 255, 68, 255 });
+#endif
+                                                DrawTextureRec(textureAtlas, source, position, WHITE);
                                         }
                                 EndMode2D();
 

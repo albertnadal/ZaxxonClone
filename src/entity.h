@@ -56,7 +56,9 @@ public:
   void RemoveFromSpacePartitionObjectsTree();
   std::vector<int> GetLowerBound() const;
   std::vector<int> GetUpperBound() const;
+#if DEBUG
   ProjectedBoundaries GetProjectedBoundaries() const;
+#endif
   Vector2 GetRightmostProjectedCoordinate() const;
   EntityIdentificator Id() const;
   EntityType Type() const;

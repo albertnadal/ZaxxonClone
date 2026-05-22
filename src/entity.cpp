@@ -105,7 +105,7 @@ bool IEntity::ShouldBeginAnimationLoopAgain()
 {
     return false;
 }
-
+#if DEBUG
 ProjectedBoundaries IEntity::GetProjectedBoundaries() const {
   Vector2 a = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX, boundingBox.lY, boundingBox.lZ);
   Vector2 b = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX, boundingBox.lY + boundingBox.uY, boundingBox.lZ);
@@ -117,7 +117,7 @@ ProjectedBoundaries IEntity::GetProjectedBoundaries() const {
   Vector2 h = Position::AddAndGetProjectedCoordinate(position, boundingBox.lX + boundingBox.uX, boundingBox.lY, boundingBox.lZ + boundingBox.uZ);
   return {a, b, c, d, e, f, g, h};
 }
-
+#endif
 Vector2 IEntity::GetRightmostProjectedCoordinate() const {
   return Position::AddAndGetProjectedCoordinate(position, boundingBox.lX + boundingBox.uX, boundingBox.lY + boundingBox.uY, boundingBox.lZ + boundingBox.uZ);
 }
