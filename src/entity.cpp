@@ -52,9 +52,9 @@ std::vector<int> IEntity::GetUpperBound() const {
 }
 
 void IEntity::LoadAnimationWithId(uint16_t animationId) {
-    std::optional<EntitySpriteSheetAnimation *> currentAnimation = spriteSheet->GetAnimationWithId(animationId);
-    assert(currentAnimation != std::nullopt);
-    currentAnimationSprites = (*currentAnimation)->GetSprites();
+  EntitySpriteSheetAnimation *currentAnimation = spriteSheet->GetAnimationWithId(animationId);
+  assert(currentAnimation != nullptr);
+  currentAnimationSprites = currentAnimation->GetSprites();
     animationHasOnlyOneSprite = (currentAnimationSprites.size() <= 1);
     currentAnimationSpriteIterator = std::begin(currentAnimationSprites);
     animationLoaded = true;

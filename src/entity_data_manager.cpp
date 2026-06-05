@@ -1,4 +1,5 @@
 #include <entity_data_manager.h>
+#include <memory>
 #include <fstream>
 #include <sstream>
 #include <collision/collision.h>
@@ -50,8 +51,11 @@ void EntityDataManager::LoadObjectsDataFromFile(std::string filename)
                         } else if(startsWith(token, "#")) {
                                 currentLineType = OBJ_ANIMATION_ID;
                                 uint16_t entitySpriteSheetAnimationId = std::stoi(token.substr(1));
-                                currentEntitySpriteSheetAnimation = new EntitySpriteSheetAnimation(entitySpriteSheetAnimationId);
-                                currentEntitySpriteSheet->AddAnimation(currentEntitySpriteSheetAnimation);
+                                {
+                                        auto animUPtr = std::make_unique<EntitySpriteSheetAnimation>(entitySpriteSheetAnimationId);
+                                        currentEntitySpriteSheetAnimation = animUPtr.get();
+                                        currentEntitySpriteSheet->AddAnimation(std::move(animUPtr));
+                                }
                         } else {
                                 currentLineType = OBJ_SPRITE;
                                 currentFrameValues.push_back(token);

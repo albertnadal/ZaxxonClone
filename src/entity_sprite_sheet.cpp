@@ -3,26 +3,17 @@
 EntitySpriteSheet::EntitySpriteSheet() {
 }
 
-EntitySpriteSheet::~EntitySpriteSheet() {
-  std::map<uint16_t, EntitySpriteSheetAnimation*>::iterator it = animations.begin();
-
-	while (it != animations.end())
-	{
-		EntitySpriteSheetAnimation* entityAnimation = it->second;
-		delete entityAnimation;
-		it++;
-	}
+void EntitySpriteSheet::AddAnimation(std::unique_ptr<EntitySpriteSheetAnimation> animation) {
+  if (!animation) return;
+  uint16_t id = animation->Id;
+  animations.emplace(id, std::move(animation));
 }
 
-void EntitySpriteSheet::AddAnimation(EntitySpriteSheetAnimation *animation) {
-  animations.insert(std::pair<uint16_t,EntitySpriteSheetAnimation*>(animation->Id, animation));
-}
-
-std::optional<EntitySpriteSheetAnimation*> EntitySpriteSheet::GetAnimationWithId(uint16_t AnimationId) {
+EntitySpriteSheetAnimation* EntitySpriteSheet::GetAnimationWithId(uint16_t AnimationId) const {
     auto it = animations.find(AnimationId);
     if (it != animations.end()) {
-        return it->second;
+        return it->second.get();
     }
 
-    return std::nullopt;
+    return nullptr;
 }
