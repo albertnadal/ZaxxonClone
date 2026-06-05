@@ -11,21 +11,15 @@ Vector2 Position::GetProjectedCoordinate() const {
     return { projected_x, projected_y };
 }
 
-Vector2 Position::AddAndGetProjectedCoordinate(Position _p, float _x, float _y, float _z) {
-    Position p;
-    p.Copy(_p);
-    p.AddX(_x);
-    p.AddY(_y);
-    p.AddZ(_z);
-    return p.GetProjectedCoordinate();
+Vector2 Position::AddAndGetProjectedCoordinate(const Position& _p, float _x, float _y, float _z) {
+    const float absoluteX = _p.x + _p.x_offset + _x;
+    const float absoluteY = _p.y + _p.y_offset + _y;
+    const float absoluteZ = _p.z + _p.z_offset + _z;
+    return ProjectFromAbsolute(absoluteX, absoluteY, absoluteZ);
 }
 
 Vector3 Position::GetCoordinates() const {
     return { x, y, z };
-}
-
-Vector3 Position::GetOffset() const {
-    return { x_offset, y_offset, z_offset };
 }
 
 Vector3 Position::GetCoordinatesWithOffset() const {
@@ -33,10 +27,19 @@ Vector3 Position::GetCoordinatesWithOffset() const {
 }
 
 void Position::CalculateProjectionCoordinate() {
+    const float absoluteX = x + x_offset;
+    const float absoluteY = y + y_offset;
+    const float absoluteZ = z + z_offset;
+    Vector2 p = ProjectFromAbsolute(absoluteX, absoluteY, absoluteZ);
+    projected_x = p.x;
+    projected_y = p.y;
+}
+
+Vector2 Position::ProjectFromAbsolute(float absoluteX, float absoluteY, float absoluteZ) {
     // 0.5 is the tangent of 26.565 degrees, which is used for calculating the isometric projection
-    projected_y = (y + y_offset) + (x + x_offset) * 0.5; // Projection on the Y axis from the X axis
-    projected_y = projected_y + (z + z_offset) * -0.5; // Projection on the Y axis from the Z axis
-    projected_x = (x + x_offset) + (z + z_offset); // Projection on the X axis from the Z axis
+    const float projY = absoluteY + absoluteX * 0.5f - absoluteZ * 0.5f;
+    const float projX = absoluteX + absoluteZ;
+    return { projX, projY };
 }
 
 void Position::SetXYZ(float _x, float _y, float _z) {
@@ -68,17 +71,12 @@ void Position::AddZ(float _z) {
     CalculateProjectionCoordinate();
 }
 
-void Position::Copy(Position position) {
-    Vector3 coordinates = position.GetCoordinates();
-    Vector3 coordinatesOffset = position.GetOffset();
-    x = coordinates.x;
-    y = coordinates.y;
-    z = coordinates.z;
-    x_offset = coordinatesOffset.x;
-    y_offset = coordinatesOffset.y;
-    z_offset = coordinatesOffset.z;
+void Position::Copy(const Position& position) {
+    x = position.x;
+    y = position.y;
+    z = position.z;
+    x_offset = position.x_offset;
+    y_offset = position.y_offset;
+    z_offset = position.z_offset;
     CalculateProjectionCoordinate();
-}
-
-Position::~Position() {
 }

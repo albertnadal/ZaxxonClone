@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef DEBUG
-#define DEBUG false
+#define DEBUG true
 #endif
 
 #include <cstdint>

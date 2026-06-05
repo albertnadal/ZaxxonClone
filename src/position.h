@@ -11,20 +11,21 @@ private:
   float projected_x, projected_y;
 
   void CalculateProjectionCoordinate();
+  static Vector2 ProjectFromAbsolute(float absoluteX, float absoluteY, float absoluteZ);
+
 public:
   Position();
-  ~Position();
+  ~Position() = default;
   Vector2 GetProjectedCoordinate() const;
-  static Vector2 AddAndGetProjectedCoordinate(Position, float, float, float);
+  static Vector2 AddAndGetProjectedCoordinate(const Position&, float, float, float);
   Vector3 GetCoordinates() const;
-  Vector3 GetOffset() const;
   Vector3 GetCoordinatesWithOffset() const;
   void SetXYZ(float, float, float);
   void SetXYZOffset(float, float, float);
   void AddX(float);
   void AddY(float);
   void AddZ(float);
-  void Copy(Position);
+  void Copy(const Position&);
 };
 
 #endif
