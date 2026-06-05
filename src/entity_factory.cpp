@@ -32,23 +32,23 @@ EntityFactory::~EntityFactory() {
 
 void EntityFactory::Register(const EntityIdentificator entityId, const CreateEntityFn pfnCreate)
 {
-	entityFactoryMap[entityId] = pfnCreate;
+	entityFactoryMap.emplace(entityId, pfnCreate);
 }
 
 std::optional<IEntity*> EntityFactory::CreateEntity(const EntityIdentificator entityId) const
 {
-	EntityFactoryMap::const_iterator it = entityFactoryMap.find(entityId);
-	if( it != entityFactoryMap.end() ) {
-		IEntity *entity = it->second();
-		std::optional<EntitySpriteSheet *> entitySpriteSheet = textureManager->GetSpriteSheetByEntityIdentificator(entity->Id());
-		assert(entitySpriteSheet != std::nullopt);
-		entity->SetGameManager(gameManager);
-		entity->SetSpacePartitionObjectsTree(spacePartitionObjectsTree);
-		entity->InitWithSpriteSheet(*entitySpriteSheet);
-		return entity;
+	auto it = entityFactoryMap.find(entityId);
+	if (it == entityFactoryMap.end()) {
+		return std::nullopt;
 	}
 
-	return std::nullopt;
+	IEntity *entity = it->second();
+	std::optional<EntitySpriteSheet *> entitySpriteSheet = textureManager->GetSpriteSheetByEntityIdentificator(entity->Id());
+	assert(entitySpriteSheet != std::nullopt);
+	entity->SetGameManager(gameManager);
+	entity->SetSpacePartitionObjectsTree(spacePartitionObjectsTree);
+	entity->InitWithSpriteSheet(*entitySpriteSheet);
+	return entity;
 }
 
 EntityFactory *EntityFactory::Get(GameManager* _gameManager, EntityDataManager* _textureManager, aabb::Tree<IEntity*>* _spacePartitionObjectsTree)

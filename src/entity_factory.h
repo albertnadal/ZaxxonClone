@@ -32,10 +32,10 @@ private:
   EntityDataManager *textureManager = nullptr;
   aabb::Tree<IEntity*> *spacePartitionObjectsTree = nullptr;
 public:
-	~EntityFactory();
-	static EntityFactory *Get(GameManager*, EntityDataManager*, aabb::Tree<IEntity*>*);
-	void Register(const EntityIdentificator, CreateEntityFn);
-	std::optional<IEntity*> CreateEntity(const EntityIdentificator) const;
+  ~EntityFactory();
+  static EntityFactory *Get(GameManager*, EntityDataManager*, aabb::Tree<IEntity*>*);
+  void Register(const EntityIdentificator, CreateEntityFn);
+  std::optional<IEntity*> CreateEntity(const EntityIdentificator) const;
 };
 
 #endif

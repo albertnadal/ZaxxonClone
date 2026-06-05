@@ -45,7 +45,7 @@ public:
   ~GameManager();
   LevelInfo LoadLevel();
   UpdateInfo Update(uint8_t);
-  std::optional<IEntity *> CreateEntityWithId(EntityIdentificator, Position);
+  std::optional<IEntity *> CreateEntityWithId(EntityIdentificator, const Position&);
   std::optional<Position *> GetPlayerPosition() const; // TODO: To be removed
   void SetShipShadowVisible(bool);
 };

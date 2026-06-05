@@ -163,7 +163,5 @@ void IEntity::Hit() {
 }
 
 void IEntity::CreateRune() const {
-  Position runePosition;
-  runePosition.Copy(position);
-  gameManager->CreateEntityWithId(EntityIdentificator::ENEMY_RUNE, runePosition);
+  gameManager->CreateEntityWithId(EntityIdentificator::ENEMY_RUNE, position);
 }
