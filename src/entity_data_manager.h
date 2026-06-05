@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <memory>
 #include <optional>
 #include <entity_sprite_sheet.h>
 #include <raylib/raylib.h>
@@ -13,7 +14,7 @@ using namespace std;
 
 class EntityDataManager
 {
-  typedef map<EntityIdentificator, EntitySpriteSheet*> SpriteSheetsMap;
+  typedef map<EntityIdentificator, std::unique_ptr<EntitySpriteSheet>> SpriteSheetsMap;
   SpriteSheetsMap entitySpriteSheetsMap;
   std::string textureFilename;
   void LoadObjectsDataFromFile(std::string filename);

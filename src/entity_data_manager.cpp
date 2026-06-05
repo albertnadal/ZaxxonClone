@@ -12,11 +12,6 @@ EntityDataManager::EntityDataManager()
 }
 
 EntityDataManager::~EntityDataManager() {
-        for (auto& kv : entitySpriteSheetsMap) {
-                EntitySpriteSheet* entitySpriteSheet = kv.second;
-                delete entitySpriteSheet;
-        }
-
         entitySpriteSheetsMap.clear();
 }
 
@@ -46,8 +41,11 @@ void EntityDataManager::LoadObjectsDataFromFile(std::string filename)
                         } else if(startsWith(token, "##")) {
                                 currentLineType = OBJ_ID;
                                 EntityIdentificator entityId = (EntityIdentificator)std::stoi(token.substr(2));
-                                currentEntitySpriteSheet = new EntitySpriteSheet();
-                                entitySpriteSheetsMap[entityId] = currentEntitySpriteSheet;
+                                {
+                                        auto sheetUPtr = std::make_unique<EntitySpriteSheet>();
+                                        currentEntitySpriteSheet = sheetUPtr.get();
+                                        entitySpriteSheetsMap.emplace(entityId, std::move(sheetUPtr));
+                                }
                         } else if(startsWith(token, "#")) {
                                 currentLineType = OBJ_ANIMATION_ID;
                                 uint16_t entitySpriteSheetAnimationId = std::stoi(token.substr(1));
@@ -109,7 +107,7 @@ Texture2D EntityDataManager::LoadTextureAtlas() const {
 std::optional<EntitySpriteSheet*> EntityDataManager::GetSpriteSheetByEntityIdentificator(EntityIdentificator entityId) const {
         auto searchIterator = entitySpriteSheetsMap.find(entityId);
         if (searchIterator != entitySpriteSheetsMap.end()) {
-                return searchIterator->second;
+                return searchIterator->second.get();
         }
 
         return std::nullopt;
