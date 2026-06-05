@@ -4,6 +4,7 @@
 #include <vector>
 #include <optional>
 #include <entity_factory.h>
+#include <memory>
 #include <entities/ship.h>
 #include <entities/ship_shadow.h>
 #include <entity_data_manager.h>
@@ -27,7 +28,7 @@ class GameManager
   int lifeCounter = 1;
   bool isGameFinished = false;
   bool isGameOver = false;
-  EntityDataManager *textureManager;
+  std::shared_ptr<EntityDataManager> textureManager;
   SpriteRectBuffer *spriteRectBuffer;
   uint32_t maxObjects;
   Position cameraPosition;
@@ -41,7 +42,7 @@ class GameManager
   void updateStaticObjects();
   void updateSpriteRectBuffers();
 public:
-  GameManager(EntityDataManager*, SpriteRectBuffer*, uint32_t);
+  GameManager(std::shared_ptr<EntityDataManager>, SpriteRectBuffer*, uint32_t);
   ~GameManager();
   LevelInfo LoadLevel();
   UpdateInfo Update(uint8_t);

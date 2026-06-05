@@ -2,7 +2,7 @@
 #include <entity_sprite_sheet.h>
 #include <map>
 
-EntityFactory::EntityFactory(GameManager* _gameManager, EntityDataManager* _textureManager, aabb::Tree<IEntity*>* _spacePartitionObjectsTree) {
+EntityFactory::EntityFactory(GameManager* _gameManager, std::shared_ptr<EntityDataManager> _textureManager, aabb::Tree<IEntity*>* _spacePartitionObjectsTree) {
 	gameManager = _gameManager;
 	textureManager = _textureManager;
 	spacePartitionObjectsTree = _spacePartitionObjectsTree;
@@ -51,7 +51,7 @@ std::optional<IEntity*> EntityFactory::CreateEntity(const EntityIdentificator en
 	return entity;
 }
 
-EntityFactory *EntityFactory::Get(GameManager* _gameManager, EntityDataManager* _textureManager, aabb::Tree<IEntity*>* _spacePartitionObjectsTree)
+EntityFactory *EntityFactory::Get(GameManager* _gameManager, std::shared_ptr<EntityDataManager> _textureManager, aabb::Tree<IEntity*>* _spacePartitionObjectsTree)
 {
 	static EntityFactory instance(_gameManager, _textureManager, _spacePartitionObjectsTree);
 	return &instance;

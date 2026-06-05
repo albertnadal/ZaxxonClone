@@ -3,6 +3,7 @@
 
 #include <map>
 #include <optional>
+#include <memory>
 #include <entity.h>
 #include <game_manager.h>
 #include <entity_data_manager.h>
@@ -23,17 +24,17 @@ class GameManager;
 class EntityFactory
 {
 private:
-  EntityFactory(GameManager*, EntityDataManager*, aabb::Tree<IEntity*>*);
+  EntityFactory(GameManager*, std::shared_ptr<EntityDataManager>, aabb::Tree<IEntity*>*);
   EntityFactory &operator=(const EntityFactory &);
   void RegisterEntities();
   typedef std::map<EntityIdentificator, CreateEntityFn> EntityFactoryMap;
   EntityFactoryMap entityFactoryMap;
   GameManager *gameManager = nullptr;
-  EntityDataManager *textureManager = nullptr;
+  std::shared_ptr<EntityDataManager> textureManager = nullptr;
   aabb::Tree<IEntity*> *spacePartitionObjectsTree = nullptr;
 public:
   ~EntityFactory();
-  static EntityFactory *Get(GameManager*, EntityDataManager*, aabb::Tree<IEntity*>*);
+  static EntityFactory *Get(GameManager*, std::shared_ptr<EntityDataManager>, aabb::Tree<IEntity*>*);
   void Register(const EntityIdentificator, CreateEntityFn);
   std::optional<IEntity*> CreateEntity(const EntityIdentificator) const;
 };

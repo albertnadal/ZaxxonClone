@@ -8,6 +8,7 @@
 #include <game_manager.h>
 #include <utils.h>
 #include <main_menu_screen.cpp>
+#include <memory>
 
 constexpr float SCR_WIDTH = 224.0f;
 constexpr float SCR_HEIGHT = 256.0f;
@@ -21,7 +22,7 @@ int highScore = 0;
 int lifeCounter = 3;
 float logoTransparency = 0;
 GameScreenType currentGameScreen;
-EntityDataManager *entityTextureManager;
+std::shared_ptr<EntityDataManager> entityTextureManager;
 GameManager *gameManager;
 int gameLoopFrequency = MILLISECONDS_PER_TICK;
 bool paused = false;
@@ -80,7 +81,7 @@ int main()
         staticCamera.zoom = ZOOM;
 
         currentGameScreen = GameScreenType::MAIN_MENU;
-        entityTextureManager = new EntityDataManager();
+        entityTextureManager = std::make_shared<EntityDataManager>();
         SpriteRectBuffer *spriteRectBuffer = new SpriteRectBuffer(MAX_OBJECTS);
         gameManager = new GameManager(entityTextureManager, spriteRectBuffer, MAX_OBJECTS);
 
@@ -161,7 +162,6 @@ int main()
 
         exitGame = true;
 
-        delete entityTextureManager;
         delete gameManager;
         delete spriteRectBuffer;
 

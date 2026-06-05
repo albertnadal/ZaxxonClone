@@ -4,8 +4,8 @@
 #include <fstream>
 #include <sstream>
 
-GameManager::GameManager(EntityDataManager* _textureManager, SpriteRectBuffer* _spriteRectBuffer, uint32_t _maxObjects) {
-        textureManager = _textureManager;
+GameManager::GameManager(std::shared_ptr<EntityDataManager> _textureManager, SpriteRectBuffer* _spriteRectBuffer, uint32_t _maxObjects) {
+  textureManager = _textureManager;
         spriteRectBuffer = _spriteRectBuffer;
         maxObjects = _maxObjects;
         spacePartitionObjectsTree = new aabb::Tree<IEntity*>();
