@@ -105,7 +105,7 @@ std::optional<IEntity *> GameManager::CreateEntityWithId(EntityIdentificator ent
     std::vector<int> upperBound = (*entity_ptr)->GetUpperBound();
     spacePartitionObjectsTree->insertParticle(*entity_ptr, lowerBound, upperBound);
 
-    mobileObjects.emplace((*entity_ptr)->uniqueId, std::unique_ptr<IEntity>(*entity_ptr));
+    mobileObjects.emplace((*entity_ptr)->uniqueId, *entity_ptr);
   }
 
   return entity_ptr;
@@ -172,7 +172,7 @@ void GameManager::updateSpriteRectBuffers() {
   }*/
 
   for (auto const& x : mobileObjects) {
-    IEntity* entity_ptr = x.second.get();
+    IEntity* entity_ptr = x.second;
     Rectangle src = { entity_ptr->currentSprite.u1, entity_ptr->currentSprite.v1, entity_ptr->currentSprite.u2, entity_ptr->currentSprite.v2 };
     Vector2 pos = entity_ptr->position.GetProjectedCoordinate();
 #if DEBUG
@@ -187,9 +187,9 @@ void GameManager::updateSpriteRectBuffers() {
   spriteRectBuffer->bufferLength = i;
 }
 
-void GameManager::updateEntities(std::map<uint32_t, std::unique_ptr<IEntity>>& objects, std::optional<uint8_t> pressedKeys = std::nullopt) {
+void GameManager::updateEntities(std::map<uint32_t, IEntity*>& objects, std::optional<uint8_t> pressedKeys = std::nullopt) {
     for (auto const& x : objects) {
-        IEntity* entity_ptr = x.second.get();
+        IEntity* entity_ptr = x.second;
 
         // Mark the object to delete if it is out of the screen.
         if(std::abs(cameraPosition.GetProjectedCoordinate().x) > entity_ptr->GetRightmostProjectedCoordinate().x * ZOOM) {
@@ -222,6 +222,7 @@ void GameManager::deleteUneededObjects() {
   for (auto entity_ptr : objectsToDelete) {
     staticObjects.erase(entity_ptr->uniqueId);
     mobileObjects.erase(entity_ptr->uniqueId);
+    delete entity_ptr;
   }
 
   objectsToDelete.clear();
@@ -243,6 +244,10 @@ void GameManager::deleteAllObjects() {
   mobileObjects.clear();
 
   // Delete static object instances.
+  for (auto& pair : staticObjects) {
+    delete pair.second;
+  }
+
   staticObjects.clear();
 }
 

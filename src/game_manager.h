@@ -20,8 +20,8 @@ struct LevelInfo { Texture2D bgTexture; Rectangle bgSource; Position bgPosition;
 class GameManager
 {
   aabb::Tree<IEntity*> *spacePartitionObjectsTree = nullptr;
-  std::map<uint32_t, std::unique_ptr<IEntity>> mobileObjects;
-  std::map<uint32_t, std::unique_ptr<IEntity>> staticObjects;
+  std::map<uint32_t, IEntity*> mobileObjects;
+  std::map<uint32_t, IEntity*> staticObjects;
   std::vector<IEntity*> objectsToDelete;
   Ship* ship = nullptr;
   ShipShadow* shipShadow = nullptr;
@@ -37,7 +37,7 @@ class GameManager
   void resetLevelValues();
   void deleteUneededObjects();
   void deleteAllObjects();
-  void updateEntities(std::map<uint32_t, std::unique_ptr<IEntity>>&, std::optional<uint8_t>);
+  void updateEntities(std::map<uint32_t, IEntity*>&, std::optional<uint8_t>);
   void updateMobileObjects(uint8_t);
   void updateStaticObjects();
   void updateSpriteRectBuffers();
